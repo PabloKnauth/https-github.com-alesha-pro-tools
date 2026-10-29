@@ -1,0 +1,266 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Avión de papel · prueba en tinta</title>
+<style>body{margin:0;background:#242321;display:grid;place-items:center;min-height:100vh}canvas{max-width:100vw;max-height:100vh;object-fit:contain}</style>
+<canvas id="c"></canvas>
+<script src="core.js"></script>
+<script src="studio.js"></script>
+<script src="cels.js"></script>
+<script>
+'use strict';
+/* BRIEF
+Subject: a paper dart resting on the ground is lifted by a gust, loops once for
+  the joy of it, and glides out of frame. Its dashed trail stays on the page.
+Duration ~8 s; 16:9; 1920x1080; 24 fps.
+Look: ink (paperInk). Brush-ink contours with taper and small overshoots, form
+  hatching on the shaded faces of the paper, a warm wash on the sun only.
+Drawing method: the dart is a rigid folded sheet, so every drawing is a whole
+  projection of one 3D fold model at that pose: silhouette, visible faces,
+  overlap order and hatching change with the angle (underside shows at the top
+  of the loop). No springs: it is rigid. Grass is the flexible element.
+Exposure: rest held 1 s; everything else on twos (12 drawings/s). Camera locked.
+Force: the gust bends the grass as its front passes, tips the dart's tail
+  (anticipation, nose planted on the ground), then lifts it.
+Beat sheet:
+  0.0  rest, quiet page                         (soft note)
+  0.9  gust enters left, grass bends in a wave  (whoosh)
+  1.45 tail lifts, nose stays planted           (anticipation)
+  2.05 lift-off, climb, one loop, wobbling exit (pluck, rising notes)
+  end  empty page with the trail, grass settles (chime), hold to read
+Sources: none external. All drawings authored in code.
+*/
+const INK = PAL.ink, GROUND = 300;
+const PRESS = [[0,.12],[.15,.9],[.5,1],[.85,.75],[1,.1]];
+const HPRESS = [[0,.35],[.5,1],[1,.3]];
+
+// ---------- the folded dart: x forward, y up, z toward the viewer ----------
+const PM = {N:[74,0,0], T:[-58,0,0], B:[-58,-17,0], L:[-60,6,-42], R:[-60,6,42]};
+const CAMV = {tilt:.62, yaw:.30, scale:1.8, persp:1100};
+const rx = (p,a) => { const c=Math.cos(a), s=Math.sin(a); return [p[0], p[1]*c-p[2]*s, p[1]*s+p[2]*c]; };
+const ry = (p,a) => { const c=Math.cos(a), s=Math.sin(a); return [p[0]*c+p[2]*s, p[1], -p[0]*s+p[2]*c]; };
+const rz = (p,a) => { const c=Math.cos(a), s=Math.sin(a); return [p[0]*c-p[1]*s, p[0]*s+p[1]*c, p[2]]; };
+const toCam = (p,pitch,roll) => ry(rx(rz(rx(p,roll),pitch),CAMV.tilt),CAMV.yaw);
+const proj = q => { const f = CAMV.persp/(CAMV.persp-q[2]*CAMV.scale); return [q[0]*CAMV.scale*f, -q[1]*CAMV.scale*f]; };
+const l3 = (a,b,u) => [lerp(a[0],b[0],u), lerp(a[1],b[1],u), lerp(a[2],b[2],u)];
+const sub3 = (a,b) => [a[0]-b[0], a[1]-b[1], a[2]-b[2]];
+const cross3 = (a,b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]];
+const norm3 = a => { const l = Math.hypot(...a) || 1; return a.map(v => v/l); };
+const LIGHT = norm3([-.35,.75,.55]);
+const FACES = [
+  {id:'far',  tri:['N','L','T'], edges:[['N','L'],['L','T']], crease:'L'},
+  {id:'keel', tri:['N','B','T'], edges:[['N','B'],['B','T']]},
+  {id:'near', tri:['N','R','T'], edges:[['N','R'],['R','T']], crease:'R'},
+];
+// Screen angle of the nose for a pitch; used to point the dart along its path.
+const noseAngle = (pitch,roll) => { const q = proj(toCam([60,0,0],pitch,roll)); return Math.atan2(q[1], q[0]); };
+function pitchFor(screenAngle, roll, near) {
+  let best = 0, err = 1e9;
+  for (let k = -360; k <= 360; k++) {
+    const a = near + k*Math.PI/360, e = Math.abs(Math.atan2(Math.sin(noseAngle(a,roll)-screenAngle), Math.cos(noseAngle(a,roll)-screenAngle)));
+    if (e < err) { err = e; best = a; }
+  }
+  return best;
+}
+// One whole drawing of the dart at a pose. The hand's bow on each edge is a
+// property of the edge (stable id), not of the frame.
+function dartDrawing(pitch, roll, id) {
+  const cam = {}, scr = {};
+  for (const [k,p] of Object.entries(PM)) { cam[k] = toCam(p,pitch,roll); scr[k] = proj(cam[k]); }
+  const edge = (a, b, sid, bowAmt) => {
+    const A = PM[a], Bp = PM[b], pts = [];
+    for (const u of [-.035,.33,.66,1.03]) pts.push(proj(toCam(l3(A,Bp,u),pitch,roll)));
+    const dx = pts[3][0]-pts[0][0], dy = pts[3][1]-pts[0][1], len = Math.hypot(dx,dy) || 1, bow = (hash(strokeSeed(sid),3)-.5)*bowAmt;
+    pts[1] = [pts[1][0]-dy/len*bow, pts[1][1]+dx/len*bow]; pts[2] = [pts[2][0]-dy/len*bow*.8, pts[2][1]+dx/len*bow*.8];
+    return pts;
+  };
+  const faces = FACES.map(F => {
+    const [a,b,c] = F.tri.map(k => cam[k]);
+    let n = norm3(cross3(sub3(b,a), sub3(c,a))); if (n[2] < 0) n = n.map(v => -v);
+    const lit = clamp(n[0]*LIGHT[0]+n[1]*LIGHT[1]+n[2]*LIGHT[2], 0, 1);
+    const strokes = [];
+    for (const [p,q] of F.edges) strokes.push({id:F.id+'/'+p+q, points:edge(p,q,F.id+p+q,5), width:2.6, opacity:.95, pressure:PRESS});
+    if (F.crease) strokes.push({id:F.id+'/crease', points:[scr.N, proj(toCam(l3(PM.T,PM[F.crease],.5),pitch,roll))].map((p,i,arr)=>p), width:1, opacity:.55, pressure:HPRESS});
+    // Form hatching on the shaded side, parallel to the trailing edge, anchored to the paper.
+    const tip = F.tri[1], nh = lit < .62 ? Math.round((.62-lit)/.62*7)+1 : 0;
+    for (let k = 0; k < nh; k++) {
+      const u = .34 + .58*(nh === 1 ? .5 : k/(nh-1));
+      const A = l3(PM.N,PM.T,u), Bq = l3(PM.N,PM[tip],u);
+      strokes.push({id:F.id+'/hatch/'+k, points:[proj(toCam(l3(A,Bq,.12),pitch,roll)), proj(toCam(l3(A,Bq,.5),pitch,roll)), proj(toCam(l3(A,Bq,.86),pitch,roll))], width:.95, opacity:.6, pressure:HPRESS});
+    }
+    return {depth:(a[2]+b[2]+c[2])/3, poly:F.tri.map(k => scr[k]), fill:mix('#fffaf1','#d3c1a1',1-lit), cel:compileCel({strokes},{id:id+'/'+F.id})};
+  }).sort((u,v) => u.depth-v.depth);
+  const spine = compileCel({strokes:[{id:'spine', points:edge('N','T','spine',3), width:2.3, opacity:.95, pressure:PRESS}]},{id:id+'/spine'});
+  const all = Object.values(scr);
+  return {faces, spine, minY:Math.min(...all.map(p=>p[1])), maxY:Math.max(...all.map(p=>p[1])), nose:scr.N};
+}
+function drawDart(c, d, x, y) {
+  c.save(); c.translate(x,y);
+  for (const f of d.faces) {
+    c.fillStyle = f.fill; c.fill(polyPath(f.poly));
+    drawCel(c, f.cel, {material:'ink', color:INK});
+  }
+  drawCel(c, d.spine, {material:'ink', color:INK});
+  c.restore();
+}
+
+// ---------- staging: rest, anticipation, flight ----------
+const REST_X = -600, ANT0 = 1.45, ANT1 = 1.85, FLY0 = 2.05;
+const restProbe = dartDrawing(0,0,'probe-rest');
+const REST_NOSE_X = REST_X + restProbe.nose[0];
+// On the ground the lowest mark touches the ground line and the nose x is planted.
+function groundPose(pitch, slide) {
+  const d = dartDrawing(pitch,0,'probe');
+  return {x:REST_NOSE_X + slide - d.nose[0], y:GROUND - 2 - d.maxY, pitch, roll:0};
+}
+const ANT_PITCH = -.24, ANT_SLIDE = 9, LAUNCH = groundPose(ANT_PITCH, ANT_SLIDE);
+const LOOP_C = [65,-65], big = ([x,y]) => [LOOP_C[0]+(x-LOOP_C[0])*1.32, LOOP_C[1]+(y-LOOP_C[1])*1.32];
+const PATH = motionPath([
+  [LAUNCH.x,LAUNCH.y],[LAUNCH.x+130,LAUNCH.y-40],[-300,150],[-120,112],
+  ...[[60,84],[190,28],[222,-76],[152,-182],[40,-216],[-66,-166],[-92,-60],[-32,42],[92,92]].map(big),
+  [300,80],[520,-20],[780,-150],[1250,-360]
+]);
+// Speed follows height: slower at the top of the loop, faster at the bottom.
+const DT = 1/480, DIST = [0];
+for (let t = 0; DIST[DIST.length-1] < PATH.length; t += DT) {
+  const d = DIST[DIST.length-1], y = PATH.at(d/PATH.length).p[1];
+  const v = (380 + 1.4*(y+216)) * (.28 + .72*sm(0,.7,t,easeOut)) * (1 + .7*sm(PATH.length*.7, PATH.length*.9, d));
+  DIST.push(Math.min(PATH.length, d + v*DT));
+}
+const FLY_DUR = (DIST.length-1)*DT, FLY_END = FLY0 + FLY_DUR;
+const DUR = Math.round((FLY_END + 1.4)*24)/24;
+const distAt = t => { const k = clamp((t-FLY0)/DT, 0, DIST.length-1), i = Math.floor(k); return lerp(DIST[i], DIST[Math.min(i+1,DIST.length-1)], k-i); };
+const LOOP_OUT = PATH.length*.7;
+function flightPose(t) {
+  const d = distAt(t), {p, tangent} = PATH.at(d/PATH.length);
+  const roll = .24*Math.sin(TAU*1.5*sm(LOOP_OUT, PATH.length, d, x=>x)) * sm(LOOP_OUT, LOOP_OUT+200, d);
+  let pitch = pitchFor(Math.atan2(tangent[1], tangent[0]), roll, 0);
+  // Unwrap so the loop keeps turning the same way instead of jumping by 2π.
+  const frac = d/PATH.length; if (frac > .3 && frac < .66 && pitch < 0) pitch += TAU;
+  pitch = lerp(ANT_PITCH, pitch, sm(0,.16,t-FLY0,easeOut));
+  return {x:p[0], y:p[1], pitch, roll, d};
+}
+function poseAt(t) {
+  if (t < ANT0) return {...groundPose(0,0), d:-1};
+  if (t < FLY0) { const u = sm(ANT0,ANT1,t,easeOut); return {...groundPose(ANT_PITCH*u, ANT_SLIDE*u), d:-1}; }
+  return flightPose(t);
+}
+// Drawing time: the opening is one held drawing, the rest is on twos.
+const TRACK = exposureTrack([{at:0,hold:true},{at:1,on:2}]);
+
+// ---------- the setting ----------
+const bgStrokes = [];
+const bs = (id, points, width, opacity=.9, extra={}) => bgStrokes.push({id, points, width, opacity, pressure:PRESS, ...extra});
+{
+  const g = (x0,x1,seed) => { const pts=[]; for (let x=x0; x<=x1; x+=110) pts.push([x, GROUND + (hash(x|0,seed)-.5)*3 + (x>500?(x-500)*.004:0)]); return pts; };
+  bs('ground/a', g(-990,260,4), 2.6); bs('ground/b', g(170,990,7).map(([x,y])=>[x,y+1.5]), 2.3);
+  for (let i=0;i<46;i++) { const x=-960+i*42+hash(i,2)*20, y=GROUND+12+hash(i,5)*26; bs('soil/'+i,[[x,y],[x+9+hash(i,6)*8,y+2]], .8, .32+hash(i,8)*.2); }
+  // Sun with a few uneven rays.
+  const SX=650, SY=-300, sun=[]; for (let k=0;k<=13;k++){ const a=-1.4+k/13*TAU*1.04, r=56+(hash(k,11)-.5)*4; sun.push([SX+Math.cos(a)*r, SY+Math.sin(a)*r]); }
+  bs('sun', sun, 2.4);
+  for (let k=0;k<11;k++){ const a=k/11*TAU+.2, r0=76+hash(k,12)*6, r1=r0+18+hash(k,13)*14; bs('ray/'+k,[[SX+Math.cos(a)*r0,SY+Math.sin(a)*r0],[SX+Math.cos(a)*r1,SY+Math.sin(a)*r1]],1.7,.85); }
+  const cloud = (id,cx,cy,radii) => {
+    const total = radii.reduce((a,r)=>a+r*1.6,0), pts=[[cx-total/2-10,cy+2]]; let x = cx-total/2;
+    for (const [j,r] of radii.entries()) { for (let s=0;s<=6;s++){ const a=Math.PI+s/6*Math.PI; pts.push([x+r*.8+Math.cos(a)*r*.8, cy+Math.sin(a)*r]); } x += r*1.6; }
+    pts.push([x+12,cy+3]); bs(id, pts, 2.1, .9);
+    bs(id+'/base', [[cx-total/2+14,cy+6],[cx,cy+8],[cx+total/2-20,cy+5]], 1.1, .5);
+  };
+  cloud('cloud/a',-470,-300,[40,62,50,34]); cloud('cloud/b',280,-390,[30,46,36]);
+}
+const BG_CEL = compileCel({strokes:bgStrokes},{id:'setting'});
+let BG = null, BG_S = 0;
+function background() {
+  if (BG && BG_S === S) return BG;
+  BG = layer(); BG_S = S; const g = BG.getContext('2d');
+  paper(g, PAL.paper, null); g.translate(CX,CY);
+  g.fillStyle = alpha('#efb466',.5); g.beginPath(); g.arc(652,-302,52,0,TAU); g.fill();
+  drawCel(g, BG_CEL, {material:'ink', color:INK});
+  return BG;
+}
+// Grass: flexible, so it bends with the gust front and settles.
+const TUFTS = Array.from({length:18}, (_,i) => -935 + i*110 + (hash(i,3)-.5)*50);
+const GUST_X = t => -W/2 - 250 + (t-.9)*1150;
+const gustArrive = x => .9 + (x + W/2 + 250)/1150;
+function bendAt(t, x) {
+  const dt = t - gustArrive(x); if (dt <= 0) return 0;
+  return .65*sm(0,.12,dt)*Math.exp(-dt/.75)*Math.cos(Math.max(0,dt-.12)*6);
+}
+const tuftCache = new Map();
+function tuftCel(i, b) {
+  const q = Math.round(b*20), k = i+'/'+q;
+  if (!tuftCache.has(k)) {
+    const x0 = TUFTS[i], strokes = [];
+    for (let j=0;j<3;j++) {
+      const len = 24 + hash(i*3+j,21)*20, lean = (j-1)*.35 + (hash(i*3+j,22)-.5)*.2, bx = x0 + (j-1)*6, pts = [];
+      for (let s=0;s<=4;s++){ const h=s/4, bend=(q/20)*len*1.1*h*h; pts.push([bx + Math.sin(lean)*len*h + bend, GROUND - Math.cos(lean)*len*h + Math.abs(bend)*.25*h]); }
+      strokes.push({id:'blade/'+j, points:pts, width:1.6, opacity:.85, pressure:[[0,1],[.6,.7],[1,.05]]});
+    }
+    tuftCache.set(k, compileCel({strokes},{id:'tuft/'+k}));
+  }
+  return tuftCache.get(k);
+}
+
+// ---------- the film ----------
+const dartCache = new Map();
+function shot(c, tau) {
+  const td = TRACK(tau), f = Math.round(td*24);
+  blit(c, background());
+  resetT(c); c.translate(CX,CY);
+  const P = poseAt(td);
+  // Trail: dashes along the travelled path, revealed one drawing at a time.
+  if (P.d > 0) {
+    c.save(); c.strokeStyle = INK; c.lineCap = 'round'; c.lineWidth = 2; c.globalAlpha = .5; c.beginPath();
+    for (let d = 30, k = 0; d < P.d - 80; d += 27, k++) {
+      const a = PATH.at(d/PATH.length).p, b = PATH.at((d+12+hash(k,31)*4)/PATH.length).p, o = (hash(k,32)-.5)*2.5;
+      c.moveTo(a[0], a[1]+o); c.lineTo(b[0], b[1]+o*.6);
+    }
+    c.stroke(); c.restore();
+  }
+  // Gust: three curling strokes; each exposure is a new drawing of the wind.
+  if (td > .9 && td < 3.6) {
+    const front = GUST_X(td), op = .62*sm(.9,1.15,td)*(1-sm(2.7,3.5,td));
+    for (let k=0;k<3;k++) {
+      const base = GROUND - [62,128,26][k], len = [430,360,300][k], hx = front - k*70, pts = [];
+      for (let j=0;j<=12;j++){ const x = hx-len+j*len/12; pts.push([x, base + 9*Math.sin(j*.85+k*2.1) * (1-j/14)]); }
+      for (let s=1;s<=7;s++){ const a = Math.PI/2 - s*(1.55*Math.PI/7), r = 17-s*1.3; pts.push([hx+8+Math.cos(a)*r, base-15+Math.sin(a)*r+15*(1-s/7)*0]); }
+      drawStroke(c, makeStroke(pts,{id:'gust/'+k+'/'+f, width:2.2, rough:.6, pressure:[[0,.05],[.4,.8],[.85,1],[1,.2]]}), {color:INK, opacity:op});
+    }
+  }
+  // Ground shadow while the dart is near the ground.
+  if (td < FLY0 + 1) {
+    const h = Math.max(0, GROUND - (P.y + (P.d < 0 ? 0 : 30))), k = 1 - clamp(h/260,0,1);
+    if (k > 0) {
+      c.save(); c.strokeStyle = INK; c.globalAlpha = .38*k; c.lineWidth = 1.1; c.beginPath();
+      for (let r=0;r<4;r++){ const w = (120-r*24)*(.55+.45*k); c.moveTo(P.x-w/2, GROUND+5+r*4); c.lineTo(P.x+w/2-6, GROUND+5+r*4); }
+      c.stroke(); c.restore();
+    }
+  }
+  if (P.x < W/2 + 220) {
+    if (!dartCache.has(f)) dartCache.set(f, dartDrawing(P.pitch, P.roll, 'dart/'+f));
+    drawDart(c, dartCache.get(f), P.x, P.y);
+  }
+  for (let i=0;i<TUFTS.length;i++) drawCel(c, tuftCel(i, bendAt(td, TUFTS[i])), {material:'ink', color:INK});
+}
+
+// ---------- sound ----------
+function whoosh(ac, m, t0, t, d, g, f0, f1, seed) {
+  const sr = ac.sampleRate, buf = ac.createBuffer(1, Math.ceil(sr*d), sr), ch = buf.getChannelData(0), r = rng(seed);
+  for (let i=0;i<ch.length;i++) ch[i] = r()*2-1;
+  const s = ac.createBufferSource(), bp = ac.createBiquadFilter(), e = ac.createGain();
+  s.buffer = buf; bp.type = 'bandpass'; bp.Q.value = .9;
+  bp.frequency.setValueAtTime(f0, t0+t); bp.frequency.linearRampToValueAtTime(f1, t0+t+d*.45); bp.frequency.linearRampToValueAtTime(f0*.8, t0+t+d);
+  e.gain.setValueAtTime(0, t0+t); e.gain.linearRampToValueAtTime(g, t0+t+d*.4); e.gain.linearRampToValueAtTime(0, t0+t+d);
+  s.connect(bp); bp.connect(e); e.connect(m); s.start(t0+t);
+}
+function score(ac, t0, dest) {
+  const m = ac.createGain(); m.gain.value = .6; m.connect(dest);
+  note(ac, m, pentHz(0,0), t0, .2, 1.4, 'sine', .08);
+  whoosh(ac, m, t0, .85, 2.3, .32, 350, 1600, 3);
+  note(ac, m, pentHz(1,1), t0, FLY0, .35, 'triangle', .16);
+  const steps = [0,1,2,3,4,3,2], span = FLY_DUR*.6;
+  steps.forEach((s,k) => note(ac, m, pentHz(1,s), t0, FLY0 + .25 + k*span/steps.length, .45, 'triangle', .11));
+  whoosh(ac, m, t0, FLY0 + FLY_DUR*.55, 1.6, .12, 500, 1100, 9);
+  note(ac, m, pentHz(2,0), t0, FLY_END - .1, 1.8, 'sine', .13);
+  note(ac, m, pentHz(1,4), t0, FLY_END + .05, 1.6, 'sine', .08);
+}
+defineFilm({palette:PALETTES.paperInk, format:{ar:'16:9', width:1920}, fps:24, timeline:[{name:'avion-de-papel', dur:DUR, fn:shot}], score});
+</script>

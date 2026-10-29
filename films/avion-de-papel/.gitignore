@@ -1,0 +1,6 @@
+node_modules/
+out/*-frames/
+out/.*-render-*/
+out/*-score.wav
+out/*-render.json
+out/avion-de-papel.mp4
