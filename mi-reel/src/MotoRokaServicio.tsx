@@ -29,7 +29,7 @@ const WORDS: [number, number, string][] = [
   [9.18, 9.7, "viejo,"], [9.92, 10.24, "cadena"], [10.24, 10.6, "floja"], [10.72, 11.0, "o"], [11.0, 11.34, "balatas"],
   [11.34, 12.1, "desgastadas."], [12.4, 12.64, "Aquí"], [12.64, 12.74, "en"], [12.74, 12.9, "Moto"],
   [12.9, 13.12, "Roka"], [13.12, 13.34, "somos"], [13.34, 13.68, "un"], [13.68, 13.96, "centro"], [13.96, 14.16, "de"],
-  [14.16, 14.46, "servicio"], [14.46, 15.1, "oficial"], [15.1, 15.88, "QJ Motor."], [16.18, 16.4, "En"],
+  [14.16, 14.46, "servicio"], [14.46, 15.1, "oficial"], [15.1, 15.88, "Liqui Moly."], [16.18, 16.4, "En"],
   [16.4, 16.6, "cada"], [16.6, 17.0, "servicio"], [17.0, 17.5, "cambiamos"], [17.5, 17.74, "el"], [17.74, 18.04, "aceite"],
   [18.04, 18.7, "y"], [18.7, 19.28, "revisamos"], [19.28, 20.02, "cadenas,"], [20.02, 20.3, "frenos"], [20.3, 20.46, "y"],
   [20.46, 21.0, "llantas."], [21.2, 21.34, "Te"], [21.34, 21.7, "entregamos"], [21.7, 21.88, "tu"], [21.88, 22.15, "moto"],
@@ -303,7 +303,7 @@ const OfficialBadge: React.FC = () => {
           boxShadow: `0 0 24px ${BLUE}`,
         }}
       >
-        ✓ SERVICIO OFICIAL QJ MOTOR
+        ✓ SERVICIO OFICIAL LIQUI MOLY
       </div>
     </div>
   );

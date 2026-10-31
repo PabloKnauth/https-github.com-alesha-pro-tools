@@ -2,6 +2,20 @@
 
 Repositorio de herramientas de edición de video. Ver `KIT-EDICION.md` para el kit instalado.
 
+## Marcas y nombres del cliente
+
+Verificá estos nombres antes de ponerlos en subtítulos o gráficos; Whisper los transcribe mal.
+
+- **Moto Roka Fix & Shop**: el taller del cliente (logo azul en la camisa del personal).
+  Whisper lo oye como "Motor Rock".
+- **Liqui Moly**: marca alemana de aceites y aditivos. Moto Roka es *centro de servicio oficial
+  Liqui Moly*. Whisper lo oye como "Likimori". **No** es QJ Motor, aunque el letrero de neón
+  QJ MOTOR aparezca de fondo en el local: no deduzcas la marca por lo que se ve en el video.
+- Otros: "balatas" (pastillas de freno), "llantas" (Whisper escribe "yantas").
+
+Al transcribir, pasá estos nombres en `initial_prompt` de faster-whisper. Si una palabra clave sale
+con probabilidad baja, preguntale al usuario en vez de adivinar.
+
 ## Sesiones en la nube (claude.ai/code)
 
 El contenedor tiene un proxy de red que bloquea algunos hosts. Lo que funciona:

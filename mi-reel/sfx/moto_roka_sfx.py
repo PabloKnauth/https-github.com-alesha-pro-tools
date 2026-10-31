@@ -137,7 +137,7 @@ place(impact(), 5.68, -17); place(glitch(), 5.7, -24)
 for at in (8.82, 9.92, 11.0):
     place(pop(1000, 320), at, -17, -0.5); place(error_bonk(), at + 0.07, -23, -0.5)
 
-# 12.74 official badge, 15.1 QJ pill
+# 12.74 official badge, 15.1 Liqui Moly pill
 place(whoosh(0.5), 12.6, -20); place(pop(700, 220, 0.12), 12.8, -17)
 place(sparkle(), 15.1, -21, 0.15)
 
