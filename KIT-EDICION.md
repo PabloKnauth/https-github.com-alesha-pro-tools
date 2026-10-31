@@ -30,6 +30,13 @@ npm run dev          # Remotion Studio (vista previa)
 claude
 ```
 
+## Efectos de sonido
+
+`mi-reel/sfx/moto_roka_sfx.py` sintetiza efectos (whoosh, pop, notificación, golpe, checks,
+teclado, envío de mensaje, acorde de éxito) sin bancos de sonido de terceros, sincronizados con una
+línea de tiempo editable. Se mezclan sobre el video sin recodificar la imagen; el comando está en el
+encabezado del script. Requiere Python con `numpy` y `scipy`.
+
 ## Fórmula de pedido (de la guía)
 
 > Editá **[mi clip.mp4]** en formato vertical 1080×1920 a 30 fps. Sumá un **[estilo]** con
