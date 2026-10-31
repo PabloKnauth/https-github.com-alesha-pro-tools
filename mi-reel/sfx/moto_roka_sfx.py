@@ -127,11 +127,11 @@ for at in (5.55, 12.6, 22.5, 26.85):
 
 # 1.78 oil gauge
 place(whoosh(), 1.65, -21, -0.3); place(pop(), 1.86, -17, -0.3)
-place(beep(1050), 3.7, -24); place(beep(1050), 3.95, -24)            # nivel bajo
+place(beep(1050), 3.7, -21); place(beep(1050), 3.95, -21)            # nivel bajo
 
 # 4.62 alert notification, 5.7 "falla"
-place(whoosh(), 4.5, -21, 0.2); place(chime([880, 660]), 4.66, -18, 0.2)
-place(impact(), 5.68, -15); place(glitch(), 5.7, -24)
+place(whoosh(), 4.5, -21, 0.2); place(chime([880, 660]), 4.66, -21, 0.2)
+place(impact(), 5.68, -17); place(glitch(), 5.7, -24)
 
 # 8.82 / 9.92 / 11.0 problem chips (pan left, where they appear)
 for at in (8.82, 9.92, 11.0):
@@ -152,7 +152,7 @@ place(whoosh(), 21.08, -21); place(riser(), 21.4, -25); place(chime([784, 988, 1
 # 23.42 chat: enter, typing, send, typing dots, reply
 place(whoosh(0.45, 300, 4000), 23.3, -21, 0.3)
 for k in range(8):
-    place(key_click(), 23.6 + k * 0.075 + rng.uniform(-0.01, 0.01), -24, 0.3)
+    place(key_click(), 23.6 + k * 0.075 + rng.uniform(-0.01, 0.01), -18, 0.3)
 place(send_swoop(), 24.3, -19, 0.35)
 place(chime([1046, 1318], 0.09, 0.22), 25.5, -17, 0.3)
 

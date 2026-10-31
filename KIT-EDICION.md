@@ -37,6 +37,10 @@ teclado, envío de mensaje, acorde de éxito) sin bancos de sonido de terceros, 
 línea de tiempo editable. Se mezclan sobre el video sin recodificar la imagen; el comando está en el
 encabezado del script. Requiere Python con `numpy` y `scipy`.
 
+`mi-reel/sfx/audio_master.py` limpia y masteriza el audio: reducción de ruido espectral con perfil
+tomado de las pausas, EQ de voz, de-esser, compresor, efectos atenuados bajo la voz (*ducking*) y
+normalización a −14 LUFS / −1 dBTP, el estándar para Reels y TikTok. Requiere además `noisereduce`.
+
 ## Fórmula de pedido (de la guía)
 
 > Editá **[mi clip.mp4]** en formato vertical 1080×1920 a 30 fps. Sumá un **[estilo]** con
