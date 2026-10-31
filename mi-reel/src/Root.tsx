@@ -1,6 +1,7 @@
 import { Composition } from "remotion";
 import { MyComposition } from "./Composition";
 import { WidgetsFlotantes } from "./WidgetsFlotantes";
+import { MotoRokaServicio } from "./MotoRokaServicio";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -10,6 +11,14 @@ export const RemotionRoot: React.FC = () => {
         id="WidgetsFlotantes"
         component={WidgetsFlotantes}
         durationInFrames={208}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="MotoRokaServicio"
+        component={MotoRokaServicio}
+        durationInFrames={838}
         fps={30}
         width={1080}
         height={1920}
