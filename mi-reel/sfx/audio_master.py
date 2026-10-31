@@ -6,15 +6,32 @@
 The picture is copied untouched (-c:v copy).
 
 Usage (requires numpy, scipy, noisereduce; intermediate WAVs are written to the current directory):
-    python3 audio_master.py video.mp4 voice_raw.wav sfx.wav words.json out.mp4
+    python3 audio_master.py video.mp4 voice_raw.wav sfx.wav words.json out.mp4 \
+        [--max-gap-db -30] [--scenes 0,5.23,8.77] [--voice-ref -26] [--sfx-db -7]
 voice_raw.wav: mono 48 kHz extract of the original clip's audio.
 words.json: [[start, end, word, prob], ...] word timestamps; pauses > 0.25 s build the noise profile.
+--max-gap-db: only pauses quieter than this (dBFS) go into the noise profile, so pauses that still
+    hold breath or voice bleed are not treated as noise.
+--scenes: cut times of a multi-take clip; each take's speech is gain-matched to the median take
+    before compression (the gain steps on the cuts, so the change is hidden).
+--voice-ref: gain the denoised speech to this RMS (dBFS) before EQ/compression, so the compressor
+    and expander thresholds act the same on hot and quiet recordings.
+--sfx-db: SFX bus gain before ducking (default -7, tuned for the first reel).
 """
-import json, subprocess, sys, numpy as np, noisereduce as nr
+import argparse, json, subprocess, sys, numpy as np, noisereduce as nr
 from scipy.io import wavfile
 
-SRC_VIDEO, VOICE_RAW, SFX, WORDS, OUT = sys.argv[1:6]
+ap = argparse.ArgumentParser()
+for name in ("src_video", "voice_raw", "sfx", "words", "out"):
+    ap.add_argument(name)
+ap.add_argument("--max-gap-db", type=float, default=None)
+ap.add_argument("--scenes", type=lambda s: [float(v) for v in s.split(",")], default=None)
+ap.add_argument("--voice-ref", type=float, default=None)
+ap.add_argument("--sfx-db", type=float, default=-7.0)
+args = ap.parse_args()
+SRC_VIDEO, VOICE_RAW, SFX, WORDS, OUT = args.src_video, args.voice_raw, args.sfx, args.words, args.out
 SR = 48000
+db = lambda s: 20 * np.log10(np.sqrt((s**2).mean()) + 1e-12)
 
 def run(args):
     r = subprocess.run(args, capture_output=True, text=True)
@@ -26,10 +43,30 @@ sr, x = wavfile.read(VOICE_RAW)
 x = x.astype(np.float32) / 2**31
 w = json.load(open(WORDS))
 gaps = [(w[i][1] + 0.04, w[i + 1][0] - 0.04) for i in range(len(w) - 1) if w[i + 1][0] - w[i][1] > 0.25]
+if args.max_gap_db is not None:
+    gaps = [(a, b) for a, b in gaps if db(x[int(a * sr):int(b * sr)]) <= args.max_gap_db]
 noise = np.concatenate([x[int(a * sr):int(b * sr)] for a, b in gaps if b > a])
 print(f"noise profile: {len(noise) / sr:.2f} s from {len(gaps)} pauses")
+
+if args.scenes:
+    bounds = args.scenes + [len(x) / sr]
+    levels = []
+    for a, b in zip(bounds[:-1], bounds[1:]):
+        ws = [q for q in w if a <= q[0] < b]
+        levels.append(db(np.concatenate([x[int(q[0] * sr):int(q[1] * sr)] for q in ws])) if ws else None)
+    target = float(np.median([l for l in levels if l is not None]))
+    for (a, b), l in zip(zip(bounds[:-1], bounds[1:]), levels):
+        if l is not None:
+            g = float(np.clip(target - l, -6, 6))
+            x[int(a * sr):int(b * sr)] *= 10 ** (g / 20)
+            print(f"take {a:6.2f}-{b:6.2f}s: {l:6.1f} dBFS -> gain {g:+.1f} dB")
 clean = nr.reduce_noise(y=x, sr=sr, y_noise=noise, stationary=True, prop_decrease=0.92,
                         n_std_thresh_stationary=2.0, freq_mask_smooth_hz=300, time_mask_smooth_ms=60)
+if args.voice_ref is not None:
+    speech = np.concatenate([clean[int(q[0] * sr):int(q[1] * sr)] for q in w])
+    g = args.voice_ref - db(speech)
+    clean = clean * 10 ** (g / 20)
+    print(f"voice to reference: {db(speech):.1f} -> {args.voice_ref:.1f} dBFS ({g:+.1f} dB)")
 wavfile.write("voice_nr.wav", sr, clean.astype(np.float32))
 
 # ---------- 2. voice polish ----------
@@ -49,7 +86,7 @@ run(["ffmpeg", "-v", "error", "-y", "-i", "voice_nr.wav", "-af", VOICE_CHAIN, "-
 # ---------- 3. mix: SFX ducked under the voice, then 2-pass loudnorm ----------
 MIX = (
     "[0:a]aformat=channel_layouts=mono,asplit=2[v][sc];"
-    "[1:a]volume=-7dB,highpass=f=60,equalizer=f=3000:t=q:w=1.2:g=-2[s];"  # SFX bus: under the voice, room for presence
+    f"[1:a]volume={args.sfx_db}dB,highpass=f=60,equalizer=f=3000:t=q:w=1.2:g=-2[s];"  # SFX bus: under the voice, room for presence
     "[s][sc]sidechaincompress=threshold=0.03:ratio=4:attack=8:release=220:makeup=1[sd];"
     "[v]pan=stereo|c0=c0|c1=c0[vs];"
     "[vs][sd]amix=inputs=2:normalize=0:duration=first[m]"

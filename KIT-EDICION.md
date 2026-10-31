@@ -40,6 +40,10 @@ encabezado del script. Requiere Python con `numpy` y `scipy`.
 `mi-reel/sfx/audio_master.py` limpia y masteriza el audio: reducción de ruido espectral con perfil
 tomado de las pausas, EQ de voz, de-esser, compresor, efectos atenuados bajo la voz (*ducking*) y
 normalización a −14 LUFS / −1 dBTP, el estándar para Reels y TikTok. Requiere además `noisereduce`.
+Para clips con varias tomas o grabados más fuerte, usá `--scenes` (iguala el nivel de cada toma),
+`--max-gap-db` (solo pausas realmente silenciosas como perfil de ruido), `--voice-ref -26` (la cadena
+actúa igual sin importar el nivel de entrada) y `--sfx-db` (nivel de los efectos). Ejemplo en el
+encabezado del script; `regalos_sfx.py` es la línea de tiempo de efectos del reel de regalos.
 
 ## Fórmula de pedido (de la guía)
 

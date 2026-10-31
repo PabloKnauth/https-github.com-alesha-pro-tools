@@ -12,11 +12,11 @@ import {
 
 // Moto Roka · servicio — widgets de vidrio, cámara dinámica y subtítulos palabra por palabra.
 // La iluminación del clip no se toca: solo zoom/movimiento y gráficos encima.
-const BLUE = "#2f45e0";
-const BLUE_SOFT = "#7d8cff";
-const AMBER = "#ffb020";
+export const BLUE = "#2f45e0";
+export const BLUE_SOFT = "#7d8cff";
+export const AMBER = "#ffb020";
 const RED = "#ff4d4f";
-const FONT = "Inter, sans-serif";
+export const FONT = "Inter, sans-serif";
 
 // Transcripción corregida [inicio, fin, palabra]
 const WORDS: [number, number, string][] = [
@@ -53,7 +53,7 @@ const PAGES: [number, number][] = (() => {
   return pages;
 })();
 
-const glass: React.CSSProperties = {
+export const glass: React.CSSProperties = {
   background: "rgba(10, 14, 40, 0.42)",
   backdropFilter: "blur(22px) saturate(1.5)",
   WebkitBackdropFilter: "blur(22px) saturate(1.5)",
@@ -64,13 +64,13 @@ const glass: React.CSSProperties = {
   fontFamily: FONT,
 };
 
-const useT = () => {
+export const useT = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   return { t: frame / fps, frame, fps };
 };
 
-const springAt = (frame: number, fps: number, at: number, damping = 12) =>
+export const springAt = (frame: number, fps: number, at: number, damping = 12) =>
   spring({ frame: frame - at * fps, fps, config: { damping, stiffness: 130, mass: 0.8 } });
 
 // ---------- cámara ----------
@@ -101,7 +101,7 @@ const Camera: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 // ---------- contenedor flotante ----------
-const Float: React.FC<{
+export const Float: React.FC<{
   inAt: number;
   outAt: number;
   x: number;
@@ -150,7 +150,7 @@ const Float: React.FC<{
   );
 };
 
-const Kicker: React.FC<{ color?: string; children: React.ReactNode }> = ({ color = BLUE_SOFT, children }) => (
+export const Kicker: React.FC<{ color?: string; children: React.ReactNode }> = ({ color = BLUE_SOFT, children }) => (
   <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 24, fontWeight: 800, letterSpacing: 3, color }}>
     <span style={{ width: 12, height: 12, borderRadius: 6, background: color, boxShadow: `0 0 12px ${color}` }} />
     {children}
@@ -158,7 +158,7 @@ const Kicker: React.FC<{ color?: string; children: React.ReactNode }> = ({ color
 );
 
 // ---------- iconos ----------
-const Icon: React.FC<{ bg: string; children: React.ReactNode; size?: number }> = ({ bg, children, size = 76 }) => (
+export const Icon: React.FC<{ bg: string; children: React.ReactNode; size?: number }> = ({ bg, children, size = 76 }) => (
   <svg width={size} height={size} viewBox="0 0 64 64" style={{ flexShrink: 0 }}>
     <rect width="64" height="64" rx="18" fill={bg} />
     {children}
