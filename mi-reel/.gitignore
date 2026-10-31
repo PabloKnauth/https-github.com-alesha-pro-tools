@@ -5,3 +5,8 @@ dist
 
 # Ignore the output video from Git but not videos you import into src/.
 out
+
+# Clips del usuario: se copian a public/ para editar, no se versionan.
+public/*.mp4
+public/*.mov
+public/*.MOV
