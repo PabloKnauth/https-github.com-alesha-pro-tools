@@ -3,7 +3,7 @@
    ========================================================== */
 window.MARCA = {
   nombre: "Pablo Knauth",            // TODO: confirma el nombre de tu marca
-  instagram: "pabloknauth",          // TODO: tu usuario de Instagram sin @
+  instagram: "pablo_knauth_",        // usuario de Instagram sin @
   tiktok: "",                        // opcional, sin @
   youtube: "",                       // opcional, URL completa
   correo: "",                        // opcional, correo de contacto visible
