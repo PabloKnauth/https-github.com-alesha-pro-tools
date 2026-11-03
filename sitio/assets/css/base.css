@@ -1,0 +1,103 @@
+/* Collage retro: papel crema, tinta negra, ondas tomate/rosa/mostaza,
+   fotos B/N recortadas con borde de papel, garabatos amarillos a mano. */
+:root {
+  --bg: #F3EAD8;        /* papel */
+  --bg-2: #EADBC0;      /* papel tostado */
+  --surface: #FBF6EC;   /* hoja limpia */
+  --fg: #17130F;        /* tinta */
+  --muted: #5F5347;
+  --line: #17130F;
+  --shadow: #17130F;
+  --tomato: #EC4A27;
+  --pink: #EF80A8;
+  --mustard: #F4B71F;
+  --moss: #1F5B4C;
+  --on-color: #17130F;  /* texto sobre tomate/rosa/mostaza */
+  --on-moss: #F3EAD8;
+  --grain-opacity: .22;
+  --crema: #FBF6EC;     /* garabatos sobre portadas de color (igual en ambos temas) */
+
+  --f-display: "Shrikhand", "Cooper Black", Georgia, serif;
+  --f-marker: "Permanent Marker", "Comic Sans MS", cursive;
+  --f-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+
+  --step--1: clamp(.82rem, .79rem + .15vw, .9rem);
+  --step-0: clamp(1rem, .96rem + .2vw, 1.1rem);
+  --step-1: clamp(1.2rem, 1.1rem + .5vw, 1.45rem);
+  --step-2: clamp(1.5rem, 1.3rem + 1vw, 2.1rem);
+  --step-3: clamp(2rem, 1.6rem + 2vw, 3.2rem);
+  --step-4: clamp(2.6rem, 1.8rem + 4.2vw, 5.6rem);
+
+  --r: 14px;
+  --gutter: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16120F; --bg-2: #201A15; --surface: #251E18; --fg: #F3EAD8; --muted: #BFB09C;
+    --line: #F3EAD8; --shadow: #000000; --tomato: #F25A36; --pink: #F28BB0; --mustard: #F6C03A;
+    --moss: #2F7A66; --on-color: #17130F; --on-moss: #F3EAD8; --grain-opacity: .12; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16120F; --bg-2: #201A15; --surface: #251E18; --fg: #F3EAD8; --muted: #BFB09C;
+  --line: #F3EAD8; --shadow: #000000; --tomato: #F25A36; --pink: #F28BB0; --mustard: #F6C03A;
+  --moss: #2F7A66; --on-color: #17130F; --on-moss: #F3EAD8; --grain-opacity: .12; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; overflow-x: clip; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--f-body); font-size: var(--step-0); line-height: 1.6;
+  font-variation-settings: "wdth" 100; overflow-x: clip;
+}
+/* grano de papel sobre todo */
+body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 100;
+  opacity: var(--grain-opacity); mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1  0 0 0 0 .08  0 0 0 0 .05  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--tomato); outline-offset: 3px; border-radius: 4px; }
+[hidden] { display: none !important; }
+
+.wrap { width: 100%; max-width: 1180px; margin-inline: auto; padding-left: var(--gutter); padding-right: var(--gutter-r); }
+
+.marker { font-family: var(--f-marker); font-weight: 400; letter-spacing: .01em; }
+.display { font-family: var(--f-display); font-weight: 400; line-height: .98; letter-spacing: -.01em; text-wrap: balance; }
+
+/* Botones tipo sticker */
+.btn {
+  --b-bg: var(--fg); --b-fg: var(--bg);
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+  font: 800 var(--step-0)/1 var(--f-body); font-variation-settings: "wdth" 110;
+  text-decoration: none; text-transform: uppercase; letter-spacing: .04em;
+  padding: .95em 1.4em; border-radius: 999px; border: 2.5px solid var(--line);
+  background: var(--b-bg); color: var(--b-fg); cursor: pointer;
+  box-shadow: 4px 4px 0 var(--shadow); transition: transform .15s ease, box-shadow .15s ease;
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--shadow); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); }
+.btn[disabled] { opacity: .55; cursor: not-allowed; transform: none; box-shadow: 2px 2px 0 var(--shadow); }
+.btn--tomato { --b-bg: var(--tomato); --b-fg: var(--on-color); }
+.btn--mustard { --b-bg: var(--mustard); --b-fg: var(--on-color); }
+.btn--pink { --b-bg: var(--pink); --b-fg: var(--on-color); }
+.btn--ghost { --b-bg: var(--surface); --b-fg: var(--fg); }
+.btn--sm { font-size: var(--step--1); padding: .75em 1.1em; box-shadow: 3px 3px 0 var(--shadow); }
+
+/* Garabatos */
+.doodle { fill: none; stroke: var(--mustard); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Foto recortada con borde de papel y cinta */
+.recorte { position: relative; background: #F6EEDF; padding: 10px; border-radius: 6px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.08), 8px 10px 0 rgba(23,19,15,.18); }
+.recorte img { border-radius: 3px; }
+.cinta { position: absolute; width: 96px; height: 28px; background: color-mix(in srgb, var(--mustard) 70%, transparent);
+  box-shadow: 0 1px 2px rgba(0,0,0,.15); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

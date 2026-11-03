@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sistema de contenido semanal con IA · Pablo Knauth</title>
+<meta name="description" content="Manual operativo para publicar todas las semanas en 5 bloques de trabajo, sin depender de la inspiración.">
+<meta property="og:title" content="Sistema de contenido semanal con IA">
+<meta property="og:image" content="https://tudominio.com/assets/img/banner.jpg">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/fuentes.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/doc.css">
+<style>
+@page { size: A4; margin: 16mm 16mm 18mm;
+  @bottom-left { content: "Pablo Knauth · tudominio.com"; font: 700 8pt Archivo, sans-serif; color: #5F5347; letter-spacing: .06em; text-transform: uppercase; }
+  @bottom-right { content: counter(page); font: 400 11pt Shrikhand, serif; color: #EC4A27; } }
+@page :first { margin: 0; @bottom-left { content: none; } @bottom-right { content: none; } }
+</style>
+</head>
+<body style="--c:var(--moss)">
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="g-estrella" viewBox="0 0 100 100">
+    <path d="M50 7 C53 20 57 30 61 38 C72 38 83 38 93 40 C84 47 75 53 67 59 C70 69 74 79 77 91 C67 84 58 77 50 71 C41 78 32 85 22 91 C26 80 30 69 33 59 C24 52 15 46 7 40 C18 38 29 38 39 37 C43 27 46 17 50 7 Z"/>
+    <path d="M47 12 C51 24 54 32 58 41 M36 62 C44 66 56 66 64 62" opacity=".7"/>
+  </symbol>
+  <symbol id="g-corona" viewBox="0 0 100 100">
+    <path d="M12 74 C14 58 16 42 19 27 C27 37 34 46 40 53 C43 40 46 27 50 14 C54 27 57 40 60 53 C67 45 74 36 82 27 C84 42 86 58 88 74 C63 77 37 77 12 74 Z"/>
+    <path d="M30 86 C44 84 58 84 72 86"/>
+    <circle cx="50" cy="62" r="3"/><circle cx="31" cy="64" r="2.5"/><circle cx="69" cy="64" r="2.5"/>
+  </symbol>
+  <symbol id="g-rayo" viewBox="0 0 100 100">
+    <path d="M60 6 C50 22 39 38 27 55 C35 55 43 54 50 54 C47 67 44 80 40 94 C52 76 64 58 76 40 C68 40 60 41 53 41 C56 29 58 18 60 6 Z"/>
+  </symbol>
+  <symbol id="g-espiral" viewBox="0 0 100 100">
+    <path d="M52 50 C55 45 62 47 61 54 C59 62 47 63 43 55 C38 44 49 34 60 37 C75 41 77 61 66 70 C52 81 30 74 26 57 C21 37 38 20 58 22 C80 25 92 46 86 66"/>
+  </symbol>
+  <symbol id="g-flecha" viewBox="0 0 100 100">
+    <path d="M10 30 C30 20 55 26 70 46 C76 54 80 63 82 74"/>
+    <path d="M66 66 C72 70 78 74 82 78 C85 70 88 63 92 56"/>
+  </symbol>
+</svg>
+
+<header class="barra">
+  <div class="wrap barra__in">
+    <a class="barra__volver" href="../index.html#biblioteca">← Biblioteca</a>
+    <a class="barra__marca marker" href="../index.html">Pablo Knauth</a>
+    <a class="btn btn--sm btn--mustard" href="pdf/sistema-contenido-semanal.pdf" download>Descargar PDF</a>
+  </div>
+</header>
+
+<section class="portada">
+  <svg class="portada__ondas" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1200" height="800" fill="var(--moss)"/><path fill="var(--mustard)" d="M640 0 C780 120 560 260 720 400 S900 660 760 800 L1010 800 C1150 660 920 520 1040 400 S880 120 1000 0 Z"/><path fill="var(--pink)" d="M740 0 C860 130 680 260 820 400 S980 660 880 800 L940 800 C1060 660 860 520 960 400 S820 130 920 0 Z"/><path fill="var(--mustard)" d="M0 560 C140 520 220 640 380 610 S600 700 720 800 L0 800 Z"/><path fill="var(--pink)" d="M0 650 C120 630 210 720 330 700 S480 760 560 800 L0 800 Z"/></svg>
+  <svg class="portada__d" viewBox="0 0 100 100" aria-hidden="true"><use class="doodle" href="#g-espiral"/></svg>
+  <div class="wrap portada__in">
+    <div class="portada__txt">
+      <p class="portada__tipo marker">Manual</p>
+      <h1 class="display">Sistema de contenido semanal con IA</h1>
+      <p class="portada__sub">Manual operativo para publicar todas las semanas en 5 bloques de trabajo, sin depender de la inspiración.</p>
+      <ul class="portada__meta"><li>Todos</li><li>4 min de lectura</li><li>4 prompts</li></ul>
+      <p class="portada__autor marker">por Pablo Knauth · @pabloknauth</p>
+    </div>
+    <figure class="recorte portada__foto"><img src="../assets/img/retrato-sm.jpg" width="560" height="747" alt="Pablo Knauth"></figure>
+  </div>
+</section>
+
+<main class="wrap">
+  <nav class="indice" aria-labelledby="indice-t">
+    <h2 class="indice__t marker" id="indice-t">En este recurso</h2>
+    <ol><li><a href="#para-que-sirve-este-manual">Para qué sirve este manual</a></li><li><a href="#antes-de-empezar">Antes de empezar</a></li><li><a href="#la-semana">La semana</a></li><li><a href="#bloque-1-ideas">Bloque 1 · Ideas</a></li><li><a href="#bloque-2-guiones">Bloque 2 · Guiones</a></li><li><a href="#bloque-3-grabacion">Bloque 3 · Grabación</a></li><li><a href="#bloque-4-edicion">Bloque 4 · Edición</a></li><li><a href="#bloque-5-publicacion-y-revision">Bloque 5 · Publicación y revisión</a></li><li><a href="#si-te-atrasas">Si te atrasas</a></li><li><a href="#checklist-semanal">Checklist semanal</a></li></ol>
+  </nav>
+  <article class="doc">
+<h2 id="para-que-sirve-este-manual">Para qué sirve este manual</h2>
+<p>Publicar con constancia no depende de tener más ideas; depende de tener un <strong>proceso</strong>. Este manual divide la semana en cinco bloques con un objetivo, un tiempo y un resultado claro. La IA te ayuda en cada uno, pero las decisiones las tomas tú.</p>
+<p><strong>Meta semanal sugerida:</strong> 3 Reels, 2 carruseles e historias diarias. Ajusta los números a tu realidad; es mejor cumplir 2 que prometer 7.</p>
+<h2 id="antes-de-empezar">Antes de empezar</h2>
+<p>Necesitas tener definido, una sola vez:</p>
+<ul>
+<li class="check">Tus 3 pilares de contenido</li>
+<li class="check">Tu documento de voz de marca</li>
+<li class="check">Una carpeta de ideas (notas del celular, Notion o una hoja de cálculo)</li>
+<li class="check">Una carpeta de grabaciones con subcarpetas por semana</li>
+</ul>
+<h2 id="la-semana">La semana</h2>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Bloque</th>
+<th>Día sugerido</th>
+<th>Tiempo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Ideas</td>
+<td>Lunes</td>
+<td>30 min</td>
+<td>5 ideas elegidas</td>
+</tr>
+<tr>
+<td>2. Guiones</td>
+<td>Martes</td>
+<td>60 min</td>
+<td>5 guiones listos</td>
+</tr>
+<tr>
+<td>3. Grabación</td>
+<td>Miércoles</td>
+<td>90 min</td>
+<td>Todo el material grabado</td>
+</tr>
+<tr>
+<td>4. Edición</td>
+<td>Jueves</td>
+<td>2 h</td>
+<td>Piezas exportadas</td>
+</tr>
+<tr>
+<td>5. Publicación y revisión</td>
+<td>Viernes</td>
+<td>45 min</td>
+<td>Programado y medido</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="bloque-1-ideas">Bloque 1 · Ideas</h2>
+<p><strong>Objetivo:</strong> salir con 5 ideas, ni una más.</p>
+<ol>
+<li>Revisa los comentarios y DMs de la semana. Anota preguntas reales.</li>
+<li>Pide a la IA que convierta esas preguntas en ideas.</li>
+<li>Elige 5 y asigna cada una a un pilar.</li>
+</ol>
+<figure class="prompt"><figcaption>prompt 01</figcaption><pre>Estas son las preguntas y comentarios que recibí esta semana: [pega]. Mis pilares son [pilar 1], [pilar 2] y [pilar 3]. Dame 10 ideas de contenido, cada una con el pilar al que pertenece y el formato sugerido (Reel o carrusel).</pre><button class="copiar" type="button">Copiar</button></figure>
+<h2 id="bloque-2-guiones">Bloque 2 · Guiones</h2>
+<p><strong>Objetivo:</strong> que el miércoles solo tengas que leer y grabar.</p>
+<ol>
+<li>Escribe o genera un guion por idea.</li>
+<li>Léelo en voz alta. Si tropiezas, reescribe esa frase.</li>
+<li>Escribe el texto en pantalla de los primeros 3 segundos.</li>
+</ol>
+<figure class="prompt"><figcaption>prompt 02</figcaption><pre>Escribe guiones de 30 segundos para estas 5 ideas: [lista]. Sigue mi documento de voz. Entrégalos en tabla: Segundo | Lo que digo | Texto en pantalla | Toma.</pre><button class="copiar" type="button">Copiar</button></figure>
+<aside class="nota"><svg viewBox="0 0 100 100" aria-hidden="true"><use class="doodle" href="#g-estrella"/></svg><p><strong>Regla:</strong> la IA escribe el borrador; tú decides el gancho. Es la parte que más influye en que la gente se quede.</p></aside>
+<h2 id="bloque-3-grabacion">Bloque 3 · Grabación</h2>
+<p><strong>Objetivo:</strong> grabar todo en una sola sesión.</p>
+<ul>
+<li class="check">Luz frente a ti (ventana o aro), nunca detrás</li>
+<li class="check">Celular a la altura de los ojos, lente limpio</li>
+<li class="check">Graba cada guion 2 veces, la segunda más rápido</li>
+<li class="check">Graba 10 tomas de recurso: manos, pantalla, espacio de trabajo</li>
+<li class="check">Cambia de camiseta o de ángulo entre videos si quieres que parezcan de días distintos</li>
+</ul>
+<h2 id="bloque-4-edicion">Bloque 4 · Edición</h2>
+<p><strong>Objetivo:</strong> exportar, no perfeccionar.</p>
+<ol>
+<li>Corta silencios y repeticiones.</li>
+<li>Subtítulos siempre; revisa nombres propios y marcas.</li>
+<li>Primer segundo con movimiento o texto grande.</li>
+<li>Exporta en 1080×1920.</li>
+</ol>
+<figure class="prompt"><figcaption>prompt 03</figcaption><pre>Revisa estos subtítulos y corrige ortografía, nombres de marcas y palabras mal transcritas. Las marcas correctas son: [lista]. Devuelve el texto con los mismos tiempos: [pega los subtítulos].</pre><button class="copiar" type="button">Copiar</button></figure>
+<h2 id="bloque-5-publicacion-y-revision">Bloque 5 · Publicación y revisión</h2>
+<p><strong>Objetivo:</strong> programar la semana siguiente y aprender de la anterior.</p>
+<ol>
+<li>Programa las piezas en los horarios en que tu audiencia está activa (lo ves en las estadísticas de tu cuenta).</li>
+<li>Anota estas métricas de cada pieza de la semana anterior:</li>
+</ol>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Qué te dice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Retención a 3 segundos</td>
+<td>Si el gancho funciona</td>
+</tr>
+<tr>
+<td>Tiempo de reproducción promedio</td>
+<td>Si el desarrollo engancha</td>
+</tr>
+<tr>
+<td>Guardados</td>
+<td>Si el contenido es útil</td>
+</tr>
+<tr>
+<td>Compartidos</td>
+<td>Si el contenido conecta</td>
+</tr>
+<tr>
+<td>DMs y clics al enlace</td>
+<td>Si el contenido vende</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="3">
+<li>Pide a la IA que encuentre patrones:</li>
+</ol>
+<figure class="prompt"><figcaption>prompt 04</figcaption><pre>Estas son las métricas de mis últimas 10 publicaciones: [pega tabla con tema, formato, gancho y métricas]. ¿Qué tienen en común las 3 mejores y las 3 peores? Dame 3 decisiones concretas para la próxima semana.</pre><button class="copiar" type="button">Copiar</button></figure>
+<h2 id="si-te-atrasas">Si te atrasas</h2>
+<ul>
+<li>Perdiste un día: junta dos bloques, no saltes ninguno.</li>
+<li>Perdiste la semana: publica 1 Reel y 1 carrusel, nada más, y retoma el lunes.</li>
+<li>Sin ideas: vuelve a tus 3 publicaciones con más guardados y haz una segunda parte.</li>
+</ul>
+<h2 id="checklist-semanal">Checklist semanal</h2>
+<ul>
+<li class="check">Lunes: 5 ideas elegidas</li>
+<li class="check">Martes: 5 guiones leídos en voz alta</li>
+<li class="check">Miércoles: todo grabado</li>
+<li class="check">Jueves: todo exportado con subtítulos revisados</li>
+<li class="check">Viernes: programado y métricas anotadas</li>
+</ul>
+  </article>
+</main>
+
+<footer class="doc-pie">
+  <div class="wrap doc-pie__in">
+    <p class="display doc-pie__marca">Pablo Knauth</p>
+    <p>Más recursos gratis en <strong>tudominio.com</strong> · Instagram <strong>@pabloknauth</strong></p>
+  </div>
+</footer>
+
+<div class="compuerta" id="compuerta" hidden>
+  <div class="compuerta__caja">
+    <p class="marker" style="color:var(--tomato);margin:0 0 6px">recurso gratis</p>
+    <h2 class="display">Desbloquéalo en un toque</h2>
+    <p>Este recurso es gratis para quienes me siguen en Instagram. Vuelve a la biblioteca, sígueme y se abrirá al instante.</p>
+    <a class="btn btn--tomato" href="../index.html?r=sistema-contenido-semanal#biblioteca">Desbloquear gratis</a>
+  </div>
+</div>
+<script src="../assets/js/recurso.js"></script>
+</body>
+</html>

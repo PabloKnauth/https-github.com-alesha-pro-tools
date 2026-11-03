@@ -1,0 +1,13 @@
+# Publica la carpeta tal cual (sitio estático, sin compilación en Netlify).
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/recursos/pdf/*"
+  [headers.values]
+    Content-Disposition = "attachment"

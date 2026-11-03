@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Crea tu asistente de IA con tu voz · Pablo Knauth</title>
+<meta name="description" content="Guía paso a paso para tener una IA que escriba como tú, conozca tu negocio y no suene a robot.">
+<meta property="og:title" content="Crea tu asistente de IA con tu voz">
+<meta property="og:image" content="https://tudominio.com/assets/img/banner.jpg">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/fuentes.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/doc.css">
+<style>
+@page { size: A4; margin: 16mm 16mm 18mm;
+  @bottom-left { content: "Pablo Knauth · tudominio.com"; font: 700 8pt Archivo, sans-serif; color: #5F5347; letter-spacing: .06em; text-transform: uppercase; }
+  @bottom-right { content: counter(page); font: 400 11pt Shrikhand, serif; color: #EC4A27; } }
+@page :first { margin: 0; @bottom-left { content: none; } @bottom-right { content: none; } }
+</style>
+</head>
+<body style="--c:var(--pink)">
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="g-estrella" viewBox="0 0 100 100">
+    <path d="M50 7 C53 20 57 30 61 38 C72 38 83 38 93 40 C84 47 75 53 67 59 C70 69 74 79 77 91 C67 84 58 77 50 71 C41 78 32 85 22 91 C26 80 30 69 33 59 C24 52 15 46 7 40 C18 38 29 38 39 37 C43 27 46 17 50 7 Z"/>
+    <path d="M47 12 C51 24 54 32 58 41 M36 62 C44 66 56 66 64 62" opacity=".7"/>
+  </symbol>
+  <symbol id="g-corona" viewBox="0 0 100 100">
+    <path d="M12 74 C14 58 16 42 19 27 C27 37 34 46 40 53 C43 40 46 27 50 14 C54 27 57 40 60 53 C67 45 74 36 82 27 C84 42 86 58 88 74 C63 77 37 77 12 74 Z"/>
+    <path d="M30 86 C44 84 58 84 72 86"/>
+    <circle cx="50" cy="62" r="3"/><circle cx="31" cy="64" r="2.5"/><circle cx="69" cy="64" r="2.5"/>
+  </symbol>
+  <symbol id="g-rayo" viewBox="0 0 100 100">
+    <path d="M60 6 C50 22 39 38 27 55 C35 55 43 54 50 54 C47 67 44 80 40 94 C52 76 64 58 76 40 C68 40 60 41 53 41 C56 29 58 18 60 6 Z"/>
+  </symbol>
+  <symbol id="g-espiral" viewBox="0 0 100 100">
+    <path d="M52 50 C55 45 62 47 61 54 C59 62 47 63 43 55 C38 44 49 34 60 37 C75 41 77 61 66 70 C52 81 30 74 26 57 C21 37 38 20 58 22 C80 25 92 46 86 66"/>
+  </symbol>
+  <symbol id="g-flecha" viewBox="0 0 100 100">
+    <path d="M10 30 C30 20 55 26 70 46 C76 54 80 63 82 74"/>
+    <path d="M66 66 C72 70 78 74 82 78 C85 70 88 63 92 56"/>
+  </symbol>
+</svg>
+
+<header class="barra">
+  <div class="wrap barra__in">
+    <a class="barra__volver" href="../index.html#biblioteca">← Biblioteca</a>
+    <a class="barra__marca marker" href="../index.html">Pablo Knauth</a>
+    <a class="btn btn--sm btn--mustard" href="pdf/asistente-ia-tu-voz.pdf" download>Descargar PDF</a>
+  </div>
+</header>
+
+<section class="portada">
+  <svg class="portada__ondas" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1200" height="800" fill="var(--pink)"/><path fill="var(--mustard)" d="M640 0 C780 120 560 260 720 400 S900 660 760 800 L1010 800 C1150 660 920 520 1040 400 S880 120 1000 0 Z"/><path fill="var(--tomato)" d="M740 0 C860 130 680 260 820 400 S980 660 880 800 L940 800 C1060 660 860 520 960 400 S820 130 920 0 Z"/><path fill="var(--mustard)" d="M0 560 C140 520 220 640 380 610 S600 700 720 800 L0 800 Z"/><path fill="var(--tomato)" d="M0 650 C120 630 210 720 330 700 S480 760 560 800 L0 800 Z"/></svg>
+  <svg class="portada__d" viewBox="0 0 100 100" aria-hidden="true"><use class="doodle" href="#g-corona"/></svg>
+  <div class="wrap portada__in">
+    <div class="portada__txt">
+      <p class="portada__tipo marker">Guía</p>
+      <h1 class="display">Crea tu asistente de IA con tu voz</h1>
+      <p class="portada__sub">Guía paso a paso para tener una IA que escriba como tú, conozca tu negocio y no suene a robot.</p>
+      <ul class="portada__meta"><li>Principiante</li><li>5 min de lectura</li></ul>
+      <p class="portada__autor marker">por Pablo Knauth · @pabloknauth</p>
+    </div>
+    <figure class="recorte portada__foto"><img src="../assets/img/retrato-sm.jpg" width="560" height="747" alt="Pablo Knauth"></figure>
+  </div>
+</section>
+
+<main class="wrap">
+  <nav class="indice" aria-labelledby="indice-t">
+    <h2 class="indice__t marker" id="indice-t">En este recurso</h2>
+    <ol><li><a href="#que-vas-a-construir">Qué vas a construir</a></li><li><a href="#paso-1-reune-tu-material">Paso 1 · Reúne tu material</a></li><li><a href="#paso-2-escribe-tu-documento-de-voz">Paso 2 · Escribe tu documento de voz</a></li><li><a href="#paso-3-escribe-las-instrucciones">Paso 3 · Escribe las instrucciones</a></li><li><a href="#paso-4-configuralo">Paso 4 · Configúralo</a></li><li><a href="#paso-5-ponlo-a-prueba">Paso 5 · Ponlo a prueba</a></li><li><a href="#errores-frecuentes">Errores frecuentes</a></li><li><a href="#checklist-final">Checklist final</a></li></ol>
+  </nav>
+  <article class="doc">
+<h2 id="que-vas-a-construir">Qué vas a construir</h2>
+<p>Un asistente es una conversación de IA que ya trae preparado lo que siempre tienes que explicarle: quién eres, a quién le hablas, cómo escribes y qué vendes. En lugar de empezar de cero cada vez, abres tu asistente y pides directamente "escríbeme el guion del martes".</p>
+<p>Lo puedes armar en <strong>Claude</strong> (con Proyectos) o en <strong>ChatGPT</strong> (con GPTs personalizados). El método es el mismo; solo cambia dónde pegas las cosas.</p>
+<aside class="nota"><svg viewBox="0 0 100 100" aria-hidden="true"><use class="doodle" href="#g-estrella"/></svg><p><strong>Tiempo:</strong> una tarde. <strong>Costo:</strong> los Proyectos de Claude y la creación de GPTs pueden requerir un plan de pago según el momento; revisa las condiciones actuales de cada servicio antes de empezar.</p></aside>
+<h2 id="paso-1-reune-tu-material">Paso 1 · Reúne tu material</h2>
+<p>Abre una carpeta y guarda ahí:</p>
+<ul>
+<li class="check">10 textos tuyos que te gusten: copies, correos, guiones o mensajes</li>
+<li class="check">3 publicaciones que funcionaron muy bien (y por qué crees que funcionaron)</li>
+<li class="check">La lista de tus productos o servicios con precios</li>
+<li class="check">Las 10 preguntas que más te hacen tus clientes, con tus respuestas</li>
+<li class="check">Palabras o frases que jamás usarías</li>
+</ul>
+<p>No hace falta que esté bonito. La IA aprende de ejemplos reales mucho mejor que de descripciones.</p>
+<h2 id="paso-2-escribe-tu-documento-de-voz">Paso 2 · Escribe tu documento de voz</h2>
+<p>Usa la <strong>Plantilla de voz de marca</strong> de esta biblioteca. Si no tienes tiempo, pega tus 10 textos en una conversación y usa este prompt:</p>
+<figure class="prompt"><figcaption>prompt 01</figcaption><pre>Analiza estos 10 textos que escribí yo: [pega los textos]. Describe mi forma de escribir en un documento de una página: largo de frases, nivel de formalidad, palabras que repito, cómo empiezo y cómo cierro, uso de humor, de emojis y de preguntas. Incluye 5 reglas que debería seguir alguien que quiera escribir como yo.</pre><button class="copiar" type="button">Copiar</button></figure>
+<p>Lee el resultado y corrige lo que no sea cierto. Ese documento es el corazón de tu asistente.</p>
+<h2 id="paso-3-escribe-las-instrucciones">Paso 3 · Escribe las instrucciones</h2>
+<p>Las instrucciones son el texto que el asistente lee antes de cada conversación. Copia esta plantilla y rellénala:</p>
+<figure class="prompt"><figcaption>prompt 02</figcaption><pre>Eres el asistente de contenido de [tu nombre], [qué haces] para [público].
+
+TU TRABAJO
+Ayudarme a crear guiones de Reels, carruseles, copies, correos y respuestas a mensajes que suenen exactamente como yo.
+
+MI AUDIENCIA
+[Describe a tu cliente ideal en 3 líneas: situación, frustración y deseo.]
+
+CÓMO ESCRIBO
+Sigue el documento &quot;voz-de-marca&quot; que está en tus archivos. Reglas clave:
+- [regla 1]
+- [regla 2]
+- [regla 3]
+
+LO QUE NUNCA HACES
+- No inventas datos, testimonios ni resultados. Si necesitas un dato, me lo preguntas.
+- No usas estas palabras: [lista].
+- No prometes resultados garantizados.
+
+CÓMO TRABAJAS CONMIGO
+- Si mi pedido es ambiguo, hazme como máximo 2 preguntas antes de escribir.
+- Entrega primero la versión corta. Ofrece la larga solo si la pido.
+- Cuando escribas un guion, incluye el texto en pantalla.
+
+MIS PRODUCTOS
+[Lista de productos con precio y enlace.]</pre><button class="copiar" type="button">Copiar</button></figure>
+<h2 id="paso-4-configuralo">Paso 4 · Configúralo</h2>
+<p><strong>En Claude:</strong> crea un Proyecto nuevo, pega la plantilla del paso 3 en las instrucciones del proyecto y sube tu documento de voz, tus textos de ejemplo y tu lista de productos como archivos del proyecto. Cada conversación que abras dentro del proyecto tendrá todo eso.</p>
+<p><strong>En ChatGPT:</strong> entra a la sección de GPTs, elige crear uno nuevo y usa la pestaña de configuración manual. Pega las instrucciones, sube los mismos archivos como conocimiento y desactiva las funciones que no necesites.</p>
+<aside class="nota"><svg viewBox="0 0 100 100" aria-hidden="true"><use class="doodle" href="#g-estrella"/></svg><p>Los nombres de los menús cambian con frecuencia. Si no encuentras una opción, busca "Projects" en la ayuda de Claude o "Custom GPTs" en la de OpenAI.</p></aside>
+<h2 id="paso-5-ponlo-a-prueba">Paso 5 · Ponlo a prueba</h2>
+<p>Haz estos 5 pedidos y anota qué falla:</p>
+<ol>
+<li>"Escríbeme un guion de Reel sobre [tema frecuente]."</li>
+<li>"Responde este DM: [mensaje real que recibiste]."</li>
+<li>"Dame 10 ideas para la próxima semana."</li>
+<li>"Convierte este Reel en carrusel: [guion]."</li>
+<li>"Escribe el anuncio de [producto]."</li>
+</ol>
+<p>Cada vez que algo no suene a ti, no lo corrijas solo en la conversación: <strong>agrega una regla a las instrucciones</strong>. Después de 2 o 3 rondas el asistente queda afinado.</p>
+<h2 id="errores-frecuentes">Errores frecuentes</h2>
+<ul>
+<li><strong>Instrucciones larguísimas.</strong> Más de dos páginas confunde. Lo detallado va en los archivos.</li>
+<li><strong>Describir en lugar de mostrar.</strong> "Escribo cercano" no sirve; tres ejemplos reales sí.</li>
+<li><strong>Pedirle que invente pruebas.</strong> Testimonios y cifras siempre los aportas tú.</li>
+<li><strong>No actualizarlo.</strong> Cada vez que lances algo nuevo, actualiza la lista de productos.</li>
+</ul>
+<h2 id="checklist-final">Checklist final</h2>
+<ul>
+<li class="check">Mi asistente tiene instrucciones, documento de voz y ejemplos</li>
+<li class="check">Probé los 5 pedidos</li>
+<li class="check">Agregué al menos 3 reglas nuevas después de las pruebas</li>
+<li class="check">Lo guardé en favoritos para abrirlo cada día</li>
+</ul>
+  </article>
+</main>
+
+<footer class="doc-pie">
+  <div class="wrap doc-pie__in">
+    <p class="display doc-pie__marca">Pablo Knauth</p>
+    <p>Más recursos gratis en <strong>tudominio.com</strong> · Instagram <strong>@pabloknauth</strong></p>
+  </div>
+</footer>
+
+<div class="compuerta" id="compuerta" hidden>
+  <div class="compuerta__caja">
+    <p class="marker" style="color:var(--tomato);margin:0 0 6px">recurso gratis</p>
+    <h2 class="display">Desbloquéalo en un toque</h2>
+    <p>Este recurso es gratis para quienes me siguen en Instagram. Vuelve a la biblioteca, sígueme y se abrirá al instante.</p>
+    <a class="btn btn--tomato" href="../index.html?r=asistente-ia-tu-voz#biblioteca">Desbloquear gratis</a>
+  </div>
+</div>
+<script src="../assets/js/recurso.js"></script>
+</body>
+</html>

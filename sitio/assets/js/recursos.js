@@ -1,0 +1,87 @@
+/* Generado por scripts/build.py — no editar a mano */
+window.RECURSOS = [
+ {
+  "slug": "asistente-ia-tu-voz",
+  "titulo": "Crea tu asistente de IA con tu voz",
+  "subtitulo": "Guía paso a paso para tener una IA que escriba como tú, conozca tu negocio y no suene a robot.",
+  "tipo": "Guía",
+  "color": "pink",
+  "garabato": "corona",
+  "nivel": "Principiante",
+  "orden": 2,
+  "minutos": 5,
+  "prompts": 2,
+  "paginas": 5,
+  "claves": "Qué vas a construir Paso 1 · Reúne tu material Paso 2 · Escribe tu documento de voz Paso 3 · Escribe las instrucciones Paso 4 · Configúralo Paso 5 · Ponlo a prueba Errores frecuentes Checklist final"
+ },
+ {
+  "slug": "ganchos-reels",
+  "titulo": "30 ganchos para Reels y cómo adaptarlos con IA",
+  "subtitulo": "Fórmulas para los primeros 3 segundos, ordenadas por tipo, con el prompt para convertirlas a tu tema.",
+  "tipo": "Guía",
+  "color": "tomato",
+  "garabato": "rayo",
+  "nivel": "Principiante",
+  "orden": 6,
+  "minutos": 4,
+  "prompts": 2,
+  "paginas": 5,
+  "claves": "Por qué importan 3 segundos Curiosidad Error común Resultado Contraste Historia Lista y número El gancho también se ve Adapta cualquier gancho con IA Cómo saber si tu gancho funciona"
+ },
+ {
+  "slug": "plantilla-voz-de-marca",
+  "titulo": "Plantilla de voz de marca",
+  "subtitulo": "Rellénala una vez y pégala en cualquier IA para que escriba como tú. Incluye ejemplos de cómo completarla.",
+  "tipo": "Plantilla",
+  "color": "pink",
+  "garabato": "estrella",
+  "nivel": "Todos",
+  "orden": 5,
+  "minutos": 3,
+  "prompts": 1,
+  "paginas": 6,
+  "claves": "Cómo usarla 1. Quién soy 2. A quién le hablo 3. Mi promesa y mis temas 4. Mi tono 5. Mis palabras 6. Ejemplos de cómo escribo 7. Ejemplos de lo que NO soy 8. Reglas visuales 9. Instrucción final para la IA Revisión"
+ },
+ {
+  "slug": "prompts-marca-personal",
+  "titulo": "40 prompts para tu marca personal",
+  "subtitulo": "Posicionamiento, ideas, guiones, carruseles y ventas. Copia, rellena los corchetes y pega.",
+  "tipo": "Prompts",
+  "color": "tomato",
+  "garabato": "estrella",
+  "nivel": "Principiante",
+  "orden": 1,
+  "minutos": 9,
+  "prompts": 40,
+  "paginas": 8,
+  "claves": "Cómo usar este pack 1. Posicionamiento 2. Ideas de contenido 3. Guiones de Reels 4. Carruseles y copies 5. Ventas y mensajes directos Antes de publicar"
+ },
+ {
+  "slug": "sistema-contenido-semanal",
+  "titulo": "Sistema de contenido semanal con IA",
+  "subtitulo": "Manual operativo para publicar todas las semanas en 5 bloques de trabajo, sin depender de la inspiración.",
+  "tipo": "Manual",
+  "color": "moss",
+  "garabato": "espiral",
+  "nivel": "Todos",
+  "orden": 4,
+  "minutos": 4,
+  "prompts": 4,
+  "paginas": 6,
+  "claves": "Para qué sirve este manual Antes de empezar La semana Bloque 1 · Ideas Bloque 2 · Guiones Bloque 3 · Grabación Bloque 4 · Edición Bloque 5 · Publicación y revisión Si te atrasas Checklist semanal"
+ },
+ {
+  "slug": "tu-primera-skill",
+  "titulo": "Tu primera Skill para Claude",
+  "subtitulo": "Tutorial para crear un plugin de habilidades que Claude usa solo cuando lo necesita. Con ejemplo completo para creadores.",
+  "tipo": "Tutorial",
+  "color": "mustard",
+  "garabato": "rayo",
+  "nivel": "Intermedio",
+  "orden": 3,
+  "minutos": 5,
+  "prompts": 1,
+  "paginas": 6,
+  "claves": "Qué es una Skill Paso 1 · La cabecera Paso 2 · Las instrucciones Paso 3 · Instálala Paso 4 · Pruébala Paso 5 · Hazla mejor De Skill a plugin Ideas de Skills para tu marca Checklist"
+ }
+];
