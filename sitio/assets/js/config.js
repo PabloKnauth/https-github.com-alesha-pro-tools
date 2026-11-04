@@ -33,13 +33,14 @@ window.MARCA = {
   productos: [
     {
       id: "pack-pro",
-      etiqueta: "Más vendido",
+      etiqueta: "213 prompts",
       nombre: "Pack Pro de Prompts",
       precio: "$349",
-      resumen: "Más de 200 prompts ordenados por objetivo, con ejemplos de salida y variantes para Claude y ChatGPT.",
+      resumen: "213 prompts y 5 plantillas de voz ordenados por objetivo, con un ejemplo de resultado por categoría y notas para usarlos en Claude y ChatGPT.",
       incluye: [
-        "Prompts de posicionamiento, contenido, ventas y atención",
-        "Plantillas de voz de marca listas para pegar",
+        "213 prompts en 12 categorías: posicionamiento, contenido, ventas, DMs y más",
+        "5 plantillas de voz de marca listas para pegar",
+        "Un ejemplo de resultado por categoría",
         "Actualizaciones gratis del pack"
       ],
       enlace: "https://mpago.li/1rvkkRG",
@@ -81,16 +82,16 @@ window.MARCA = {
       precio: "$699",
       resumen: "Cinco Skills de Claude listas para instalar: guionista de Reels, editor de captions, ideas de carrusel, respuestas a DMs y planificador semanal.",
       incluye: [
-        "Cinco carpetas SKILL.md probadas",
-        "Video de instalación en Claude y Claude Code",
-        "Guía para adaptarlas a tu voz"
+        "Cinco Skills probadas en Claude Code",
+        "Carpetas para Claude Code y ZIP para claude.ai",
+        "Guía de instalación y de adaptación a tu voz"
       ],
       enlace: "https://mpago.li/1scrjw4",
       color: "pink"
     },
     {
       id: "mentoria",
-      etiqueta: "Cupos limitados",
+      etiqueta: "1 a 1",
       nombre: "Sesión 1:1 · Tu asistente de IA",
       precio: "$1,690",
       resumen: "Una videollamada de 60 minutos para construir juntos el asistente de IA de tu marca con tus textos reales.",

@@ -67,7 +67,7 @@ window.RECURSOS = [
   "orden": 7,
   "minutos": 6,
   "prompts": 7,
-  "paginas": 7,
+  "paginas": 6,
   "claves": "El problema: sabes demasiado 1. Simple: ¿cuál es la única idea? 2. Inesperado: ¿qué rompe la expectativa? 3. Concreto: ¿se puede ver? 4. Creíble: ¿por qué me creerían? 5. Emocional: ¿a quién le importa? 6. Historia: ¿hay alguien que cambia? Auditoría rápida antes de publicar Lecturas recomendadas"
  },
  {

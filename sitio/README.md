@@ -87,7 +87,8 @@ Viven **fuera** de `sitio/`, en `../productos-pago/`, para que nunca se publique
 - Escribe el contenido en `productos-pago/contenido/*.md` (mismo formato que los recursos).
 - Genera los PDF con `python3 scripts/build.py --pago`. Salen en `productos-pago/pdf/` y llevan
   la nota "Licencia de uso personal · No redistribuir".
-- Sube ese PDF a Hotmart, Gumroad o Lemon Squeezy y pega el enlace de venta en `config.js`.
+- Empaqueta los kits con `python3 scripts/empaquetar.py` (salen en `productos-pago/entregables/`).
+- Al recibir un pago de Mercado Pago, envía al comprador el PDF o el ZIP de su producto.
 - El plan del catálogo y las fuentes de cada recurso están en `productos-pago/PLAN-CATALOGO.md`.
 
 ## Publicar con tu propio dominio (Netlify)

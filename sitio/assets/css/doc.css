@@ -89,8 +89,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 /* checklist */
 .doc ul:has(> li.check) { list-style: none; padding-left: 0; }
-li.check { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; }
-li.check::before { content: ""; width: 20px; height: 20px; margin-top: .25em; border: 2.5px solid var(--line); border-radius: 5px; background: var(--surface); }
+li.check { position: relative; display: block; padding-left: 34px; }
+li.check::before { content: ""; position: absolute; left: 0; top: .2em; width: 20px; height: 20px; border: 2.5px solid var(--line); border-radius: 5px; background: var(--surface); }
 
 .linea { display: inline-block; width: 100%; min-height: 1.5em; border-bottom: 1.8px dashed color-mix(in srgb, var(--fg) 45%, transparent); vertical-align: bottom; }
 
