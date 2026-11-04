@@ -8,7 +8,7 @@ window.MARCA = {
   tiktok: "",                        // opcional, sin @
   youtube: "",                       // opcional, URL completa
   correo: "",                        // opcional, correo de contacto visible
-  dominio: "pablo-knauth.netlify.app", // dirección gratuita de Netlify (aparece en los PDF)
+  dominio: "pabloknauth.netlify.app", // dirección gratuita de Netlify (aparece en los PDF)
 
   // Texto de "Sobre mí". Un párrafo por línea.
   sobreMi: [
