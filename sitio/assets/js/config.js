@@ -42,7 +42,7 @@ window.MARCA = {
         "Plantillas de voz de marca listas para pegar",
         "Actualizaciones gratis del pack"
       ],
-      enlace: "",
+      enlace: "https://mpago.li/1rvkkRG",
       color: "tomato"
     },
     {
@@ -57,7 +57,7 @@ window.MARCA = {
         "Estructura de página de venta y prueba con 3 personas",
         "Hoja de trabajo y 6 prompts"
       ],
-      enlace: "",
+      enlace: "https://mpago.li/1AykywQ",
       color: "moss"
     },
     {
@@ -71,7 +71,7 @@ window.MARCA = {
         "5 plantillas de retícula para Canva o Figma",
         "Prompts para auditar tus diseños con IA"
       ],
-      enlace: "",
+      enlace: "https://mpago.li/2NhDvzB",
       color: "tomato"
     },
     {
@@ -85,7 +85,7 @@ window.MARCA = {
         "Video de instalación en Claude y Claude Code",
         "Guía para adaptarlas a tu voz"
       ],
-      enlace: "",
+      enlace: "https://mpago.li/1scrjw4",
       color: "pink"
     },
     {
