@@ -93,12 +93,12 @@ Viven **fuera** de `sitio/`, en `../productos-pago/`, para que nunca se publique
 
 ## Publicar gratis en Netlify (dirección actual)
 
-El sitio está configurado para **https://pabloknauth.netlify.app** (gratis, con HTTPS).
+El sitio está configurado para **https://pablo-knauth.netlify.app** (gratis, con HTTPS).
 
 1. app.netlify.com → *Sign up with GitHub* → *Add new site* → *Import an existing project* → GitHub.
 2. Repositorio `https-github.com-alesha-pro-tools`, rama `sitio-marca-personal`,
    base directory `sitio`, build command vacío, publish directory `sitio`.
-3. *Site configuration → Change site name* → `pabloknauth`. Si está ocupado, elige otro y cambia
+3. *Site configuration → Change site name* → `pablo-knauth`. Si cambia, elige otro y cambia
    `dominio` en `config.js`, regenera con `python3 scripts/build.py` y sube los cambios.
 4. *Site configuration → Forms* → activa *form detection* para guardar los correos.
 
