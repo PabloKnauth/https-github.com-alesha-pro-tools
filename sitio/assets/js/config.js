@@ -23,16 +23,19 @@ window.MARCA = {
   // Segundos que el botón "Ya te sigo" tarda en activarse después de abrir Instagram.
   esperaSeguir: 6,
 
+  // Moneda de los precios de la tienda (Mercado Pago México cobra en pesos).
+  moneda: "MXN",
+
   /* Productos de pago.
      enlace: tu link de pago de Mercado Pago (o Stripe, Hotmart, Gumroad, Lemon Squeezy).
      Si "enlace" está vacío, el botón aparece como "Muy pronto".
-     TODO: los nombres y precios son una propuesta; cámbialos por los tuyos. */
+     TODO: los nombres y precios (en pesos) son una propuesta; cámbialos por los tuyos. */
   productos: [
     {
       id: "pack-pro",
       etiqueta: "Más vendido",
       nombre: "Pack Pro de Prompts",
-      precio: "US$19",
+      precio: "$349",
       resumen: "Más de 200 prompts ordenados por objetivo, con ejemplos de salida y variantes para Claude y ChatGPT.",
       incluye: [
         "Prompts de posicionamiento, contenido, ventas y atención",
@@ -46,7 +49,7 @@ window.MARCA = {
       id: "de-lo-que-sabes-a-producto",
       etiqueta: "Manual Pro",
       nombre: "De lo que sabes a un producto que vende",
-      precio: "US$29",
+      precio: "$499",
       resumen: "Convierte tu experiencia en una guía, plantilla o curso que la gente termina y aplica. Método de 9 pasos y plan de 14 días.",
       incluye: [
         "Mapa de acciones y diagnóstico de brechas",
@@ -61,7 +64,7 @@ window.MARCA = {
       id: "sistema-visual-de-marca",
       etiqueta: "Kit Pro",
       nombre: "Sistema visual de marca",
-      precio: "US$39",
+      precio: "$699",
       resumen: "Paleta, tipografía, retículas e imagen para que te reconozcan antes de leer tu nombre. Con mi propia marca como ejemplo resuelto.",
       incluye: [
         "Manual con hojas de trabajo y plan de 7 días",
@@ -75,7 +78,7 @@ window.MARCA = {
       id: "kit-skills",
       etiqueta: "Nuevo",
       nombre: "Kit de Skills para creadores",
-      precio: "US$39",
+      precio: "$699",
       resumen: "Cinco Skills de Claude listas para instalar: guionista de Reels, editor de captions, ideas de carrusel, respuestas a DMs y planificador semanal.",
       incluye: [
         "Cinco carpetas SKILL.md probadas",
@@ -89,7 +92,7 @@ window.MARCA = {
       id: "mentoria",
       etiqueta: "Cupos limitados",
       nombre: "Sesión 1:1 · Tu asistente de IA",
-      precio: "US$90",
+      precio: "$1,690",
       resumen: "Una videollamada de 60 minutos para construir juntos el asistente de IA de tu marca con tus textos reales.",
       incluye: [
         "Diagnóstico previo de tu contenido",

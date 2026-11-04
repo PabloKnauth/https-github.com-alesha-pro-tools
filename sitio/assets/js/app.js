@@ -143,7 +143,7 @@
     return '<article class="producto" style="--c:var(--' + p.color + ')">' +
       (p.etiqueta ? '<span class="producto__etq">' + esc(p.etiqueta) + "</span>" : "") +
       '<h3 class="producto__n">' + esc(p.nombre) + "</h3>" +
-      '<p class="producto__p">' + esc(p.precio) + "</p>" +
+      '<p class="producto__p">' + esc(p.precio) + (M.moneda ? ' <span class="producto__moneda">' + esc(M.moneda) + "</span>" : "") + "</p>" +
       '<p class="producto__r">' + esc(p.resumen) + "</p>" +
       "<ul>" + (p.incluye || []).map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul>" +
       boton + "</article>";

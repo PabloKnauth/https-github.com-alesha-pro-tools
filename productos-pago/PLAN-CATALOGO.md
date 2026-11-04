@@ -31,11 +31,12 @@ Cómo se usan los libros de referencia para nutrir los recursos gratis y los pro
 recuerde*, *Cuenta historias en 60 segundos*, *Diseña carruseles que se leen solos*.
 
 **De pago (fuera de la web, en `productos-pago/pdf/`):**
-- ✅ *De lo que sabes a un producto que vende* · Manual Pro · 10 págs · precio propuesto US$29
+- ✅ *De lo que sabes a un producto que vende* · Manual Pro · 10 págs · precio propuesto $499 MXN
+- ✅ *Sistema visual de marca* · Kit Pro · 11 págs + 5 plantillas de retícula · precio propuesto $699 MXN
 
 ## Próximos productos de pago (estructura propuesta)
 
-### Sistema visual de marca · Kit (US$39 propuesto)
+### Sistema visual de marca · Kit ($699 MXN propuesto)
 Fuentes: Lupton, Müller-Brockmann, Albers, Berger.
 1. Tu paleta en parejas: fondo, texto, acento (prueba de relatividad)
 2. Dos tipografías y tres niveles de jerarquía
@@ -44,7 +45,7 @@ Fuentes: Lupton, Müller-Brockmann, Albers, Berger.
 5. Manual de marca de 1 página
 6. Entregables: plantillas editables (Canva / Figma), hoja de colores con contrastes verificados
 
-### Guiones que venden · Manual Pro (US$29 propuesto)
+### Guiones que venden · Manual Pro ($499 MXN propuesto)
 Fuentes: McKee, Heath, Berger, Block.
 1. El cambio de valor que vende tu producto
 2. Historias de cliente sin inventar testimonios
@@ -53,7 +54,7 @@ Fuentes: McKee, Heath, Berger, Block.
 5. Dirección visual de la escena de venta
 6. Entregables: 30 prompts, Skill de Claude "guionista de ventas"
 
-### Dirección visual de Reels con celular · Guía (gratis o US$15)
+### Dirección visual de Reels con celular · Guía (gratis o $249 MXN)
 Fuentes: Block.
 1. Los 6 componentes visuales que controlas con un celular
 2. Contraste y afinidad aplicados a cortes, luz y color
