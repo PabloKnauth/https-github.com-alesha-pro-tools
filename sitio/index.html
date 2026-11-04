@@ -44,6 +44,7 @@
     <a class="nav__logo marker" href="#inicio">Pablo Knauth</a>
     <nav class="nav__links" aria-label="Principal">
       <a href="#biblioteca">Biblioteca</a>
+      <a href="#reto">El reto</a>
       <a href="#tienda">Tienda</a>
       <a href="#sobre-mi">Sobre mí</a>
     </nav>
@@ -125,6 +126,32 @@
     </div>
   </section>
 
+  <section class="seccion reto" id="reto" aria-labelledby="reto-t">
+    <div class="wrap">
+      <div class="reto__cab">
+        <p class="reto__eyebrow marker">reto personal · en vivo</p>
+        <h2 class="display reto__t" id="reto-t"><span id="reto-dia">Día 1</span> <span class="reto__t-b" id="reto-frase">al tener el cuerpo del puto Logan</span></h2>
+        <p class="reto__meta" id="reto-meta"></p>
+      </div>
+      <ul class="reto__datos" id="reto-datos" aria-label="Avance del reto"></ul>
+      <div class="reto__barra" aria-hidden="true"><span id="reto-barra"></span></div>
+      <div class="reto__leyenda" aria-label="Leyenda">
+        <span><i class="dia dia--hecho"></i> Entrené</span>
+        <span><i class="dia dia--descanso"></i> Descanso</span>
+        <span><i class="dia dia--hoy"></i> Hoy</span>
+        <span><i class="dia dia--sin"></i> Sin registro</span>
+      </div>
+      <div class="meses" id="reto-meses"></div>
+      <div class="reto__pie">
+        <div class="reto__detalle" id="reto-detalle" aria-live="polite"></div>
+        <div class="reto__ctas">
+          <a class="btn btn--mustard" href="https://kick.com/pablo-knauth" target="_blank" rel="noopener">Míralo en vivo en Kick</a>
+          <a class="btn btn--ghost" href="https://instagram.com/pablo_knauth_" target="_blank" rel="noopener">Sígueme en Instagram</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="seccion" id="tienda">
     <div class="wrap">
       <div class="seccion__cab">
@@ -186,5 +213,7 @@
 <script src="assets/js/config.js"></script>
 <script src="assets/js/recursos.js"></script>
 <script src="assets/js/app.js"></script>
+<script src="assets/js/reto.js"></script>
+<script src="assets/js/reto-calendario.js"></script>
 </body>
 </html>

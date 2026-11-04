@@ -9,6 +9,7 @@
   --line: #17130F;
   --shadow: #17130F;
   --tomato: #EC4A27;
+  --tomato-texto: #B8341A; /* tomate para texto pequeño: 4.96:1 sobre papel */
   --pink: #EF80A8;
   --mustard: #F4B71F;
   --moss: #1F5B4C;
@@ -36,13 +37,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #16120F; --bg-2: #201A15; --surface: #251E18; --fg: #F3EAD8; --muted: #BFB09C;
-    --line: #F3EAD8; --shadow: #000000; --tomato: #F25A36; --pink: #F28BB0; --mustard: #F6C03A;
+    --line: #F3EAD8; --shadow: #000000; --tomato: #F25A36; --tomato-texto: #F25A36; --pink: #F28BB0; --mustard: #F6C03A;
     --moss: #2F7A66; --on-color: #17130F; --on-moss: #F3EAD8; --grain-opacity: .12; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #16120F; --bg-2: #201A15; --surface: #251E18; --fg: #F3EAD8; --muted: #BFB09C;
-  --line: #F3EAD8; --shadow: #000000; --tomato: #F25A36; --pink: #F28BB0; --mustard: #F6C03A;
+  --line: #F3EAD8; --shadow: #000000; --tomato: #F25A36; --tomato-texto: #F25A36; --pink: #F28BB0; --mustard: #F6C03A;
   --moss: #2F7A66; --on-color: #17130F; --on-moss: #F3EAD8; --grain-opacity: .12; color-scheme: dark;
 }
 

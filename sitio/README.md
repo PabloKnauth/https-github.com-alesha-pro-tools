@@ -47,6 +47,39 @@ sitio/
    python3 scripts/build.py
    ```
 
+## El reto (calendario)
+
+El calendario de la sección **El reto** se llena con `assets/js/reto.js`. Agrega una línea por día:
+
+```js
+{ fecha: "2026-11-05", tipo: "entreno", que: "Pierna + core", minutos: 60, nota: "Arranqué con todo" },
+{ fecha: "2026-11-11", tipo: "descanso", nota: "Recuperación" },
+```
+
+- Los días con registro se marcan con un zarpazo (entreno) o en verde (descanso).
+- Los días pasados sin registro aparecen punteados; el día de hoy, con borde amarillo.
+- La racha, el avance y el número de día se calculan solos con la fecha del visitante.
+- Cambia `inicio` o `dias` si ajustas la duración del reto.
+
+No hace falta regenerar nada: guarda el archivo y vuelve a publicar. Si conectas Netlify a GitHub
+(base directory `sitio`), cada cambio subido se publica solo.
+
+## Cobrar con Mercado Pago
+
+**Opción rápida, sin programar:** en tu cuenta de Mercado Pago entra a cobrar → **Link de pago**,
+crea un link por producto (nombre, precio, descripción) y pega cada link en `enlace` dentro de
+`config.js`. El botón **Comprar** abre el pago de Mercado Pago. Acepta tarjeta, saldo, SPEI y
+efectivo, y el comprador no necesita cuenta.
+
+La entrega del PDF no es automática con un link: cuando recibas el aviso de venta, envía el archivo
+al correo del comprador. Escribe en la descripción del link: "Recibirás el PDF en tu correo en menos
+de 24 h".
+
+**Opción automática (más adelante):** Checkout Pro de Mercado Pago con una función de Netlify que
+crea el pago, recibe la notificación (webhook), verifica que el pago esté aprobado y envía el enlace
+de descarga por correo. Requiere tus credenciales de producción guardadas como variables de entorno
+en Netlify, **nunca** en el código, porque el repositorio es público.
+
 ## Productos de pago
 
 Viven **fuera** de `sitio/`, en `../productos-pago/`, para que nunca se publiquen gratis en la web.

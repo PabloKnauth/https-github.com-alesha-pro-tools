@@ -153,6 +153,7 @@
   $("#sobre-texto").innerHTML = (M.sobreMi || []).map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("");
   var redes = [];
   if (M.instagram) redes.push(["Instagram", "https://instagram.com/" + M.instagram]);
+  if (M.kick) redes.push(["Kick", "https://kick.com/" + M.kick]);
   if (M.tiktok) redes.push(["TikTok", "https://www.tiktok.com/@" + M.tiktok]);
   if (M.youtube) redes.push(["YouTube", M.youtube]);
   $("#redes").innerHTML = redes.map(function (r) { return '<li><a href="' + esc(r[1]) + '" target="_blank" rel="noopener">' + r[0] + "</a></li>"; }).join("") +

@@ -33,7 +33,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 /* índice */
 .indice { margin-block: 48px 8px; }
-.indice__t { font-size: var(--step-1); margin: 0 0 12px; color: var(--tomato); }
+.indice__t { font-size: var(--step-1); margin: 0 0 12px; color: var(--tomato-texto); }
 .indice ol { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 8px 22px; }
 .indice li { counter-increment: s; display: grid; grid-template-columns: 2.2em 1fr; align-items: baseline; border-bottom: 1.5px dashed color-mix(in srgb, var(--fg) 35%, transparent); padding-block: 6px; }
 .indice li::before { content: counter(s, decimal-leading-zero); font-weight: 800; color: var(--muted); font-size: .85em; font-variant-numeric: tabular-nums; }
@@ -58,7 +58,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 /* prompt */
 .prompt { position: relative; margin: 22px 0; max-width: none; background: var(--surface); border: 2.5px solid var(--line); border-radius: 14px;
   box-shadow: 5px 5px 0 var(--c); break-inside: avoid; }
-.prompt figcaption { font-family: var(--f-marker); font-size: .95rem; padding: 10px 16px 0; color: var(--tomato); }
+.prompt figcaption { font-family: var(--f-marker); font-size: .95rem; padding: 10px 16px 0; color: var(--tomato-texto); }
 .prompt pre { margin: 0; padding: 6px 16px 18px; white-space: pre-wrap; word-wrap: break-word; font: 500 .98rem/1.6 var(--f-body); color: var(--fg); }
 .copiar { position: absolute; top: 8px; right: 8px; font: 800 .72rem/1 var(--f-body); text-transform: uppercase; letter-spacing: .06em;
   border: 2px solid var(--line); background: var(--mustard); color: var(--on-color); border-radius: 999px; padding: .55em .9em; cursor: pointer; }
@@ -110,7 +110,7 @@ li.check::before { content: ""; width: 20px; height: 20px; margin-top: .25em; bo
 
 /* impresión / PDF */
 @media print {
-  :root { --bg: #F3EAD8; --bg-2: #EADBC0; --surface: #FBF6EC; --fg: #17130F; --muted: #5F5347; --line: #17130F; --shadow: #17130F; }
+  :root { --bg: #F3EAD8; --bg-2: #EADBC0; --surface: #FBF6EC; --fg: #17130F; --muted: #5F5347; --line: #17130F; --shadow: #17130F; --tomato-texto: #B8341A; }
   html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #F3EAD8; }
   body::after, body::before, .barra, .copiar, .compuerta { display: none !important; }
   .portada { height: 297mm; border: 0; break-after: page; display: block; }

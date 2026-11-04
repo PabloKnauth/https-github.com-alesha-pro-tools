@@ -4,6 +4,7 @@
 window.MARCA = {
   nombre: "Pablo Knauth",            // TODO: confirma el nombre de tu marca
   instagram: "pablo_knauth_",        // usuario de Instagram sin @
+  kick: "pablo-knauth",              // canal de Kick (kick.com/pablo-knauth)
   tiktok: "",                        // opcional, sin @
   youtube: "",                       // opcional, URL completa
   correo: "",                        // opcional, correo de contacto visible
@@ -23,7 +24,7 @@ window.MARCA = {
   esperaSeguir: 6,
 
   /* Productos de pago.
-     enlace: tu link de Stripe Payment Links, Hotmart, Gumroad o Lemon Squeezy.
+     enlace: tu link de pago de Mercado Pago (o Stripe, Hotmart, Gumroad, Lemon Squeezy).
      Si "enlace" está vacío, el botón aparece como "Muy pronto".
      TODO: los nombres y precios son una propuesta; cámbialos por los tuyos. */
   productos: [
@@ -55,6 +56,20 @@ window.MARCA = {
       ],
       enlace: "",
       color: "moss"
+    },
+    {
+      id: "sistema-visual-de-marca",
+      etiqueta: "Kit Pro",
+      nombre: "Sistema visual de marca",
+      precio: "US$39",
+      resumen: "Paleta, tipografía, retículas e imagen para que te reconozcan antes de leer tu nombre. Con mi propia marca como ejemplo resuelto.",
+      incluye: [
+        "Manual con hojas de trabajo y plan de 7 días",
+        "5 plantillas de retícula para Canva o Figma",
+        "Prompts para auditar tus diseños con IA"
+      ],
+      enlace: "",
+      color: "tomato"
     },
     {
       id: "kit-skills",

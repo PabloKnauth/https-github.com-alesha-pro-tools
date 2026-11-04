@@ -24,7 +24,7 @@ def leer_config():
     def campo(n, defecto=""):
         m = re.search(r'\b%s:\s*"([^"]*)"' % n, txt)
         return m.group(1) if m else defecto
-    return {"nombre": campo("nombre", "Tu marca"), "instagram": campo("instagram"), "dominio": campo("dominio", "tudominio.com")}
+    return {"nombre": campo("nombre", "Tu marca"), "instagram": campo("instagram"), "kick": campo("kick"), "dominio": campo("dominio", "tudominio.com")}
 
 
 CFG = leer_config()
@@ -147,7 +147,7 @@ PLANTILLA = """<!doctype html>
 
 <div class="compuerta" id="compuerta" hidden>
   <div class="compuerta__caja">
-    <p class="marker" style="color:var(--tomato);margin:0 0 6px">recurso gratis</p>
+    <p class="marker" style="color:var(--tomato-texto);margin:0 0 6px">recurso gratis</p>
     <h2 class="display">Desbloquéalo en un toque</h2>
     <p>Este recurso es gratis para quienes me siguen en Instagram. Vuelve a la biblioteca, sígueme y se abrirá al instante.</p>
     <a class="btn btn--tomato" href="../index.html?r={slug}#biblioteca">Desbloquear gratis</a>
@@ -206,7 +206,7 @@ def escribir_datos(datos):
 
 def escribir_index():
     t = (RAIZ / "scripts/plantilla-index.html").read_text(encoding="utf-8")
-    for k in ("nombre", "instagram", "dominio"):
+    for k in ("nombre", "instagram", "kick", "dominio"):
         t = t.replace("{{%s}}" % k, html.escape(CFG[k], quote=True))
     t = t.replace("{{sprite}}", SPRITE)
     (RAIZ / "index.html").write_text(t, encoding="utf-8")
