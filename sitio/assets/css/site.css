@@ -104,7 +104,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 @media (max-width: 760px) { .pasos { grid-template-columns: 1fr; gap: 40px; } }
 
 /* PRODUCTOS */
-.productos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 26px; }
+.productos { display: grid; grid-template-columns: 1fr; gap: 30px 26px; }
+@media (min-width: 700px) { .productos { grid-template-columns: repeat(2, 1fr); } }
 .producto { position: relative; display: flex; flex-direction: column; min-width: 0; padding: 26px 24px 24px; background: var(--surface);
   border: 2.5px solid var(--line); border-radius: var(--r); box-shadow: 6px 6px 0 var(--c); }
 .producto__etq { position: absolute; top: -16px; right: 18px; background: var(--c); color: var(--on-color); font-family: var(--f-marker);

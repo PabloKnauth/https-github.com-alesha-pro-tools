@@ -4,6 +4,7 @@
 Uso (desde la carpeta sitio/):
     python3 scripts/build.py          # páginas + PDF
     python3 scripts/build.py --sin-pdf
+    python3 scripts/build.py --pago   # productos de pago: ../productos-pago/contenido -> ../productos-pago/pdf
 Requiere: pip install markdown pyyaml   ·   PDF: Node.js + playwright
 """
 import html, json, math, re, subprocess, sys, unicodedata
@@ -140,7 +141,7 @@ PLANTILLA = """<!doctype html>
 <footer class="doc-pie">
   <div class="wrap doc-pie__in">
     <p class="display doc-pie__marca">{nombre}</p>
-    <p>Más recursos gratis en <strong>{dominio}</strong>{ig_pie}</p>
+    <p>{pie}</p>
   </div>
 </footer>
 
@@ -158,15 +159,22 @@ PLANTILLA = """<!doctype html>
 """
 
 
-def construir():
+PAGO = RAIZ.parent / "productos-pago"
+
+
+def construir(fuente=CONTENIDO, prefijo="", pago=False):
     SALIDA.mkdir(exist_ok=True); (SALIDA / "pdf").mkdir(exist_ok=True)
     datos = []
     ig = f" · @{CFG['instagram']}" if CFG["instagram"] else ""
-    for md in sorted(CONTENIDO.glob("*.md")):
+    if pago:
+        pie = f"Licencia de uso personal · No redistribuir · <strong>{html.escape(CFG['dominio'])}</strong>"
+    else:
+        pie = f"Más recursos gratis en <strong>{html.escape(CFG['dominio'])}</strong>" + (f" · Instagram <strong>@{html.escape(CFG['instagram'])}</strong>" if CFG["instagram"] else "")
+    for md in sorted(fuente.glob("*.md")):
         crudo = md.read_text(encoding="utf-8")
         _, fm, cuerpo_md = crudo.split("---", 2)
         meta = yaml.safe_load(fm)
-        slug = md.stem
+        slug = prefijo + md.stem
         cuerpo, indice, nprompts = convertir(cuerpo_md)
         palabras = len(re.sub("<[^>]+>", " ", cuerpo).split())
         minutos = max(3, math.ceil(palabras / 180))
@@ -175,7 +183,7 @@ def construir():
         pagina = PLANTILLA.format(
             titulo=e(meta["titulo"]), subtitulo=e(meta["subtitulo"]), tipo=e(meta["tipo"]), nivel=e(meta["nivel"]),
             color=meta["color"], garabato=meta["garabato"], slug=slug, minutos=minutos, extra=extra,
-            nombre=e(CFG["nombre"]), dominio=e(CFG["dominio"]), ig=e(ig), ig_pie=f" · Instagram <strong>@{e(CFG['instagram'])}</strong>" if CFG["instagram"] else "",
+            nombre=e(CFG["nombre"]), dominio=e(CFG["dominio"]), ig=e(ig), pie=pie,
             sprite=SPRITE, ondas=ondas_portada(meta["color"]), cuerpo=cuerpo,
             indice="".join(f'<li><a href="#{i}">{html.escape(t)}</a></li>' for i, t in indice),
         )
@@ -212,16 +220,34 @@ def escribir_favicon():
         encoding="utf-8")
 
 
+def generar_pdf(slugs):
+    r = subprocess.run(["node", str(RAIZ / "scripts/pdf.js"), str(RAIZ)] + slugs, capture_output=True, text=True)
+    sys.stderr.write(r.stderr)
+    if r.returncode != 0:
+        sys.exit("Falló la generación de PDF")
+    return json.loads(r.stdout.strip().splitlines()[-1])
+
+
+def construir_pago():
+    """Los productos de pago se generan fuera de la web pública y se borran sus HTML temporales."""
+    datos = construir(PAGO / "contenido", prefijo="_pago-", pago=True)
+    paginas = generar_pdf([d["slug"] for d in datos])
+    (PAGO / "pdf").mkdir(exist_ok=True)
+    for d in datos:
+        nombre = d["slug"][len("_pago-"):]
+        (SALIDA / "pdf" / f"{d['slug']}.pdf").replace(PAGO / "pdf" / f"{nombre}.pdf")
+        (SALIDA / f"{d['slug']}.html").unlink()
+        print(f"  ✓ productos-pago/pdf/{nombre}.pdf  ({paginas.get(d['slug'], 0)} págs)")
+
+
 if __name__ == "__main__":
     print(f"Marca: {CFG['nombre']} · @{CFG['instagram']} · {CFG['dominio']}")
+    if "--pago" in sys.argv:
+        construir_pago(); print("Listo."); sys.exit()
     datos = construir()
     escribir_favicon(); escribir_index()
     if "--sin-pdf" not in sys.argv:
-        r = subprocess.run(["node", str(RAIZ / "scripts/pdf.js"), str(RAIZ)] + [d["slug"] for d in datos], capture_output=True, text=True)
-        sys.stderr.write(r.stderr)
-        if r.returncode != 0:
-            sys.exit("Falló la generación de PDF")
-        paginas = json.loads(r.stdout.strip().splitlines()[-1])
+        paginas = generar_pdf([d["slug"] for d in datos])
         for d in datos:
             d["paginas"] = paginas.get(d["slug"], 0)
             print(f"  ✓ recursos/pdf/{d['slug']}.pdf  ({d['paginas']} págs)")

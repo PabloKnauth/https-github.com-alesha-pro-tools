@@ -15,6 +15,20 @@ window.RECURSOS = [
   "claves": "Qué vas a construir Paso 1 · Reúne tu material Paso 2 · Escribe tu documento de voz Paso 3 · Escribe las instrucciones Paso 4 · Configúralo Paso 5 · Ponlo a prueba Errores frecuentes Checklist final"
  },
  {
+  "slug": "carruseles-que-se-leen",
+  "titulo": "Diseña carruseles que se leen solos",
+  "subtitulo": "Retícula, tipografía y color para Instagram explicados sin teoría de más. Con medidas exactas y prompts para revisar tus diseños.",
+  "tipo": "Diseño",
+  "color": "tomato",
+  "garabato": "espiral",
+  "nivel": "Principiante",
+  "orden": 9,
+  "minutos": 6,
+  "prompts": 2,
+  "paginas": 6,
+  "claves": "La gente no lee: escanea 1. La retícula 2. La jerarquía tipográfica 3. El color es relativo 4. Imagen y texto se cambian el significado Estructura de un carrusel que funciona Revisa tu diseño con IA Checklist Lecturas recomendadas"
+ },
+ {
   "slug": "ganchos-reels",
   "titulo": "30 ganchos para Reels y cómo adaptarlos con IA",
   "subtitulo": "Fórmulas para los primeros 3 segundos, ordenadas por tipo, con el prompt para convertirlas a tu tema.",
@@ -27,6 +41,34 @@ window.RECURSOS = [
   "prompts": 2,
   "paginas": 5,
   "claves": "Por qué importan 3 segundos Curiosidad Error común Resultado Contraste Historia Lista y número El gancho también se ve Adapta cualquier gancho con IA Cómo saber si tu gancho funciona"
+ },
+ {
+  "slug": "historias-para-reels",
+  "titulo": "Cuenta historias en 60 segundos",
+  "subtitulo": "Estructura de guion para Reels con deseo, giro y cambio, y cómo hacer que la imagen cuente la misma historia que tus palabras.",
+  "tipo": "Tutorial",
+  "color": "pink",
+  "garabato": "rayo",
+  "nivel": "Intermedio",
+  "orden": 8,
+  "minutos": 5,
+  "prompts": 3,
+  "paginas": 6,
+  "claves": "Una historia es un cambio Las cinco piezas El conflicto que da fuerza Haz que la imagen cuente lo mismo Errores frecuentes Checklist Lecturas recomendadas"
+ },
+ {
+  "slug": "ideas-que-se-quedan",
+  "titulo": "6 filtros para que tu contenido se recuerde",
+  "subtitulo": "Revisa cualquier idea antes de publicarla. Si pasa los seis filtros, la gente la entiende, la cree y la comparte.",
+  "tipo": "Guía",
+  "color": "mustard",
+  "garabato": "estrella",
+  "nivel": "Principiante",
+  "orden": 7,
+  "minutos": 6,
+  "prompts": 7,
+  "paginas": 7,
+  "claves": "El problema: sabes demasiado 1. Simple: ¿cuál es la única idea? 2. Inesperado: ¿qué rompe la expectativa? 3. Concreto: ¿se puede ver? 4. Creíble: ¿por qué me creerían? 5. Emocional: ¿a quién le importa? 6. Historia: ¿hay alguien que cambia? Auditoría rápida antes de publicar Lecturas recomendadas"
  },
  {
   "slug": "plantilla-voz-de-marca",

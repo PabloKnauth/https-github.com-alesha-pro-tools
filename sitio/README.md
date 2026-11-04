@@ -47,6 +47,16 @@ sitio/
    python3 scripts/build.py
    ```
 
+## Productos de pago
+
+Viven **fuera** de `sitio/`, en `../productos-pago/`, para que nunca se publiquen gratis en la web.
+
+- Escribe el contenido en `productos-pago/contenido/*.md` (mismo formato que los recursos).
+- Genera los PDF con `python3 scripts/build.py --pago`. Salen en `productos-pago/pdf/` y llevan
+  la nota "Licencia de uso personal · No redistribuir".
+- Sube ese PDF a Hotmart, Gumroad o Lemon Squeezy y pega el enlace de venta en `config.js`.
+- El plan del catálogo y las fuentes de cada recurso están en `productos-pago/PLAN-CATALOGO.md`.
+
 ## Publicar con tu propio dominio (Netlify)
 
 1. **Compra el dominio** en Cloudflare Registrar, Namecheap o Porkbun. Un `.com` suele costar

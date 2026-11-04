@@ -42,6 +42,21 @@ window.MARCA = {
       color: "tomato"
     },
     {
+      id: "de-lo-que-sabes-a-producto",
+      etiqueta: "Manual Pro",
+      nombre: "De lo que sabes a un producto que vende",
+      precio: "US$29",
+      resumen: "Convierte tu experiencia en una guía, plantilla o curso que la gente termina y aplica. Método de 9 pasos y plan de 14 días.",
+      incluye: [
+        "Mapa de acciones y diagnóstico de brechas",
+        "Actividades de práctica con escenarios reales",
+        "Estructura de página de venta y prueba con 3 personas",
+        "Hoja de trabajo y 6 prompts"
+      ],
+      enlace: "",
+      color: "moss"
+    },
+    {
       id: "kit-skills",
       etiqueta: "Nuevo",
       nombre: "Kit de Skills para creadores",
