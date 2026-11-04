@@ -91,6 +91,17 @@ Viven **fuera** de `sitio/`, en `../productos-pago/`, para que nunca se publique
 - Al recibir un pago de Mercado Pago, envía al comprador el PDF o el ZIP de su producto.
 - El plan del catálogo y las fuentes de cada recurso están en `productos-pago/PLAN-CATALOGO.md`.
 
+## Publicar gratis en Netlify (dirección actual)
+
+El sitio está configurado para **https://pabloknauth.netlify.app** (gratis, con HTTPS).
+
+1. app.netlify.com → *Sign up with GitHub* → *Add new site* → *Import an existing project* → GitHub.
+2. Repositorio `https-github.com-alesha-pro-tools`, rama `sitio-marca-personal`,
+   base directory `sitio`, build command vacío, publish directory `sitio`.
+3. *Site configuration → Change site name* → `pabloknauth`. Si está ocupado, elige otro y cambia
+   `dominio` en `config.js`, regenera con `python3 scripts/build.py` y sube los cambios.
+4. *Site configuration → Forms* → activa *form detection* para guardar los correos.
+
 ## Publicar con tu propio dominio (Netlify)
 
 1. **Compra el dominio** en Cloudflare Registrar, Namecheap o Porkbun. Un `.com` suele costar
