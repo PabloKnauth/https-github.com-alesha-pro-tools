@@ -12,6 +12,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import head from "./pablo_head.json";
+import face from "./pablo_face.json";
 
 // Marca personal Pablo Knauth — collage retro: recorte B/N con borde de papel, ondas naranja/rosa/amarillo,
 // garabatos a mano, recortes de papel con cinta y letra de marcador.
@@ -439,6 +440,132 @@ const BehindTitle: React.FC = () => {
   );
 };
 
+
+// ---------- gafas cat-eye y transformación de héroe (siguen los ojos medidos) ----------
+const FACE = face as { l: number[][]; r: number[][]; face: number[][] };
+const HERO_IN = 12.04, HERO_OUT = 13.75;
+const eyesAt = (frame: number) => {
+  const i = Math.min(frame, FACE.l.length - 1);
+  const [lx, ly] = FACE.l[i], [rx, ry] = FACE.r[i];
+  return { mx: (lx + rx) / 2, my: (ly + ry) / 2, d: Math.hypot(rx - lx, ry - ly), ang: (Math.atan2(ry - ly, rx - lx) * 180) / Math.PI, box: FACE.face[i] };
+};
+
+const LENS_FRAME = "M8 22 C 40 30, 100 28, 138 42 C 140 70, 118 92, 82 92 C 50 92, 28 74, 22 52 C 18 40, 12 30, 8 22 Z";
+const LENS_GLASS = "M30 44 C 55 44, 100 42, 124 50 C 124 70, 108 82, 82 82 C 58 82, 40 70, 34 56 Z";
+const Sunglasses: React.FC = () => {
+  const { t, frame, fps, boil } = useT();
+  const { mx, my, d, ang } = eyesAt(frame);
+  const drop = springAt(frame, fps, 0.1, 9);                       // initial drop-in
+  const off = interpolate(t, [HERO_IN - 0.05, HERO_IN + 0.25], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const back = springAt(frame, fps, HERO_OUT, 9);
+  const k = t < HERO_IN ? 0 : t < HERO_OUT ? off : 1 - back;     // 0 = on face, 1 = flown away
+  if (k > 0.99) return null;
+  const sc = d / 140;
+  const dy = (1 - drop) * -500 - k * 700;
+  return (
+    <svg width={300} height={110} viewBox="0 0 300 110" style={{
+      position: "absolute", left: mx - 150, top: my - 62, overflow: "visible",
+      transform: `translateY(${dy}px) rotate(${ang + k * 40 + jitter(boil, 3, 0.4)}deg) scale(${sc})`, transformOrigin: "150px 62px",
+      filter: "drop-shadow(0 6px 0 rgba(0,0,0,0.35))", opacity: drop,
+    }}>
+      {[0, 1].map((side) => (
+        <g key={side} transform={side ? "translate(300 0) scale(-1 1)" : undefined}>
+          <path d={LENS_FRAME} fill={C.yellow} stroke={C.ink} strokeWidth={3} />
+          <path d={LENS_GLASS} fill="#1d1d1d" opacity={0.9} />
+          <path d="M44 52 C 60 48, 80 48, 96 50" stroke="white" strokeWidth={5} strokeLinecap="round" opacity={0.35} fill="none" />
+        </g>
+      ))}
+      <path d="M136 50 C 145 42, 155 42, 164 50" stroke={C.yellow} strokeWidth={9} fill="none" strokeLinecap="round" />
+    </svg>
+  );
+};
+
+// antifaz de héroe original (tipo dominó), dibujado a mano
+const MASK = "M10 40 C 40 10, 110 20, 150 40 C 190 20, 260 10, 290 40 C 295 75, 260 100, 215 95 C 185 92, 165 75, 150 70 C 135 75, 115 92, 85 95 C 40 100, 5 75, 10 40 Z M48 58 a34 20 0 1 0 68 0 a34 20 0 1 0 -68 0 Z M184 58 a34 20 0 1 0 68 0 a34 20 0 1 0 -68 0 Z";
+const HeroMask: React.FC = () => {
+  const { t, frame, fps, boil } = useT();
+  if (t < HERO_IN + 0.12 || t > HERO_OUT + 0.15) return null;
+  const { mx, my, d, ang } = eyesAt(frame);
+  const p = springAt(frame, fps, HERO_IN + 0.12, 8);
+  const out = interpolate(t, [HERO_OUT - 0.05, HERO_OUT + 0.15], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return (
+    <svg width={300} height={110} viewBox="0 0 300 110" style={{
+      position: "absolute", left: mx - 150, top: my - 58, overflow: "visible",
+      transform: `rotate(${ang + jitter(boil, 4, 1)}deg) scale(${(d / 136) * 1.12 * p * out})`, transformOrigin: "150px 58px",
+      filter: "url(#rough) drop-shadow(0 6px 0 rgba(0,0,0,0.35))",
+    }}>
+      <path d={MASK} fill={C.red} fillRule="evenodd" stroke={C.ink} strokeWidth={6} strokeLinejoin="round" />
+      <path d="M40 30 C 80 18, 120 26, 146 42" stroke={C.yellow} strokeWidth={6} fill="none" strokeLinecap="round" opacity={0.9} />
+    </svg>
+  );
+};
+
+// cuello de capa detrás del recorte: sobresale de los hombros a los lados de la cabeza y ondea
+const Cape: React.FC = () => {
+  const { t, frame, fps, boil } = useT();
+  if (t < HERO_IN + 0.05 || t > HERO_OUT + 0.3) return null;
+  const { mx: cx, my, d: ed } = eyesAt(frame);
+  const p = springAt(frame, fps, HERO_IN + 0.05, 9);
+  const out = interpolate(t, [HERO_OUT, HERO_OUT + 0.3], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const k = p * out;
+  const sy = my + ed * 2.1;                                         // shoulder line
+  const flap = Math.sin(t * 8) * 18 + jitter(boil, 6, 5);
+  const wing = (sd: number) => {
+    const base = cx + sd * ed * 1.25;                               // collar root, behind the neck
+    const tipX = cx + sd * (ed * 1.25 + ed * 1.9 * k), tipY = sy - ed * 3.5 * k + flap * sd * 0.3;
+    const outX = cx + sd * (ed * 1.25 + ed * 2.4 * k), outY = sy + ed * 0.6;
+    return `M${base},${sy} C ${base + sd * 20},${sy - ed * 1.2 * k} ${tipX - sd * 30},${tipY + 40} ${tipX},${tipY} ` +
+      `C ${tipX + sd * 40},${tipY + ed * 0.8} ${outX + sd * 10 + flap},${outY - ed * 0.8} ${outX + flap * 0.5},${outY} ` +
+      `L ${outX - sd * 60},1960 L ${base},1960 Z`;
+  };
+  return (
+    <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, overflow: "visible", opacity: out, filter: "url(#rough)" }}>
+      {[-1, 1].map((sd) => (
+        <g key={sd}>
+          <path d={wing(sd)} fill="none" stroke={C.cream} strokeWidth={30} strokeLinejoin="round" />
+          <path d={wing(sd)} fill={C.red} stroke={C.ink} strokeWidth={7} strokeLinejoin="round" />
+          <path d={`M${cx + sd * ed * 1.4},${sy - ed * 0.3} C ${cx + sd * ed * 1.9},${sy - ed * 1.2 * k} ${cx + sd * ed * 2.3},${sy - ed * 1.4 * k} ${cx + sd * ed * 2.55},${sy - ed * 1.6 * k}`}
+            stroke={C.yellow} strokeWidth={10} fill="none" strokeLinecap="round" opacity={0.9} />
+        </g>
+      ))}
+    </svg>
+  );
+};
+
+// insignia "P", trazos de fuerza y gotas de sudor
+const HeroBits: React.FC = () => {
+  const { t, frame, fps, boil } = useT();
+  if (t < HERO_IN + 0.2 || t > HERO_OUT + 0.2) return null;
+  const { mx: cx, my, d: ed } = eyesAt(frame);
+  const fw = ed * 2.4, fy = my - ed * 1.1, fh = ed * 2.6;
+  const p = springAt(frame, fps, HERO_IN + 0.2, 8);
+  const out = interpolate(t, [HERO_OUT - 0.05, HERO_OUT + 0.2], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const lines = draw(t, HERO_IN + 0.25, 0.3);
+  const drop = (x: number, y: number, s: number) => `M${x},${y} C ${x - 14 * s},${y + 22 * s} ${x - 12 * s},${y + 40 * s} ${x},${y + 40 * s} C ${x + 12 * s},${y + 40 * s} ${x + 14 * s},${y + 22 * s} ${x},${y} Z`;
+  return (
+    <>
+      <div style={{
+        position: "absolute", left: cx - 95, top: my + ed * 1.95, width: 190, height: 190, borderRadius: "50%",
+        background: C.cream, border: `9px solid ${C.red}`, boxShadow: "6px 9px 0 rgba(0,0,0,0.3)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        transform: `scale(${p * out}) rotate(${-8 + jitter(boil, 7, 2) + (1 - p) * 90}deg)`,
+        fontFamily: MARKER, fontSize: 130, color: C.red, lineHeight: 1,
+      }}>P</div>
+      <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, overflow: "visible", opacity: out, filter: "url(#rough)" }}>
+        {[-1, 1].map((sd) => (
+          <g key={sd}>
+            {[0, 1, 2].map((k) => (
+              <path key={k} d={`M${cx + sd * (fw * 0.62 + k * 34)},${fy + fh * 0.1 + k * 20} l${sd * 46},${-40 + k * 18}`}
+                stroke={C.yellow} strokeWidth={9} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - lines} />
+            ))}
+            <path d={drop(cx + sd * fw * 0.56, fy + fh * 0.22 + ((t * 120) % 60), 1.2)} fill="#dff3ff" stroke={C.ink} strokeWidth={4} opacity={lines} />
+          </g>
+        ))}
+      </svg>
+    </>
+  );
+};
+
 // corona que sigue la cabeza (posición medida del recorte)
 const HEAD = head as { top: number[]; cx: number[] };
 const Crown: React.FC = () => {
@@ -519,7 +646,14 @@ export const PabloKnauth: React.FC<{ cutout?: string }> = ({ cutout = "pablo_cut
 
       <AbsoluteFill style={{ transform: `scale(${z})`, transformOrigin: "50% 42%" }}>
         <BehindTitle />
-        <OffthreadVideo src={staticFile(cutout)} transparent muted />
+        <Cape />
+        {/* absoluto, para que el orden de capas sea el del código (capa y título detrás, gafas delante) */}
+        <AbsoluteFill>
+          <OffthreadVideo src={staticFile(cutout)} transparent muted />
+        </AbsoluteFill>
+        <Sunglasses />
+        <HeroMask />
+        <HeroBits />
       </AbsoluteFill>
 
       {/* 0–3.3 s: IA que suena a robot */}
@@ -558,13 +692,13 @@ export const PabloKnauth: React.FC<{ cutout?: string }> = ({ cutout = "pablo_cut
       </Scrap>
 
       {/* 11.1–13.7 s: cuerpo de Logan */}
-      <Sticker at={12.2} outAt={13.75} x={70} y={1330} rot={-10} size={250}>
+      <Sticker at={12.2} outAt={13.75} x={60} y={150} rot={-10} size={230}>
         <InlineDoodle d={BICEP} vb="0 0 190 170" w={190} h={170} at={12.2} />
       </Sticker>
-      <Scrap at={13.04} outAt={13.75} x={520} y={1380} rot={5} bg={C.yellow} seed={41} tape={false}>
+      <Scrap at={13.04} outAt={13.75} x={560} y={210} rot={5} bg={C.yellow} seed={41} tape={false}>
         <div style={{ fontFamily: MARKER, fontSize: 70, color: C.ink }}>¿sí? en serio.</div>
       </Scrap>
-      <Doodle d={STAR} at={12.45} outAt={13.75} x={350} y={1290} w={80} h={80} vb="0 0 100 100" />
+      <Doodle d={STAR} at={12.45} outAt={13.75} x={330} y={150} w={80} h={80} vb="0 0 100 100" />
 
       {/* 13.96–17.3 s: biblioteca gratis */}
       <Sticker at={14.22} outAt={17.3} x={80} y={1320} rot={-6} size={260}>
