@@ -13,6 +13,19 @@ Verificá estos nombres antes de ponerlos en subtítulos o gráficos; Whisper lo
   QJ MOTOR aparezca de fondo en el local: no deduzcas la marca por lo que se ve en el video.
 - Otros: "balatas" (pastillas de freno), "llantas" (Whisper escribe "yantas").
 
+### Marca personal Pablo Knauth (videos propios del usuario)
+
+Estilo definido por el usuario con dos imágenes de referencia; respetalo en todos sus videos:
+- Persona recortada en **blanco y negro** con grano, **borde de papel crema** irregular y sombra suave
+  (`mi-reel/sfx/person_cutout.py` + modelo `u2net_human_seg`).
+- Fondo de **ondas** naranja `#f0532d` / rosa `#f49ac1` / amarillo `#f7c12e` / rojo `#e8442a` con textura
+  de papel; también acuarela sobre crema como alternativa.
+- **Garabatos amarillos** (corona, estrellas), recortes de papel rasgado con cinta, letra **Permanent Marker**
+  (títulos) y **Caveat** (notas). Animación "a mano" a 12 fps.
+- Plantilla: `mi-reel/src/PabloKnauth.tsx`. Efectos de sonido de papelería: `mi-reel/sfx/pablo_sfx.py`.
+- Whisper oye "Knauth" como "Klauth" y "Claude" como "Klauth"/"cloud"; "prompts, skills y guías" sale mal.
+  Pasá esos términos en `initial_prompt` y confirmá con el usuario las frases dudosas.
+
 Al transcribir, pasá estos nombres en `initial_prompt` de faster-whisper. Si una palabra clave sale
 con probabilidad baja, preguntale al usuario en vez de adivinar.
 
