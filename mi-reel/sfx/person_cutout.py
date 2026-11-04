@@ -1,4 +1,5 @@
-"""Pablo Knauth style person layer: B&W cutout with a cream paper border, film grain and soft shadow,
+"""Pablo Knauth style person layer: cutout (B&W with grain, or natural colour with --color) with a cream
+paper border and soft shadow,
 exported with alpha (VP9 WebM) so Remotion can put an animated background behind it.
 
 Usage (requires numpy, opencv-python-headless, onnxruntime):
@@ -11,6 +12,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("src"); ap.add_argument("model"); ap.add_argument("out")
 ap.add_argument("--width", type=int, default=1080); ap.add_argument("--height", type=int, default=1920)
 ap.add_argument("--border", type=int, default=24, help="paper border width in px (output scale)")
+ap.add_argument("--color", action="store_true", help="keep the natural colour (no B&W grade, no grain)")
 args = ap.parse_args()
 W, H, FPS = args.width, args.height, 30
 
@@ -65,10 +67,13 @@ while True:
     border = np.clip((k + edge * 7 - dist) / 1.6, 0, 1)
     border = np.maximum(border, person)
 
-    g = bw(img)
-    grain = rng.standard_normal((H, W)).astype(np.float32) * 0.045
-    g = np.clip(g + grain, 0, 1)
-    photo = np.dstack([g * 255 * 0.97, g * 255 * 0.985, g * 255])   # very slightly warm whites
+    if args.color:
+        photo = img.astype(np.float32)                              # natural colour, untouched
+    else:
+        g = bw(img)
+        grain = rng.standard_normal((H, W)).astype(np.float32) * 0.045
+        g = np.clip(g + grain, 0, 1)
+        photo = np.dstack([g * 255 * 0.97, g * 255 * 0.985, g * 255])   # very slightly warm whites
     paper = CREAM + PAPER[..., None]
     rgb = photo * person[..., None] + paper * (1 - person[..., None])
 

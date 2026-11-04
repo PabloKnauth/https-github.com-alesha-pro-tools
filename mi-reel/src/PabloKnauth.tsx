@@ -441,43 +441,13 @@ const BehindTitle: React.FC = () => {
 };
 
 
-// ---------- gafas cat-eye y transformación de héroe (siguen los ojos medidos) ----------
+// ---------- transformación de héroe (sigue los ojos medidos) ----------
 const FACE = face as { l: number[][]; r: number[][]; face: number[][] };
 const HERO_IN = 12.04, HERO_OUT = 13.75;
 const eyesAt = (frame: number) => {
   const i = Math.min(frame, FACE.l.length - 1);
   const [lx, ly] = FACE.l[i], [rx, ry] = FACE.r[i];
   return { mx: (lx + rx) / 2, my: (ly + ry) / 2, d: Math.hypot(rx - lx, ry - ly), ang: (Math.atan2(ry - ly, rx - lx) * 180) / Math.PI, box: FACE.face[i] };
-};
-
-const LENS_FRAME = "M8 22 C 40 30, 100 28, 138 42 C 140 70, 118 92, 82 92 C 50 92, 28 74, 22 52 C 18 40, 12 30, 8 22 Z";
-const LENS_GLASS = "M30 44 C 55 44, 100 42, 124 50 C 124 70, 108 82, 82 82 C 58 82, 40 70, 34 56 Z";
-const Sunglasses: React.FC = () => {
-  const { t, frame, fps, boil } = useT();
-  const { mx, my, d, ang } = eyesAt(frame);
-  const drop = springAt(frame, fps, 0.1, 9);                       // initial drop-in
-  const off = interpolate(t, [HERO_IN - 0.05, HERO_IN + 0.25], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const back = springAt(frame, fps, HERO_OUT, 9);
-  const k = t < HERO_IN ? 0 : t < HERO_OUT ? off : 1 - back;     // 0 = on face, 1 = flown away
-  if (k > 0.99) return null;
-  const sc = d / 140;
-  const dy = (1 - drop) * -500 - k * 700;
-  return (
-    <svg width={300} height={110} viewBox="0 0 300 110" style={{
-      position: "absolute", left: mx - 150, top: my - 62, overflow: "visible",
-      transform: `translateY(${dy}px) rotate(${ang + k * 40 + jitter(boil, 3, 0.4)}deg) scale(${sc})`, transformOrigin: "150px 62px",
-      filter: "drop-shadow(0 6px 0 rgba(0,0,0,0.35))", opacity: drop,
-    }}>
-      {[0, 1].map((side) => (
-        <g key={side} transform={side ? "translate(300 0) scale(-1 1)" : undefined}>
-          <path d={LENS_FRAME} fill={C.yellow} stroke={C.ink} strokeWidth={3} />
-          <path d={LENS_GLASS} fill="#1d1d1d" opacity={0.9} />
-          <path d="M44 52 C 60 48, 80 48, 96 50" stroke="white" strokeWidth={5} strokeLinecap="round" opacity={0.35} fill="none" />
-        </g>
-      ))}
-      <path d="M136 50 C 145 42, 155 42, 164 50" stroke={C.yellow} strokeWidth={9} fill="none" strokeLinecap="round" />
-    </svg>
-  );
 };
 
 // antifaz de héroe original (tipo dominó), dibujado a mano
@@ -500,57 +470,42 @@ const HeroMask: React.FC = () => {
   );
 };
 
-// cuello de capa detrás del recorte: sobresale de los hombros a los lados de la cabeza y ondea
-const Cape: React.FC = () => {
-  const { t, frame, fps, boil } = useT();
-  if (t < HERO_IN + 0.05 || t > HERO_OUT + 0.3) return null;
-  const { mx: cx, my, d: ed } = eyesAt(frame);
-  const p = springAt(frame, fps, HERO_IN + 0.05, 9);
-  const out = interpolate(t, [HERO_OUT, HERO_OUT + 0.3], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const k = p * out;
-  const sy = my + ed * 2.1;                                         // shoulder line
-  const flap = Math.sin(t * 8) * 18 + jitter(boil, 6, 5);
-  const wing = (sd: number) => {
-    const base = cx + sd * ed * 1.25;                               // collar root, behind the neck
-    const tipX = cx + sd * (ed * 1.25 + ed * 1.9 * k), tipY = sy - ed * 3.5 * k + flap * sd * 0.3;
-    const outX = cx + sd * (ed * 1.25 + ed * 2.4 * k), outY = sy + ed * 0.6;
-    return `M${base},${sy} C ${base + sd * 20},${sy - ed * 1.2 * k} ${tipX - sd * 30},${tipY + 40} ${tipX},${tipY} ` +
-      `C ${tipX + sd * 40},${tipY + ed * 0.8} ${outX + sd * 10 + flap},${outY - ed * 0.8} ${outX + flap * 0.5},${outY} ` +
-      `L ${outX - sd * 60},1960 L ${base},1960 Z`;
-  };
-  return (
-    <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, overflow: "visible", opacity: out, filter: "url(#rough)" }}>
-      {[-1, 1].map((sd) => (
-        <g key={sd}>
-          <path d={wing(sd)} fill="none" stroke={C.cream} strokeWidth={30} strokeLinejoin="round" />
-          <path d={wing(sd)} fill={C.red} stroke={C.ink} strokeWidth={7} strokeLinejoin="round" />
-          <path d={`M${cx + sd * ed * 1.4},${sy - ed * 0.3} C ${cx + sd * ed * 1.9},${sy - ed * 1.2 * k} ${cx + sd * ed * 2.3},${sy - ed * 1.4 * k} ${cx + sd * ed * 2.55},${sy - ed * 1.6 * k}`}
-            stroke={C.yellow} strokeWidth={10} fill="none" strokeLinecap="round" opacity={0.9} />
-        </g>
-      ))}
-    </svg>
-  );
-};
-
-// insignia "P", trazos de fuerza y gotas de sudor
+// torso musculoso de caricatura (genérico, dibujado a mano) sobre la camiseta + trazos de fuerza y sudor
+const TORSO = "M110 20 C 90 30, 40 40, 15 80 C 0 110, 5 160, 30 190 C 45 260, 70 330, 100 400 L 300 400 C 330 330, 355 260, 370 190 C 395 160, 400 110, 385 80 C 360 40, 310 30, 290 20 C 260 40, 140 40, 110 20 Z";
+const absRow = (y: number) => [160, 205].map((x) => `M${x + 2},${y + 3} Q${x + 18},${y - 3} ${x + 34},${y + 3} Q${x + 37},${y + 18} ${x + 34},${y + 33} Q${x + 18},${y + 38} ${x + 2},${y + 33} Q${x - 1},${y + 18} ${x + 2},${y + 3} Z`);
+const MUSCLE_LINES = [
+  "M150 24 C 170 46, 230 46, 250 24",                                                           // cuello
+  "M56 90 C 100 80, 165 84, 197 96 L 197 146 C 172 160, 122 164, 86 156 C 64 146, 54 122, 56 90",  // pectoral izq. (bloque)
+  "M344 90 C 300 80, 235 84, 203 96 L 203 146 C 228 160, 278 164, 314 156 C 336 146, 346 122, 344 90",  // pectoral der. (bloque)
+  "M40 86 C 20 112, 26 150, 46 172", "M360 86 C 380 112, 374 150, 354 172",                       // hombros
+  ...absRow(186), ...absRow(230), ...absRow(274),                                                // abdominales
+  "M86 205 C 100 245, 110 285, 122 335", "M314 205 C 300 245, 290 285, 278 335",                 // oblicuos
+];
 const HeroBits: React.FC = () => {
   const { t, frame, fps, boil } = useT();
-  if (t < HERO_IN + 0.2 || t > HERO_OUT + 0.2) return null;
+  if (t < HERO_IN || t > HERO_OUT + 0.2) return null;
   const { mx: cx, my, d: ed } = eyesAt(frame);
   const fw = ed * 2.4, fy = my - ed * 1.1, fh = ed * 2.6;
-  const p = springAt(frame, fps, HERO_IN + 0.2, 8);
+  const p = springAt(frame, fps, HERO_IN, 8);
   const out = interpolate(t, [HERO_OUT - 0.05, HERO_OUT + 0.2], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const lines = draw(t, HERO_IN + 0.25, 0.3);
+  const lines = draw(t, HERO_IN + 0.08, 0.45);
+  const tw = ed * 3.4, th = 620, top = my + ed * 1.5;               // torso box: under the chin, abs end above the captions
   const drop = (x: number, y: number, s: number) => `M${x},${y} C ${x - 14 * s},${y + 22 * s} ${x - 12 * s},${y + 40 * s} ${x},${y + 40 * s} C ${x + 12 * s},${y + 40 * s} ${x + 14 * s},${y + 22 * s} ${x},${y} Z`;
   return (
     <>
-      <div style={{
-        position: "absolute", left: cx - 95, top: my + ed * 1.95, width: 190, height: 190, borderRadius: "50%",
-        background: C.cream, border: `9px solid ${C.red}`, boxShadow: "6px 9px 0 rgba(0,0,0,0.3)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        transform: `scale(${p * out}) rotate(${-8 + jitter(boil, 7, 2) + (1 - p) * 90}deg)`,
-        fontFamily: MARKER, fontSize: 130, color: C.red, lineHeight: 1,
-      }}>P</div>
+      <svg width={tw} height={th} viewBox="0 0 400 400" preserveAspectRatio="none" style={{
+        position: "absolute", left: cx - tw / 2, top, overflow: "visible", opacity: out,
+        transform: `scale(${0.6 + 0.4 * p}) rotate(${jitter(boil, 8, 0.6)}deg)`, transformOrigin: "200px 60px",
+        filter: "url(#rough) drop-shadow(0 8px 0 rgba(0,0,0,0.3))",
+      }}>
+        <path d={TORSO} fill="#e9b48e" stroke={C.ink} strokeWidth={6} strokeLinejoin="round" opacity={Math.min(1, p * 1.4)} />
+        <path d="M92 166 C 125 172, 165 170, 192 158" stroke="#c98d68" strokeWidth={9} fill="none" strokeLinecap="round" opacity={0.75 * p} />
+        <path d="M308 166 C 275 172, 235 170, 208 158" stroke="#c98d68" strokeWidth={9} fill="none" strokeLinecap="round" opacity={0.75 * p} />
+        {MUSCLE_LINES.map((d, i) => (
+          <path key={i} d={d} fill="none" stroke={C.ink} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round"
+            pathLength={1} strokeDasharray={1} strokeDashoffset={1 - Math.min(1, Math.max(0, lines * 1.6 - i * 0.04))} />
+        ))}
+      </svg>
       <svg width={1080} height={1920} style={{ position: "absolute", inset: 0, overflow: "visible", opacity: out, filter: "url(#rough)" }}>
         {[-1, 1].map((sd) => (
           <g key={sd}>
@@ -630,7 +585,7 @@ const Captions: React.FC = () => {
   );
 };
 
-export const PabloKnauth: React.FC<{ cutout?: string }> = ({ cutout = "pablo_cutout.webm" }) => {
+export const PabloKnauth: React.FC<{ cutout?: string }> = ({ cutout = "pablo_cutout_color.webm" }) => {
   const { t } = useT();
   const z = zoomAt(t);
   return (
@@ -646,12 +601,10 @@ export const PabloKnauth: React.FC<{ cutout?: string }> = ({ cutout = "pablo_cut
 
       <AbsoluteFill style={{ transform: `scale(${z})`, transformOrigin: "50% 42%" }}>
         <BehindTitle />
-        <Cape />
         {/* absoluto, para que el orden de capas sea el del código (capa y título detrás, gafas delante) */}
         <AbsoluteFill>
           <OffthreadVideo src={staticFile(cutout)} transparent muted />
         </AbsoluteFill>
-        <Sunglasses />
         <HeroMask />
         <HeroBits />
       </AbsoluteFill>

@@ -16,8 +16,11 @@ Verificá estos nombres antes de ponerlos en subtítulos o gráficos; Whisper lo
 ### Marca personal Pablo Knauth (videos propios del usuario)
 
 Estilo definido por el usuario con dos imágenes de referencia; respetalo en todos sus videos:
-- Persona recortada en **blanco y negro** con grano, **borde de papel crema** irregular y sombra suave
-  (`mi-reel/sfx/person_cutout.py` + modelo `u2net_human_seg`).
+- Persona recortada **a color natural** (preferencia actual del usuario; el B/N de las referencias lo
+  descartó) con **borde de papel crema** irregular y sombra suave: `mi-reel/sfx/person_cutout.py --color`
+  + modelo `u2net_human_seg`. **Sin gafas** sobre la cara salvo que lo pida.
+- No dibujar personajes con copyright (p. ej. el traje o las garras de Wolverine): usar versiones
+  originales genéricas (antifaz dominó, torso musculoso de caricatura).
 - Fondo de **ondas** naranja `#f0532d` / rosa `#f49ac1` / amarillo `#f7c12e` / rojo `#e8442a` con textura
   de papel; también acuarela sobre crema como alternativa.
 - **Garabatos amarillos** (corona, estrellas), recortes de papel rasgado con cinta, letra **Permanent Marker**

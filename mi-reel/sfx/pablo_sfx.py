@@ -174,19 +174,18 @@ for at, pan in ((7.82, -0.5), (8.38, 0.5), (8.9, 0.0)):
     place(paper(0.22), at, -15, pan); place(tape(), at + 0.08, -16, pan)
 place(marker(0.45), 9.2, -19, 0.4); place(pop(), 9.25, -19, 0.3)
 
-# sunglasses drop on at the start
-place(whoosh(0.3, 800, 7000, 0.8), 0.02, -24); place(pop(1100, 380, 0.08), 0.3, -18)
+def flex():
+    """Cartoon flex: rubbery upward pitch bend + soft thump."""
+    t = t_(0.32)
+    f = 140 + 260 * (t / 0.32) ** 1.5
+    tone = np.sin(2 * np.pi * np.cumsum(f) / SR) * env(len(t), 0.01, 0.12)
+    return tone + impact()[: len(t)] * 0.35
 
-def cape_flap(d=0.5):
-    """Cloth flap: low whoosh with 7 Hz flutter."""
-    n = int(SR * d); t = np.arange(n) / SR
-    return whoosh(d, 150, 2500, 0.35) * (0.6 + 0.4 * np.sign(np.sin(2 * np.pi * 7 * t)))
-
-# hero transformation: glasses fly off, cape, mask, P badge; glasses come back
-place(whoosh(0.3, 1200, 8000, 0.3), 11.98, -19, 0.3)
-place(cape_flap(), 12.08, -17)
-place(pop(600, 200, 0.12), 12.16, -16); place(pop(1300, 420, 0.08), 12.24, -18)
-place(whoosh(0.25, 800, 6000, 0.8), 13.62, -22); place(pop(1100, 380, 0.08), 13.8, -22)
+# hero moment: muscle torso pops on the shirt, then the mask
+place(flex(), 12.04, -16)
+place(marker(0.45), 12.12, -21)
+place(pop(600, 200, 0.12), 12.16, -17)
+place(whoosh(0.25, 800, 6000, 0.8), 13.62, -23)
 
 # Logan: bicep sticker, "¿sí? en serio" punch
 place(pop(900, 300), 12.2, -17, -0.4); place(marker(0.6), 12.25, -21, -0.4)
