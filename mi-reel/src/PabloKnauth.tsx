@@ -316,7 +316,7 @@ const RobotNote: React.FC = () => {
   const n = Math.floor(interpolate(t, [1.94, 2.65], [0, text.length], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
   const cross = draw(t, 2.7, 0.35);
   return (
-    <Scrap at={1.85} outAt={3.3} x={70} y={1330} rot={-4} bg="#fbfaf6" seed={11}>
+    <Scrap at={1.85} outAt={3.3} x={70} y={420} rot={-4} bg="#fbfaf6" seed={11}>
       <div style={{ width: 560, fontFamily: "'Courier New', monospace", fontSize: 38, color: "#333", lineHeight: 1.3 }}>
         {text.slice(0, n)}
         <span style={{ opacity: t % 0.5 < 0.25 ? 1 : 0 }}>▌</span>
@@ -338,8 +338,8 @@ const Stamp: React.FC<{ at: number; outAt: number }> = ({ at, outAt }) => {
     <div
       style={{
         position: "absolute",
-        left: 500,
-        top: 1370,
+        left: 560,
+        top: 520,
         transform: `rotate(-14deg) scale(${interpolate(p, [0, 1], [2.6, 1])})`,
         opacity: Math.min(1, p * 3) * out,
         border: `10px solid ${C.red}`,
@@ -364,7 +364,7 @@ const DmBubble: React.FC = () => {
   const word = "BIBLIOTECA";
   const n = Math.floor(interpolate(t, [18.0, 18.7], [0, word.length], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }));
   return (
-    <Scrap at={17.85} outAt={20.55} x={90} y={1290} rot={3} bg={C.cream} seed={77} pad="26px 36px">
+    <Scrap at={17.85} outAt={20.55} x={90} y={400} rot={3} bg={C.cream} seed={77} pad="26px 36px">
       <div style={{ fontFamily: HAND, fontSize: 40, color: C.ink, fontWeight: 700 }}>escríbeme por mensaje:</div>
       <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 10 }}>
         <div style={{ background: C.orange, color: "white", fontFamily: MARKER, fontSize: 58, padding: "12px 30px", borderRadius: "34px 34px 6px 34px", minWidth: 380, textAlign: "center" }}>
@@ -386,7 +386,7 @@ const Signature: React.FC<{ at: number }> = ({ at }) => {
     <div
       style={{
         position: "absolute",
-        top: 1410,
+        top: 600,
         width: "100%",
         textAlign: "center",
         fontFamily: MARKER,
@@ -419,7 +419,7 @@ const BehindTitle: React.FC = () => {
   const out = interpolate(t, [4.85, 5.1], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   if (t < 3.46 || t > 5.15) return null;
   return (
-    <div style={{ position: "absolute", top: 190, width: "100%", textAlign: "center", opacity: out }}>
+    <div style={{ position: "absolute", top: 470, width: "100%", textAlign: "center", opacity: out }}>
       {["PABLO", "KNAUTH"].map((w, i) => (
         <div
           key={w}
@@ -489,7 +489,7 @@ const HeroBits: React.FC = () => {
   const p = springAt(frame, fps, HERO_IN, 8);
   const out = interpolate(t, [HERO_OUT - 0.05, HERO_OUT + 0.2], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const lines = draw(t, HERO_IN + 0.08, 0.45);
-  const tw = ed * 3.4, th = 620, top = my + ed * 1.5;               // torso box: under the chin, abs end above the captions
+  const tw = ed * 3.4, th = ed * 2.95, top = my + ed * 1.5;          // torso box under the chin, proportional to the face
   const drop = (x: number, y: number, s: number) => `M${x},${y} C ${x - 14 * s},${y + 22 * s} ${x - 12 * s},${y + 40 * s} ${x},${y + 40 * s} C ${x + 12 * s},${y + 40 * s} ${x + 14 * s},${y + 22 * s} ${x},${y} Z`;
   return (
     <>
@@ -553,7 +553,7 @@ const Captions: React.FC = () => {
   const [a, b] = PAGES[pageIdx];
   const pin = springAt(frame, fps, WORDS[a][0], 12);
   return (
-    <div style={{ position: "absolute", bottom: 150, width: "100%", display: "flex", justifyContent: "center" }}>
+    <div style={{ position: "absolute", ...(t >= HERO_IN && t <= HERO_OUT ? { top: 640 } : { bottom: 150 }), width: "100%", display: "flex", justifyContent: "center" }}>
       <div
         style={{
           background: C.cream,
@@ -611,20 +611,20 @@ export const PabloKnauth: React.FC<{ cutout?: string }> = ({ cutout = "pablo_cut
 
       {/* 0–3.3 s: IA que suena a robot */}
       <RobotNote />
-      <Sticker at={2.7} outAt={3.3} x={810} y={1300} rot={8} size={230}>
+      <Sticker at={2.7} outAt={3.3} x={800} y={560} rot={8} size={230}>
         <InlineDoodle d={ROBOT} vb="0 0 160 140" w={170} h={150} at={2.7} />
       </Sticker>
 
       {/* 3.3–7.2 s: Pablo + IA con tu voz */}
       <Crown />
-      <Scrap at={4.56} outAt={7.2} x={50} y={1360} rot={-6} bg={C.yellow} seed={21}>
+      <Scrap at={4.56} outAt={7.2} x={50} y={110} rot={-6} bg={C.yellow} seed={21}>
         <div style={{ fontFamily: MARKER, fontSize: 62, color: C.ink }}>la IA trabaja</div>
         <div style={{ fontFamily: HAND, fontSize: 46, fontWeight: 700, color: C.ink }}>para tu marca personal</div>
       </Scrap>
-      <Scrap at={6.12} outAt={7.2} x={660} y={1300} rot={7} bg={C.cream} seed={23}>
+      <Scrap at={6.12} outAt={7.2} x={600} y={560} rot={7} bg={C.cream} seed={23}>
         <div style={{ fontFamily: HAND, fontSize: 52, fontWeight: 700, color: C.ink }}>tu voz, intacta ✓</div>
       </Scrap>
-      <Doodle d={UNDERLINE} at={6.4} outAt={7.2} x={680} y={1420} w={320} h={40} vb="0 0 300 30" color={C.red} stroke={8} />
+      <Doodle d={UNDERLINE} at={6.4} outAt={7.2} x={620} y={680} w={320} h={40} vb="0 0 300 30" color={C.red} stroke={8} />
 
       {/* 7.4–10.8 s: prompts, skills y guías para Claude */}
       <Scrap at={7.82} outAt={10.8} x={70} y={130} rot={-7} bg={C.pink} seed={31}>
@@ -636,8 +636,8 @@ export const PabloKnauth: React.FC<{ cutout?: string }> = ({ cutout = "pablo_cut
       <Scrap at={8.9} outAt={10.8} x={330} y={300} rot={-2} bg={C.cream} seed={35}>
         <div style={{ fontFamily: MARKER, fontSize: 64, color: C.ink }}>GUÍAS</div>
       </Scrap>
-      <Doodle d={ARROW} at={9.2} outAt={10.8} x={380} y={1330} w={190} h={100} vb="0 0 180 90" color={C.ink} stroke={7} rot={160} />
-      <Scrap at={9.2} outAt={10.8} x={580} y={1350} rot={-4} bg={C.cream} seed={37} tape={false}>
+      <Doodle d={ARROW} at={9.2} outAt={10.8} x={400} y={470} w={190} h={100} vb="0 0 180 90" color={C.ink} stroke={7} rot={160} />
+      <Scrap at={9.2} outAt={10.8} x={580} y={520} rot={-4} bg={C.cream} seed={37} tape={false}>
         <div style={{ fontFamily: HAND, fontSize: 54, fontWeight: 700, color: C.ink }}>
           para <span style={{ fontFamily: MARKER, color: C.orange }}>Claude</span>
         </div>
@@ -654,7 +654,7 @@ export const PabloKnauth: React.FC<{ cutout?: string }> = ({ cutout = "pablo_cut
       <Doodle d={STAR} at={12.45} outAt={13.75} x={330} y={150} w={80} h={80} vb="0 0 100 100" />
 
       {/* 13.96–17.3 s: biblioteca gratis */}
-      <Sticker at={14.22} outAt={17.3} x={80} y={1320} rot={-6} size={260}>
+      <Sticker at={14.22} outAt={17.3} x={70} y={470} rot={-6} size={260}>
         <InlineDoodle d={BOOKS} vb="0 0 190 170" w={190} h={170} at={14.22} />
       </Sticker>
       <Scrap at={14.3} outAt={17.3} x={130} y={140} rot={-3} bg={C.cream} seed={51}>
@@ -669,8 +669,8 @@ export const PabloKnauth: React.FC<{ cutout?: string }> = ({ cutout = "pablo_cut
       </Scrap>
       <DmBubble />
       <Signature at={20.6} />
-      <Doodle d={STAR} at={20.95} x={900} y={1330} w={90} h={90} vb="0 0 100 100" />
-      <Doodle d={SPARK} at={21.1} x={90} y={1380} w={60} h={60} vb="0 0 40 40" stroke={5} />
+      <Doodle d={STAR} at={20.95} x={900} y={560} w={90} h={90} vb="0 0 100 100" />
+      <Doodle d={SPARK} at={21.1} x={90} y={640} w={60} h={60} vb="0 0 40 40" stroke={5} />
 
       <Captions />
     </AbsoluteFill>

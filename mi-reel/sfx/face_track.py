@@ -2,7 +2,7 @@
 OpenCV Haar face + eye detection on the source clip, geometric fallback from the face box when the eyes
 are not found, then outlier rejection and smoothing.
 
-Usage: python3 face_track.py clip.mov out.json [--width 1080 --height 1920]
+Usage: python3 face_track.py clip.mov out.json [--width 1080 --height 1920] [--scale 0.75]
 Writes {"l": [[x, y], ...], "r": [[x, y], ...], "face": [[x, y, w, h], ...]}.
 """
 import argparse, json, subprocess, numpy as np, cv2
@@ -10,6 +10,7 @@ import argparse, json, subprocess, numpy as np, cv2
 ap = argparse.ArgumentParser()
 ap.add_argument("src"); ap.add_argument("out")
 ap.add_argument("--width", type=int, default=1080); ap.add_argument("--height", type=int, default=1920)
+ap.add_argument("--scale", type=float, default=1.0, help="same --scale as person_cutout.py (bottom-centre anchor)")
 args = ap.parse_args()
 W, H = args.width, args.height
 face_cc = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
@@ -64,6 +65,12 @@ def smooth(a, k=4):
     return np.stack([np.convolve(pad[:, j], ker, mode="valid") for j in range(a.shape[1])], 1)
 
 s = W / PW
-out = {"l": (smooth(L) * s).round(1).tolist(), "r": (smooth(R) * s).round(1).tolist(), "face": (smooth(F) * s).round(1).tolist()}
+SC = args.scale
+SW, SH = int(round(W * SC / 2) * 2), int(round(H * SC / 2) * 2)
+X0, Y0 = (W - SW) // 2, H - SH                                     # matches person_cutout.py --scale
+pt = lambda a: np.stack([X0 + a[:, 0] * s * SC, Y0 + a[:, 1] * s * SC], 1)
+Fs = smooth(F) * s
+Fo = np.stack([X0 + Fs[:, 0] * SC, Y0 + Fs[:, 1] * SC, Fs[:, 2] * SC, Fs[:, 3] * SC], 1)
+out = {"l": pt(smooth(L)).round(1).tolist(), "r": pt(smooth(R)).round(1).tolist(), "face": Fo.round(1).tolist()}
 json.dump(out, open(args.out, "w"))
 print(f"{len(L)} frames, eyes detected directly in {ok.sum()} ({ok.mean() * 100:.0f}%)")
