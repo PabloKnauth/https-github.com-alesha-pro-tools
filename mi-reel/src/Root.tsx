@@ -4,6 +4,7 @@ import { WidgetsFlotantes } from "./WidgetsFlotantes";
 import { MotoRokaServicio } from "./MotoRokaServicio";
 import { RegalosMotoRoka } from "./RegalosMotoRoka";
 import { PabloKnauth } from "./PabloKnauth";
+import { BodegaRenta } from "./BodegaRenta";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -37,6 +38,14 @@ export const RemotionRoot: React.FC = () => {
         id="PabloKnauth"
         component={PabloKnauth}
         durationInFrames={659}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="BodegaRenta"
+        component={BodegaRenta}
+        durationInFrames={863}
         fps={30}
         width={1080}
         height={1920}
