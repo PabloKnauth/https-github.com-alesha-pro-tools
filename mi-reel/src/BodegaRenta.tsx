@@ -4,10 +4,10 @@ import { Float, FONT, glass, Icon, Kicker, springAt, useT } from "./MotoRokaServ
 
 // Bodega en renta — mismo sistema que MotoRokaServicio (vidrio, cámara, subtítulos), en naranja de
 // seguridad industrial. Cuando no hay persona en cuadro los widgets se agrandan y se centran.
-const OR = "#ff6b1a";
-const OR_SOFT = "#ffa266";
-const GREEN = "#3ddc84";
-const CHAR: React.CSSProperties = { ...glass, background: "rgba(22, 22, 24, 0.58)", border: "1.5px solid rgba(255,255,255,0.22)" };
+export const OR = "#ff6b1a";
+export const OR_SOFT = "#ffa266";
+export const GREEN = "#3ddc84";
+export const CHAR: React.CSSProperties = { ...glass, background: "rgba(22, 22, 24, 0.58)", border: "1.5px solid rgba(255,255,255,0.22)" };
 
 // Tramos sin persona (medidos con segmentación): ahí los widgets van grandes
 const NO_PERSON: [number, number][] = [[13.0, 19.8], [22.5, 28.8]];
@@ -63,7 +63,7 @@ const Camera: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 // envoltura para widgets grandes centrados: `zoom` escala también el tamaño de diseño, así el contenedor
 // con brillo de Float crece con el contenido en vez de recortarlo (un transform no cambiaría la caja)
-const Big: React.FC<{ w: number; scale: number; children: React.ReactNode }> = ({ w, scale, children }) => (
+export const Big: React.FC<{ w: number; scale: number; children: React.ReactNode }> = ({ w, scale, children }) => (
   <div style={{ width: w, zoom: scale } as React.CSSProperties}>{children}</div>
 );
 
@@ -89,13 +89,13 @@ const PinPath = () => (
   </g>
 );
 const QPath = () => <text x="32" y="47" textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize="42" fill="white">?</text>;
-const WarehousePath = () => (
+export const WarehousePath = () => (
   <g fill="none" stroke="white" strokeWidth="4.5" strokeLinejoin="round">
     <path d="M8 54V26L32 12l24 14v28" />
     <path d="M18 54V34h28v20M18 41h28M18 48h28" />
   </g>
 );
-const CalendarPath = () => (
+export const CalendarPath = () => (
   <g fill="none" stroke="white" strokeWidth="4.5">
     <rect x="12" y="16" width="40" height="36" rx="5" />
     <path d="M12 26h40M22 10v10M42 10v10" />
@@ -317,14 +317,14 @@ const ChatVisit: React.FC = () => {
   );
 };
 
-const Cta: React.FC = () => {
+export const Cta: React.FC<{ text?: string }> = ({ text = "AGENDA TU VISITA →" }) => {
   const { t } = useT();
   return (
     <div style={{
       background: OR, color: "white", fontFamily: FONT, fontWeight: 900, fontSize: 56, padding: "22px 48px", borderRadius: 999,
       boxShadow: `0 0 40px rgba(255,107,26,0.7), 0 18px 40px rgba(0,0,0,0.4)`, transform: `scale(${1 + 0.04 * Math.sin(t * 7)})`, whiteSpace: "nowrap",
     }}>
-      AGENDA TU VISITA →
+      {text}
     </div>
   );
 };

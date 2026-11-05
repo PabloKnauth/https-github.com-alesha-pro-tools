@@ -17,6 +17,8 @@ words.json: [[start, end, word, prob], ...] word timestamps; pauses > 0.25 s bui
 --voice-ref: gain the denoised speech to this RMS (dBFS) before EQ/compression, so the compressor
     and expander thresholds act the same on hot and quiet recordings.
 --sfx-db: SFX bus gain before ducking (default -7, tuned for the first reel).
+--keep-natural: "a-b,c-d" second ranges where the expander is bypassed, so real non-speech sound
+    (footsteps, laughter, panting caught by the mic) is kept instead of being pushed down.
 """
 import argparse, json, subprocess, sys, numpy as np, noisereduce as nr
 from scipy.io import wavfile
@@ -28,6 +30,7 @@ ap.add_argument("--max-gap-db", type=float, default=None)
 ap.add_argument("--scenes", type=lambda s: [float(v) for v in s.split(",")], default=None)
 ap.add_argument("--voice-ref", type=float, default=None)
 ap.add_argument("--sfx-db", type=float, default=-7.0)
+ap.add_argument("--keep-natural", type=lambda s: [tuple(map(float, r.split("-"))) for r in s.split(",")], default=None)
 args = ap.parse_args()
 SRC_VIDEO, VOICE_RAW, SFX, WORDS, OUT = args.src_video, args.voice_raw, args.sfx, args.words, args.out
 SR = 48000
@@ -82,6 +85,19 @@ VOICE_CHAIN = ",".join([
 ])
 run(["ffmpeg", "-v", "error", "-y", "-i", "voice_nr.wav", "-af", VOICE_CHAIN, "-ar", str(SR), "-ac", "1",
      "-c:a", "pcm_s24le", "voice_proc.wav"])
+if args.keep_natural:                                            # same chain minus the expander, crossfaded in
+    no_gate = ",".join(f for f in VOICE_CHAIN.split(",") if not f.startswith("agate"))
+    run(["ffmpeg", "-v", "error", "-y", "-i", "voice_nr.wav", "-af", no_gate, "-ar", str(SR), "-ac", "1",
+         "-c:a", "pcm_f32le", "voice_nogate.wav"])
+    run(["ffmpeg", "-v", "error", "-y", "-i", "voice_proc.wav", "-c:a", "pcm_f32le", "voice_gate.wav"])
+    _, g = wavfile.read("voice_gate.wav"); _, ng = wavfile.read("voice_nogate.wav")
+    n = min(len(g), len(ng)); w8 = np.zeros(n, np.float32); fade = int(0.08 * SR)
+    for a, b in args.keep_natural:
+        i0, i1 = int(a * SR), min(n, int(b * SR)); w8[i0:i1] = 1
+        w8[max(0, i0 - fade):i0] = np.linspace(0, 1, i0 - max(0, i0 - fade)); w8[i1:i1 + fade] = np.linspace(1, 0, len(w8[i1:i1 + fade]))
+        print(f"natural sound kept {a:.2f}-{b:.2f}s")
+    wavfile.write("voice_proc_mix.wav", SR, (g[:n] * (1 - w8) + ng[:n] * w8).astype(np.float32))
+    run(["ffmpeg", "-v", "error", "-y", "-i", "voice_proc_mix.wav", "-c:a", "pcm_s24le", "voice_proc.wav"])
 
 # ---------- 3. mix: SFX ducked under the voice, then 2-pass loudnorm ----------
 MIX = (
