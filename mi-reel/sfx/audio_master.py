@@ -17,6 +17,9 @@ words.json: [[start, end, word, prob], ...] word timestamps; pauses > 0.25 s bui
 --voice-ref: gain the denoised speech to this RMS (dBFS) before EQ/compression, so the compressor
     and expander thresholds act the same on hot and quiet recordings.
 --sfx-db: SFX bus gain before ducking (default -7, tuned for the first reel).
+--clarity: voice chain for boxy/dull recordings: cuts 240 Hz and 700 Hz, lifts presence (3.2 / 5.5 kHz)
+    and air, adds a second low-threshold compressor so soft words stay up, and a firmer expander.
+--lufs: integrated loudness target (default -14).
 --keep-natural: "a-b,c-d" second ranges where the expander is bypassed, so real non-speech sound
     (footsteps, laughter, panting caught by the mic) is kept instead of being pushed down.
 """
@@ -30,6 +33,8 @@ ap.add_argument("--max-gap-db", type=float, default=None)
 ap.add_argument("--scenes", type=lambda s: [float(v) for v in s.split(",")], default=None)
 ap.add_argument("--voice-ref", type=float, default=None)
 ap.add_argument("--sfx-db", type=float, default=-7.0)
+ap.add_argument("--clarity", action="store_true")
+ap.add_argument("--lufs", type=float, default=-14.0)
 ap.add_argument("--keep-natural", type=lambda s: [tuple(map(float, r.split("-"))) for r in s.split(",")], default=None)
 args = ap.parse_args()
 SRC_VIDEO, VOICE_RAW, SFX, WORDS, OUT = args.src_video, args.voice_raw, args.sfx, args.words, args.out
@@ -83,6 +88,20 @@ VOICE_CHAIN = ",".join([
     "agate=threshold=0.018:ratio=1.8:range=0.3:attack=4:release=180:knee=3",  # soft expander for pauses
     "alimiter=limit=0.89:attack=3:release=40:level=disabled",
 ])
+if args.clarity:
+    VOICE_CHAIN = ",".join([
+        "highpass=f=85:poles=2", "highpass=f=85:poles=2",
+        "equalizer=f=240:t=q:w=1.1:g=-4",                       # mud
+        "equalizer=f=700:t=q:w=1.0:g=-5",                       # boxy / nasal mids
+        "equalizer=f=3200:t=q:w=1.0:g=6.5",                     # presence: consonants, intelligibility
+        "equalizer=f=5500:t=q:w=1.2:g=3",
+        "highshelf=f=10000:g=4",                                # air
+        "deesser=i=0.5:m=0.5:f=0.5",
+        "acompressor=threshold=-24dB:ratio=3:attack=6:release=90:knee=4:makeup=4dB",
+        "acompressor=threshold=-32dB:ratio=2.5:attack=4:release=80:knee=6:makeup=3dB",  # lifts soft words
+        "agate=threshold=0.04:ratio=2.5:range=0.15:attack=3:release=150:knee=3",
+        "alimiter=limit=0.89:attack=3:release=40:level=disabled",
+    ])
 run(["ffmpeg", "-v", "error", "-y", "-i", "voice_nr.wav", "-af", VOICE_CHAIN, "-ar", str(SR), "-ac", "1",
      "-c:a", "pcm_s24le", "voice_proc.wav"])
 if args.keep_natural:                                            # same chain minus the expander, crossfaded in
@@ -110,7 +129,7 @@ MIX = (
 run(["ffmpeg", "-v", "error", "-y", "-i", "voice_proc.wav", "-i", SFX, "-filter_complex", MIX,
      "-map", "[m]", "-ar", str(SR), "-c:a", "pcm_s24le", "mix_pre.wav"])
 
-TARGET = "I=-14:TP=-1.0:LRA=9"
+TARGET = f"I={args.lufs}:TP=-1.0:LRA=9"
 stats = run(["ffmpeg", "-i", "mix_pre.wav", "-af", f"loudnorm={TARGET}:print_format=json", "-f", "null", "-"])
 m = json.loads(stats[stats.rindex("{"):])
 ln = (f"loudnorm={TARGET}:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"

@@ -44,6 +44,8 @@ Para clips con varias tomas o grabados más fuerte, usá `--scenes` (iguala el n
 `--max-gap-db` (solo pausas realmente silenciosas como perfil de ruido), `--voice-ref -26` (la cadena
 actúa igual sin importar el nivel de entrada) y `--sfx-db` (nivel de los efectos). Ejemplo en el
 encabezado del script; `regalos_sfx.py` es la línea de tiempo de efectos del reel de regalos.
+Si la voz suena encajonada o le falta presencia, `--clarity` (EQ de claridad + compresión de palabras
+suaves) y `--lufs -13`; `--keep-natural a-b` conserva sonidos reales (pasos, risas) en esos segundos.
 
 ## Fórmula de pedido (de la guía)
 
