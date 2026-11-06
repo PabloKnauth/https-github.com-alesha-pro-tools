@@ -6,6 +6,7 @@ import { RegalosMotoRoka } from "./RegalosMotoRoka";
 import { PabloKnauth } from "./PabloKnauth";
 import { BodegaRenta } from "./BodegaRenta";
 import { BodegaChica } from "./BodegaChica";
+import { MotoRokaCalidad } from "./MotoRokaCalidad";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -55,6 +56,14 @@ export const RemotionRoot: React.FC = () => {
         id="BodegaChica"
         component={BodegaChica}
         durationInFrames={1301}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="MotoRokaCalidad"
+        component={MotoRokaCalidad}
+        durationInFrames={1049}
         fps={30}
         width={1080}
         height={1920}
