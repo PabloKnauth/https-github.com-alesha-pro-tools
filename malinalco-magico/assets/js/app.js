@@ -4,135 +4,167 @@
   var $ = function (s, el) { return (el || document).querySelector(s); };
   var MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
   var MES_C = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
-  var MS = 86400000;
+  var MS = 86400000, FOTOS = "assets/img/casas/";
+  var CAL = !!D.calendarioAlDia;
 
-  /* ---------- fechas ---------- */
+  /* ---------- utilidades ---------- */
   function fecha(s) { var p = String(s).split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
   function clave(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
   function corta(d) { return d.getDate() + " " + MES_C[d.getMonth()]; }
+  function larga(d) { return d.getDate() + " de " + MESES[d.getMonth()]; }
   var t = new Date(), HOY = new Date(t.getFullYear(), t.getMonth(), t.getDate());
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-
-  // ¿Está ocupada la casa en el periodo [ini, fin)? Devuelve el rango que choca o null.
+  function max(c) { return c.personas[1]; }
+  function personas(c) { return c.personas[0] === c.personas[1] ? c.personas[1] + " personas" : c.personas[0] + "–" + c.personas[1] + " personas"; }
+  function datos(c) {
+    var p = [personas(c), c.recamaras + (c.recamaras === 1 ? " recámara" : " recámaras")];
+    if (c.banos) p.push(c.banos + (c.banos === 1 ? " baño" : " baños"));
+    if (c.camas) p.push(c.camas);
+    return p.join(" · ");
+  }
   function choque(casa, ini, fin) {
     var rs = casa.ocupada || [];
-    for (var i = 0; i < rs.length; i++) {
-      var a = fecha(rs[i][0]), b = fecha(rs[i][1]);
-      if (a < fin && ini < b) return [a, b];
-    }
+    for (var i = 0; i < rs.length; i++) { var a = fecha(rs[i][0]), b = fecha(rs[i][1]); if (a < fin && ini < b) return [a, b]; }
     return null;
   }
   function libreDesde(casa, dia) {
-    var d = new Date(dia), guard = 0;
-    while (guard++ < 400) { var c = choque(casa, d, new Date(+d + MS)); if (!c) return d; d = c[1]; }
+    var d = new Date(dia), n = 0;
+    while (n++ < 400) { var c = choque(casa, d, new Date(+d + MS)); if (!c) return d; d = c[1]; }
     return d;
   }
 
-  /* ---------- búsqueda ---------- */
-  var busq = null; // {ini, fin, huespedes}
+  /* ---------- estado de búsqueda ---------- */
+  var busq = null, destino = "Todas";
   var fL = $("#f-llegada"), fS = $("#f-salida"), fH = $("#f-huespedes");
   fL.min = clave(HOY); fS.min = clave(new Date(+HOY + MS));
   fL.addEventListener("change", function () {
-    if (fL.value) { var m = new Date(+fecha(fL.value) + MS); fS.min = clave(m); if (!fS.value || fecha(fS.value) <= fecha(fL.value)) fS.value = clave(m); }
+    if (!fL.value) return;
+    var m = new Date(+fecha(fL.value) + MS); fS.min = clave(m);
+    if (!fS.value || fecha(fS.value) <= fecha(fL.value)) fS.value = clave(m);
   });
   $("#buscador").addEventListener("submit", function (e) {
     e.preventDefault();
-    var err = $("#buscador-error");
-    if (!fL.value || !fS.value) { err.textContent = "Elige fecha de llegada y de salida."; err.hidden = false; return; }
-    var ini = fecha(fL.value), fin = fecha(fS.value);
-    if (ini < HOY) { err.textContent = "La llegada no puede ser antes de hoy."; err.hidden = false; return; }
-    if (fin <= ini) { err.textContent = "La salida debe ser al menos un día después de la llegada."; err.hidden = false; return; }
-    err.hidden = true;
+    var err = $("#buscador-error"), ini = fL.value && fecha(fL.value), fin = fS.value && fecha(fS.value);
+    var msg = !ini || !fin ? "Elige fecha de llegada y de salida." : ini < HOY ? "La llegada no puede ser antes de hoy." : fin <= ini ? "La salida debe ser al menos un día después de la llegada." : "";
+    err.textContent = msg; err.hidden = !msg; if (msg) return;
     busq = { ini: ini, fin: fin, huespedes: +fH.value };
     pintar();
-    var noches = Math.round((fin - ini) / MS);
-    var libres = D.casas.filter(function (c) { return disponibilidad(c).tipo === "libre"; }).length;
-    $("#estado-busqueda").textContent = "Del " + corta(ini) + " al " + corta(fin) + " (" + noches + (noches === 1 ? " noche" : " noches") + ") · " +
-      busq.huespedes + (busq.huespedes === 1 ? " huésped" : " huéspedes") + ": " + (libres ? libres + (libres === 1 ? " casa disponible." : " casas disponibles.") : "ninguna casa libre; prueba otras fechas o escríbenos.");
+    var n = Math.round((fin - ini) / MS), ok = visibles().filter(function (c) { return estado(c).reservable; }).length;
+    $("#estado-busqueda").textContent = "Del " + corta(ini) + " al " + corta(fin) + " (" + n + (n === 1 ? " noche" : " noches") + ") para " + busq.huespedes +
+      (busq.huespedes === 1 ? " persona: " : " personas: ") + (ok ? ok + (ok === 1 ? " casa te queda." : " casas te quedan.") : "ninguna casa te queda; prueba otras fechas o escríbenos.") +
+      (CAL ? "" : " Confirmamos la disponibilidad por WhatsApp.");
     document.getElementById("casas").scrollIntoView({ behavior: "smooth" });
   });
 
-  function disponibilidad(casa) {
-    if (busq) {
-      if (busq.huespedes > casa.huespedes) return { tipo: "capacidad", texto: "Hasta " + casa.huespedes + " huéspedes" };
-      var c = choque(casa, busq.ini, busq.fin);
-      return c ? { tipo: "ocupada", texto: "Ocupada en tus fechas" } : { tipo: "libre", texto: "Disponible en tus fechas" };
-    }
-    var hoy = choque(casa, HOY, new Date(+HOY + MS));
-    if (hoy) return { tipo: "ocupada", texto: "Ocupada · libre desde el " + corta(libreDesde(casa, HOY)) };
-    return { tipo: "libre", texto: "Disponible hoy" };
+  function estado(c) {
+    if (busq && busq.huespedes > max(c)) return { tipo: "capacidad", texto: "Máximo " + max(c) + " personas", reservable: false };
+    if (!CAL) return { tipo: "consulta", texto: busq ? "Pregunta por tus fechas" : "Consulta disponibilidad", reservable: true };
+    if (busq) return choque(c, busq.ini, busq.fin) ? { tipo: "ocupada", texto: "Ocupada en tus fechas", reservable: false } : { tipo: "libre", texto: "Disponible en tus fechas", reservable: true };
+    return choque(c, HOY, new Date(+HOY + MS)) ? { tipo: "ocupada", texto: "Ocupada · libre desde el " + corta(libreDesde(c, HOY)), reservable: true } : { tipo: "libre", texto: "Disponible hoy", reservable: true };
   }
 
   /* ---------- WhatsApp ---------- */
-  function wa(casa) {
+  function wa(c, extra) {
     var txt = "Hola, Malinalco Mágico. ";
-    if (casa) {
-      txt += "Me interesa reservar *" + casa.nombre + "*";
-      if (busq) txt += " del " + busq.ini.getDate() + " de " + MESES[busq.ini.getMonth()] + " al " + busq.fin.getDate() + " de " + MESES[busq.fin.getMonth()] + " de " + busq.fin.getFullYear() + " para " + busq.huespedes + (busq.huespedes === 1 ? " persona" : " personas");
-      txt += ". ¿Está disponible?";
-    } else txt += "Quiero información para reservar una casa.";
+    if (c) {
+      txt += extra === "ubicacion" ? "¿Me comparten la ubicación de *" + c.nombre + "*?" : "Me interesa *" + c.nombre + "*";
+      if (extra !== "ubicacion") {
+        if (busq) txt += " del " + larga(busq.ini) + " al " + larga(busq.fin) + " de " + busq.fin.getFullYear() + " para " + busq.huespedes + (busq.huespedes === 1 ? " persona" : " personas");
+        txt += ". ¿Está disponible y cuál sería la cotización?";
+      }
+    } else txt += "Quiero información para rentar una casa.";
     return "https://wa.me/" + D.whatsapp + "?text=" + encodeURIComponent(txt);
   }
   document.querySelectorAll('[data-wa="general"]').forEach(function (a) { a.href = wa(null); a.target = "_blank"; a.rel = "noopener"; });
 
-  /* ---------- tarjetas ---------- */
-  var ICONO = '<svg viewBox="0 0 200 200" aria-hidden="true"><path d="M28 196 V92 A72 72 0 0 1 172 92 V196" fill="none" stroke="currentColor" stroke-width="6"/><path d="M47 160 L78 92 L100 133 L122 92 L153 160 Z" fill="currentColor"/><path d="M52 176 Q63 170 74 176 T96 176 T118 176 T140 176" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>';
-  var VAR = ["", " provisional--b", " provisional--c"];
-  function foto(casa, i, n) {
-    var f = (casa.fotos || [])[n || 0];
-    if (f) return '<img src="' + esc(f) + '" alt="' + esc(casa.nombre) + ', foto ' + ((n || 0) + 1) + '" loading="lazy">';
-    return '<div class="provisional' + VAR[i % 3] + '">' + '<div>' + ICONO + 'Foto próximamente</div></div>';
+  /* ---------- filtros de destino ---------- */
+  var destinos = ["Todas"].concat(D.casas.map(function (c) { return c.destino; }).filter(function (d, i, a) { return a.indexOf(d) === i; }));
+  function pintarFiltros() {
+    $("#filtros").innerHTML = destinos.map(function (d) {
+      var n = d === "Todas" ? D.casas.length : D.casas.filter(function (c) { return c.destino === d; }).length;
+      return '<button type="button" class="filtro" aria-pressed="' + (d === destino) + '" data-destino="' + esc(d) + '">' + esc(d) + ' <span>' + n + "</span></button>";
+    }).join("");
   }
-  function precio(casa) {
-    return casa.precio ? '<span class="precio">$' + Number(casa.precio).toLocaleString("es-MX") + ' <small>MXN / noche</small></span>' : '<span class="precio">Consultar <small>precio</small></span>';
-  }
-  function datos(casa) { return casa.huespedes + " huéspedes · " + casa.recamaras + " recámaras · " + casa.banos + (casa.banos === 1 ? " baño" : " baños"); }
+  $("#filtros").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-destino]"); if (!b) return;
+    destino = b.getAttribute("data-destino"); pintarFiltros(); pintar();
+  });
+  function visibles() { return D.casas.filter(function (c) { return destino === "Todas" || c.destino === destino; }); }
 
+  /* ---------- tarjetas ---------- */
+  function img(c, n, cls, ansioso) {
+    var f = c.fotos[n] || c.fotos[0];
+    return '<img' + (cls ? ' class="' + cls + '"' : "") + ' src="' + FOTOS + esc(f) + '.jpg" alt="' + esc(c.nombre) + ", foto " + (n + 1) + ' de ' + c.fotos.length + '" loading="' + (ansioso ? "eager" : "lazy") + '" decoding="async">';
+  }
   function pintar() {
-    var lista = D.casas.map(function (c, i) { return { c: c, i: i, d: disponibilidad(c) }; });
-    if (busq) lista.sort(function (a, b) { return (a.d.tipo === "libre" ? 0 : 1) - (b.d.tipo === "libre" ? 0 : 1); });
+    var lista = visibles().map(function (c) { return { c: c, e: estado(c) }; });
+    if (busq) lista.sort(function (a, b) { return (b.e.reservable ? 1 : 0) - (a.e.reservable ? 1 : 0); });
     $("#lista-casas").innerHTML = lista.map(function (o) {
-      var c = o.c, d = o.d, puede = d.tipo === "libre";
-      return '<article class="casa">' +
-        '<div class="casa__foto">' + foto(c, o.i) + '<span class="estado estado--' + d.tipo + '">' + esc(d.texto) + '</span></div>' +
-        '<div class="casa__cuerpo"><h3 class="casa__nombre">' + esc(c.nombre) + '</h3>' +
-        '<p class="casa__datos">' + datos(c) + '</p><p class="casa__resumen">' + esc(c.resumen) + '</p>' +
-        '<ul class="amenidades">' + (c.amenidades || []).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + '</ul>' +
-        '<div class="casa__pie">' + precio(c) + '<div class="casa__botones">' +
+      var c = o.c, e = o.e;
+      return '<article class="casa" data-id="' + c.id + '">' +
+        '<div class="casa__foto">' + img(c, 0, null, true) +
+          '<span class="estado estado--' + e.tipo + '">' + esc(e.texto) + "</span>" +
+          (c.etiqueta ? '<span class="casa__etiqueta">' + esc(c.etiqueta) + "</span>" : "") +
+          '<button class="casa__fotos" type="button" data-ver="' + c.id + '">' + c.fotos.length + " fotos</button></div>" +
+        '<div class="casa__cuerpo"><p class="casa__destino">' + esc(c.destino) + (c.centro ? " · " + esc(c.centro.texto) : "") + "</p>" +
+        '<h3 class="casa__nombre">' + esc(c.nombre) + "</h3>" +
+        '<p class="casa__datos">' + esc(datos(c)) + '</p><p class="casa__resumen">' + esc(c.resumen) + "</p>" +
+        '<ul class="amenidades">' + c.amenidades.slice(0, 4).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") +
+          (c.amenidades.length > 4 ? "<li>+" + (c.amenidades.length - 4) + "</li>" : "") + "</ul>" +
+        '<div class="casa__pie"><span class="precio">Cotiza <small>según personas y fechas</small></span><div class="casa__botones">' +
           '<button class="boton boton--linea" type="button" data-ver="' + c.id + '">Ver casa</button>' +
-          '<a class="boton boton--terracota" href="' + wa(c) + '" target="_blank" rel="noopener"' + (busq && !puede ? ' aria-disabled="true" tabindex="-1"' : "") + '>Reservar</a>' +
-        '</div></div></div></article>';
+          '<a class="boton boton--terracota" href="' + wa(c) + '" target="_blank" rel="noopener"' + (e.reservable ? "" : ' aria-disabled="true" tabindex="-1"') + ">Reservar</a>" +
+        "</div></div></div></article>";
     }).join("");
     pines();
   }
-  document.addEventListener("click", function (e) {
-    var b = e.target.closest("[data-ver]"); if (b) abrir(b.getAttribute("data-ver"));
-  });
+  document.addEventListener("click", function (e) { var b = e.target.closest("[data-ver]"); if (b) abrir(b.getAttribute("data-ver")); });
 
-  /* ---------- modal ---------- */
-  var modal = $("#modal"), casaModal = null, mesBase = null;
+  /* ---------- modal con galería ---------- */
+  var modal = $("#modal"), casaModal = null, fotoN = 0, mesBase = null;
   function abrir(id) {
-    var i = D.casas.findIndex(function (c) { return c.id === id; }); if (i < 0) return;
-    var c = casaModal = D.casas[i], d = disponibilidad(c);
-    $("#modal-galeria").innerHTML = [0, 1, 2].map(function (n) { return foto(c, (i + n) % 3, n); }).join("");
-    $("#modal-estado").textContent = d.texto;
+    var c = casaModal = D.casas.find(function (x) { return x.id === id; }); if (!c) return;
+    var e = estado(c); fotoN = 0;
+    $("#galeria-miniaturas").innerHTML = c.fotos.map(function (f, n) {
+      return '<button type="button" data-n="' + n + '" aria-label="Ver foto ' + (n + 1) + '"><img src="' + FOTOS + esc(f) + '.jpg" alt="" loading="lazy"></button>';
+    }).join("");
+    foto(0);
+    $("#modal-estado").textContent = c.destino + " · " + e.texto;
     $("#modal-titulo").textContent = c.nombre;
-    $("#modal-datos").textContent = datos(c) + (c.precio ? " · $" + Number(c.precio).toLocaleString("es-MX") + " MXN por noche" : "");
+    $("#modal-datos").textContent = datos(c) + (c.centro ? " · " + c.centro.texto : "");
     $("#modal-resumen").textContent = c.resumen;
-    $("#modal-amenidades").innerHTML = (c.amenidades || []).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
-    $("#modal-reservar").href = wa(c);
-    $("#modal-mapa").href = c.maps || "#";
+    $("#modal-amenidades").innerHTML = c.amenidades.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
+    var r = $("#modal-reservar"); r.href = wa(c); r.setAttribute("aria-disabled", e.reservable ? "false" : "true");
+    var m = $("#modal-mapa");
+    if (c.maps) { m.href = c.maps; m.textContent = "Cómo llegar"; } else { m.href = wa(c, "ubicacion"); m.textContent = "Pedir ubicación"; }
+    $("#modal-nota-cal").textContent = CAL ? "" : "Marcamos tus fechas en el calendario; te confirmamos la disponibilidad por WhatsApp. " + (D.nota || "");
     var base = busq ? busq.ini : HOY; mesBase = new Date(base.getFullYear(), base.getMonth(), 1);
     calendarios();
     if (modal.showModal) modal.showModal(); else modal.setAttribute("open", "");
   }
+  function foto(n) {
+    var c = casaModal, total = c.fotos.length; fotoN = (n + total) % total;
+    $("#galeria-principal").innerHTML = img(c, fotoN, null, true);
+    $("#galeria-cuenta").textContent = (fotoN + 1) + " / " + total;
+    [].forEach.call(document.querySelectorAll("#galeria-miniaturas button"), function (b, i) { b.setAttribute("aria-current", i === fotoN ? "true" : "false"); });
+    var act = document.querySelector('#galeria-miniaturas [aria-current="true"]'); if (act && act.scrollIntoView) act.scrollIntoView({ block: "nearest", inline: "center" });
+  }
+  modal.addEventListener("click", function (e) {
+    var a = e.target.closest("[data-foto]"); if (a) return foto(fotoN + +a.getAttribute("data-foto"));
+    var m = e.target.closest("[data-n]"); if (m) return foto(+m.getAttribute("data-n"));
+  });
+  modal.addEventListener("keydown", function (e) { if (e.key === "ArrowRight") foto(fotoN + 1); if (e.key === "ArrowLeft") foto(fotoN - 1); });
+  var x0 = null;
+  $("#galeria-principal").addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  $("#galeria-principal").addEventListener("touchend", function (e) { if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) foto(fotoN + (dx < 0 ? 1 : -1)); x0 = null; });
+
   function mesHTML(m) {
     var c = casaModal, celdas = [], des = (m.getDay() + 6) % 7, dias = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
     for (var i = 0; i < des; i++) celdas.push('<span class="vacio"></span>');
     for (var d = 1; d <= dias; d++) {
       var f = new Date(m.getFullYear(), m.getMonth(), d), cls = [];
       if (f < HOY) cls.push("pasado");
-      if (choque(c, f, new Date(+f + MS))) cls.push("ocupado");
+      if (CAL && choque(c, f, new Date(+f + MS))) cls.push("ocupado");
       if (busq && f >= busq.ini && f < busq.fin) cls.push("tuyo");
       if (+f === +HOY) cls.push("hoy");
       celdas.push('<span class="' + cls.join(" ") + '">' + d + "</span>");
@@ -140,9 +172,8 @@
     return '<div class="mes"><h4>' + MESES[m.getMonth()] + " " + m.getFullYear() + '</h4><div class="mes__rejilla"><b>L</b><b>M</b><b>M</b><b>J</b><b>V</b><b>S</b><b>D</b>' + celdas.join("") + "</div></div>";
   }
   function calendarios() {
-    var m2 = new Date(mesBase.getFullYear(), mesBase.getMonth() + 1, 1);
-    $("#modal-calendario").innerHTML = mesHTML(mesBase) + mesHTML(m2) +
-      '<div style="grid-column:1/-1;display:flex;gap:8px"><button class="boton boton--linea boton--chico" type="button" data-mes="-1">‹ Meses anteriores</button><button class="boton boton--linea boton--chico" type="button" data-mes="1">Meses siguientes ›</button></div>';
+    $("#modal-calendario").innerHTML = mesHTML(mesBase) + mesHTML(new Date(mesBase.getFullYear(), mesBase.getMonth() + 1, 1)) +
+      '<div class="calendarios__nav"><button class="boton boton--linea boton--chico" type="button" data-mes="-1">‹ Anteriores</button><button class="boton boton--linea boton--chico" type="button" data-mes="1">Siguientes ›</button></div>';
   }
   $("#modal-calendario").addEventListener("click", function (e) {
     var b = e.target.closest("[data-mes]"); if (!b) return;
@@ -150,36 +181,51 @@
     if (n < new Date(HOY.getFullYear(), HOY.getMonth(), 1)) return;
     mesBase = n; calendarios();
   });
+  document.querySelector(".leyenda").hidden = false;
+  if (!CAL) document.querySelector(".d--ocupado").parentNode.hidden = true;
 
-  /* ---------- mapa ---------- */
-  var activa = null;
+  /* ---------- mapa de distancias ---------- */
+  var CX = 48, CY = 44, activa = null;
+  function radio(min) { return min <= 0 ? 0 : 7 + min * 0.95; }
+  function anillos() {
+    var mins = D.casas.filter(function (c) { return c.centro && c.centro.min > 0; }).map(function (c) { return c.centro.min; })
+      .filter(function (m, i, a) { return a.indexOf(m) === i; }).sort(function (a, b) { return a - b; });
+    $("#anillos").innerHTML = mins.map(function (m) {
+      var r = radio(m);
+      return '<circle cx="' + CX + '" cy="' + CY + '" r="' + r + '" fill="none" stroke="#B4502B" stroke-width=".35" stroke-dasharray="1.2 1" opacity=".55"/>' +
+        '<text x="' + (CX - 1.2) + '" y="' + (CY + r + 2.4) + '" text-anchor="end" class="anillo">' + m + " min</text>";
+    }).join("");
+  }
   function pines() {
     var g = $("#pines"); if (!g) return;
-    g.innerHTML = D.casas.map(function (c) {
-      if (!c.mapa) return "";
-      var oc = disponibilidad(c).tipo !== "libre";
-      return '<g class="pin' + (oc ? " ocupada" : "") + (activa === c.id ? " activa" : "") + '" data-pin="' + c.id + '" tabindex="0" role="button" aria-label="' + esc(c.nombre) + '" transform="translate(' + c.mapa.x + " " + c.mapa.y + ')">' +
+    g.innerHTML = D.casas.filter(function (c) { return c.centro; }).map(function (c) {
+      var r = radio(c.centro.min), a = (c.angulo || 0) * Math.PI / 180, x = CX + r * Math.cos(a), y = CY + r * Math.sin(a);
+      var oc = !estado(c).reservable;
+      return '<g class="pin' + (oc ? " ocupada" : "") + (activa === c.id ? " activa" : "") + '" data-pin="' + c.id + '" tabindex="0" role="button" aria-label="' + esc(c.nombre) + '" transform="translate(' + x.toFixed(1) + " " + y.toFixed(1) + ')">' +
         '<circle class="halo" r="2.4"/><path d="M0 0 C-2.6 -3 -2.8 -4.4 -2.8 -5.4 A2.8 2.8 0 0 1 2.8 -5.4 C2.8 -4.4 2.6 -3 0 0 Z"/><circle r=".9" cy="-5.3" fill="#FFF8F0"/>' +
-        '<text y="3.4" text-anchor="middle">' + esc(c.nombre) + "</text></g>";
+        '<text y="3.4" text-anchor="middle">' + esc(c.corto || c.nombre.replace(/^Casa /, "")) + "</text></g>";
     }).join("");
+    var otras = D.casas.filter(function (c) { return !c.centro; });
+    $("#otras-casas").innerHTML = otras.length ? "Sin distancia publicada: " + otras.map(function (c) {
+      return '<button type="button" class="enlace" data-ficha="' + c.id + '">' + esc(c.nombre) + (c.destino !== "Malinalco" ? " (" + esc(c.destino) + ")" : "") + "</button>";
+    }).join(", ") + ". Pídenos su ubicación." : "";
   }
   function ficha(id) {
     var c = D.casas.find(function (x) { return x.id === id; }); if (!c) return;
     activa = id; pines();
-    var d = disponibilidad(c);
-    $("#ficha-mapa").innerHTML = '<h3>' + esc(c.nombre) + '</h3><p>' + esc(d.texto) + " · " + datos(c) + '</p>' +
-      '<a class="boton boton--terracota boton--chico" href="' + esc(c.maps || "#") + '" target="_blank" rel="noopener">Cómo llegar</a>' +
+    $("#ficha-mapa").innerHTML = "<h3>" + esc(c.nombre) + "</h3><p>" + esc(c.destino) + (c.centro ? " · " + esc(c.centro.texto) : "") + " · " + esc(personas(c)) + "</p>" +
+      '<a class="boton boton--terracota boton--chico" href="' + esc(c.maps || wa(c, "ubicacion")) + '" target="_blank" rel="noopener">' + (c.maps ? "Cómo llegar" : "Pedir ubicación") + "</a>" +
       '<button class="boton boton--linea boton--chico" type="button" data-ver="' + c.id + '">Ver casa</button>';
   }
   var svgMapa = $("#mapa-svg");
   svgMapa.addEventListener("click", function (e) { var p = e.target.closest("[data-pin]"); if (p) ficha(p.getAttribute("data-pin")); });
   svgMapa.addEventListener("keydown", function (e) { var p = e.target.closest("[data-pin]"); if (p && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); ficha(p.getAttribute("data-pin")); } });
+  $("#otras-casas").addEventListener("click", function (e) { var b = e.target.closest("[data-ficha]"); if (b) ficha(b.getAttribute("data-ficha")); });
   $(".mapa__google").addEventListener("toggle", function () { var f = $("#iframe-mapa"); if (this.open && !f.src) f.src = D.mapaGoogle; });
 
-  /* ---------- paralaje del paisaje ---------- */
+  /* ---------- paralaje ---------- */
   var capas = [].slice.call(document.querySelectorAll(".hero__paisaje .capa"));
-  var quieto = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!quieto) {
+  if (!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) {
     var pend = false;
     window.addEventListener("scroll", function () {
       if (pend) return; pend = true;
@@ -191,11 +237,10 @@
     }, { passive: true });
   }
 
-  /* ---------- varios ---------- */
-  $("#aviso").hidden = !D.ejemplo;
+  /* ---------- arranque ---------- */
   $("#pie-tel").textContent = D.telefono;
   $("#pie-fb").href = D.facebook; $("#pie-ig").href = D.instagram;
   $("#anio").textContent = HOY.getFullYear();
-  pintar();
-  if (D.casas[0]) ficha(D.casas[0].id);
+  pintarFiltros(); anillos(); pintar();
+  var primera = D.casas.find(function (c) { return c.centro; }); if (primera) ficha(primera.id);
 })();
