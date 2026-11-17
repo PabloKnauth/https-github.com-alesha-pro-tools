@@ -255,3 +255,17 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .mapa__otras { font-size: .92rem; opacity: .85; }
 .enlace { background: none; border: 0; padding: 0; font: inherit; color: #E9C98B; text-decoration: underline; cursor: pointer; }
 .mapa__svg text.anillo { font-size: 1.8px; fill: var(--terracota-osc); font-weight: 600; }
+
+/* ---- Galería destacada ---- */
+.seccion--galeria { padding-top: 0; }
+.mosaico { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 210px; gap: 12px; }
+.mosaico__item { position: relative; padding: 0; border: 0; border-radius: 16px; overflow: hidden; cursor: pointer; background: var(--arena); min-width: 0; text-align: left; }
+.mosaico__item--1 { grid-column: span 2; grid-row: span 2; }
+.mosaico__item--6 { grid-column: 1 / -1; }
+.mosaico__item img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.2, .8, .2, 1); }
+.mosaico__item:hover img { transform: scale(1.06); }
+.mosaico__item span { position: absolute; inset: auto 0 0 0; padding: 40px 16px 14px; color: #fff; font-size: .82rem; letter-spacing: .06em; text-transform: uppercase;
+  background: linear-gradient(transparent, rgba(15, 22, 19, .78)); }
+.mosaico__item strong { display: block; font: 500 1.35rem/1.1 var(--f-titulo); letter-spacing: 0; text-transform: none; margin-bottom: 2px; }
+@media (max-width: 860px) { .mosaico { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 170px; } .mosaico__item--1 { grid-column: span 2; } }
+@media (max-width: 560px) { .mosaico__item span { padding: 28px 10px 9px; font-size: .68rem; } .mosaico__item strong { font-size: 1.05rem; } }

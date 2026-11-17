@@ -92,9 +92,9 @@
   function visibles() { return D.casas.filter(function (c) { return destino === "Todas" || c.destino === destino; }); }
 
   /* ---------- tarjetas ---------- */
-  function img(c, n, cls, ansioso) {
-    var f = c.fotos[n] || c.fotos[0];
-    return '<img' + (cls ? ' class="' + cls + '"' : "") + ' src="' + FOTOS + esc(f) + '.jpg" alt="' + esc(c.nombre) + ", foto " + (n + 1) + ' de ' + c.fotos.length + '" loading="' + (ansioso ? "eager" : "lazy") + '" decoding="async">';
+  function img(c, n, cls, ansioso, tam) {
+    var f = c.fotos[n] || c.fotos[0], dir = FOTOS + (tam ? tam + "/" : "");
+    return '<img' + (cls ? ' class="' + cls + '"' : "") + ' src="' + dir + esc(f) + '.jpg" alt="' + esc(c.nombre) + ", foto " + (n + 1) + ' de ' + c.fotos.length + '" loading="' + (ansioso ? "eager" : "lazy") + '" decoding="async">';
   }
   function pintar() {
     var lista = visibles().map(function (c) { return { c: c, e: estado(c) }; });
@@ -102,7 +102,7 @@
     $("#lista-casas").innerHTML = lista.map(function (o) {
       var c = o.c, e = o.e;
       return '<article class="casa" data-id="' + c.id + '">' +
-        '<div class="casa__foto">' + img(c, 0, null, true) +
+        '<div class="casa__foto">' + img(c, 0, null, true, "med") +
           '<span class="estado estado--' + e.tipo + '">' + esc(e.texto) + "</span>" +
           (c.etiqueta ? '<span class="casa__etiqueta">' + esc(c.etiqueta) + "</span>" : "") +
           '<button class="casa__fotos" type="button" data-ver="' + c.id + '">' + c.fotos.length + " fotos</button></div>" +
@@ -118,17 +118,20 @@
     }).join("");
     pines();
   }
-  document.addEventListener("click", function (e) { var b = e.target.closest("[data-ver]"); if (b) abrir(b.getAttribute("data-ver")); });
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-ver]"); if (b) abrir(b.getAttribute("data-ver"), +(b.getAttribute("data-foto-n") || 0));
+  });
 
   /* ---------- modal con galería ---------- */
   var modal = $("#modal"), casaModal = null, fotoN = 0, mesBase = null;
-  function abrir(id) {
+  function abrir(id, n) {
     var c = casaModal = D.casas.find(function (x) { return x.id === id; }); if (!c) return;
     var e = estado(c); fotoN = 0;
+    try { history.replaceState(null, "", "#casa-" + c.id); } catch (er) {}
     $("#galeria-miniaturas").innerHTML = c.fotos.map(function (f, n) {
-      return '<button type="button" data-n="' + n + '" aria-label="Ver foto ' + (n + 1) + '"><img src="' + FOTOS + esc(f) + '.jpg" alt="" loading="lazy"></button>';
+      return '<button type="button" data-n="' + n + '" aria-label="Ver foto ' + (n + 1) + '"><img src="' + FOTOS + "min/" + esc(f) + '.jpg" alt="" loading="lazy"></button>';
     }).join("");
-    foto(0);
+    foto(n || 0);
     $("#modal-estado").textContent = c.destino + " · " + e.texto;
     $("#modal-titulo").textContent = c.nombre;
     $("#modal-datos").textContent = datos(c) + (c.centro ? " · " + c.centro.texto : "");
@@ -242,5 +245,26 @@
   $("#pie-fb").href = D.facebook; $("#pie-ig").href = D.instagram;
   $("#anio").textContent = HOY.getFullYear();
   pintarFiltros(); anillos(); pintar();
+
+  /* ---------- fotos destacadas ---------- */
+  var MOSAICO = [["puente-de-dios", 2], ["quinta-amate", 0], ["los-angeles", 0], ["los-morales", 2], ["casa-cielo", 0], ["casa-arcadia", 0]];
+  $("#mosaico").innerHTML = MOSAICO.map(function (m, i) {
+    var c = D.casas.find(function (x) { return x.id === m[0]; }); if (!c) return "";
+    return '<button type="button" class="mosaico__item mosaico__item--' + (i + 1) + '" data-ver="' + c.id + '" data-foto-n="' + m[1] + '">' +
+      img(c, m[1], null, false, "med") + '<span><strong>' + esc(c.nombre) + "</strong>" + esc(c.destino) + "</span></button>";
+  }).join("");
+
+  /* ---------- enlace propio por casa y compartir ---------- */
+  modal.addEventListener("close", function () { try { history.replaceState(null, "", location.pathname + location.search); } catch (er) {} });
+  function desdeHash() { var m = /^#casa-([a-z0-9-]+)$/.exec(location.hash); if (m && D.casas.some(function (c) { return c.id === m[1]; })) abrir(m[1]); }
+  window.addEventListener("hashchange", desdeHash); desdeHash();
+  $("#modal-compartir").addEventListener("click", function () {
+    var c = casaModal, url = location.href.split("#")[0] + "#casa-" + c.id, btn = this;
+    var datosC = { title: c.nombre + " · Malinalco Mágico", text: c.nombre + ": " + c.resumen, url: url };
+    if (navigator.share) { navigator.share(datosC).catch(function () {}); return; }
+    var listo = function (ok) { btn.textContent = ok ? "Enlace copiado" : url; setTimeout(function () { btn.textContent = "Compartir"; }, 2400); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function () { listo(true); }, function () { listo(false); });
+    else listo(false);
+  });
   var primera = D.casas.find(function (c) { return c.centro; }); if (primera) ficha(primera.id);
 })();

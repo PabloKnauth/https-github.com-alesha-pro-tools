@@ -7,9 +7,17 @@
 <meta name="description" content="Renta de casas vacacionales con alberca en Malinalco, Pueblo Mágico, y en Acapulco. Para 4 a 25 personas. Reserva directo por WhatsApp.">
 <meta property="og:title" content="Malinalco Mágico · Casas vacacionales">
 <meta property="og:description" content="Casas con alberca climatizada en Malinalco. Disponibilidad en línea y reserva por WhatsApp.">
-<meta property="og:image" content="logo/malinalco-magico-vertical-blanco-sobre-terracota.png">
+<meta property="og:image" content="https://malinalcomagico.netlify.app/assets/img/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:url" content="https://malinalcomagico.netlify.app/">
+<meta property="og:type" content="website"><meta property="og:locale" content="es_MX">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://malinalcomagico.netlify.app/">
 <meta name="theme-color" content="#1D3F35">
 <link rel="icon" href="logo/malinalco-magico-simbolo.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LodgingBusiness","name":"Malinalco Mágico Casas Vacacionales","description":"Renta de casas vacacionales con alberca en Malinalco, Estado de México, y en Acapulco, Guerrero.","url":"https://malinalcomagico.netlify.app/","image":"https://malinalcomagico.netlify.app/assets/img/og.jpg","logo":"https://malinalcomagico.netlify.app/logo/malinalco-magico-simbolo.svg","telephone":"+52 777 220 5239","address":{"@type":"PostalAddress","addressLocality":"Malinalco","addressRegion":"Estado de México","addressCountry":"MX"},"sameAs":["https://www.facebook.com/MalinalcoCasasVacacionales","https://www.instagram.com/malinalcomagicocasas"]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@400;500;600&display=swap">
@@ -80,6 +88,17 @@
       </div>
       <div class="filtros" id="filtros" role="group" aria-label="Destino"></div>
       <div class="casas" id="lista-casas"></div>
+    </div>
+  </section>
+
+  <section class="seccion seccion--galeria" aria-labelledby="galeria-t">
+    <div class="contenedor">
+      <div class="seccion__cab">
+        <p class="eyebrow">Galería</p>
+        <h2 class="seccion__titulo" id="galeria-t">Así se vive Malinalco Mágico</h2>
+        <p class="seccion__texto">Toca una foto para ver la casa completa.</p>
+      </div>
+      <div class="mosaico" id="mosaico"></div>
     </div>
   </section>
 
@@ -181,6 +200,7 @@
     <div class="modal__acciones">
       <a class="boton boton--terracota" id="modal-reservar" href="#" target="_blank" rel="noopener">Reservar por WhatsApp</a>
       <a class="boton boton--linea" id="modal-mapa" href="#" target="_blank" rel="noopener">Cómo llegar</a>
+      <button class="boton boton--linea" id="modal-compartir" type="button">Compartir</button>
     </div>
   </div>
 </dialog>

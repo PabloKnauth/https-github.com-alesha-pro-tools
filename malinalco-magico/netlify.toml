@@ -1,0 +1,13 @@
+# Sitio estático: se publica tal cual.
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/logo/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
