@@ -15,7 +15,7 @@ window.MM = {
   nota: "Las cotizaciones dependen del número de personas y las fechas.",
 
   /* CASAS
-     - personas: [mínimo, máximo] · recamaras · banos (null si no se publicó) · camas (texto)
+     - personas: [mínimo, máximo] (null si no se publicó) · recamaras · banos (null si no se publicó) · camas (texto)
      - reglas: lista de reglas de la casa (se muestran en la ficha)
      - destino: "Malinalco" o "Acapulco"
      - centro: { min: minutos al centro, texto } para el mapa de distancias (null si no se sabe)
@@ -67,6 +67,48 @@ window.MM = {
       ]
     },
     {
+      "id": "casa-mali",
+      "nombre": "Casa MaLi",
+      "destino": "Malinalco",
+      "etiqueta": "Grupos grandes",
+      "resumen": "Casa para 15 personas con alberca y jacuzzi climatizados, jardín bajo árboles centenarios y vista a los cerros.",
+      "personas": [
+        15,
+        15
+      ],
+      "recamaras": 5,
+      "banos": null,
+      "camas": "5 camas king size",
+      "amenidades": [
+        "Alberca y jacuzzi climatizados",
+        "Asador",
+        "Cocina equipada",
+        "Jardín",
+        "Vista a los cerros"
+      ],
+      "centro": null,
+      "angulo": 0,
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "casa-mali-01",
+        "casa-mali-02",
+        "casa-mali-03",
+        "casa-mali-04",
+        "casa-mali-05",
+        "casa-mali-06",
+        "casa-mali-07",
+        "casa-mali-08",
+        "casa-mali-09",
+        "casa-mali-10",
+        "casa-mali-11",
+        "casa-mali-12",
+        "casa-mali-13",
+        "casa-mali-14"
+      ]
+    },
+    {
       "id": "paso-de-agua",
       "nombre": "Casa Paso de Agua",
       "destino": "Malinalco",
@@ -109,6 +151,51 @@ window.MM = {
         "paso-de-agua-12",
         "paso-de-agua-13",
         "paso-de-agua-14"
+      ]
+    },
+    {
+      "id": "casa-copal",
+      "nombre": "Casa Copal",
+      "destino": "Malinalco",
+      "etiqueta": "Zona centro",
+      "resumen": "Casa en zona centro con alberca y jacuzzi climatizados a 30 °C, terraza techada y jardín frente a los cerros.",
+      "personas": [
+        8,
+        9
+      ],
+      "recamaras": 2,
+      "banos": null,
+      "camas": null,
+      "amenidades": [
+        "Alberca y jacuzzi climatizados a 30 °C",
+        "Terraza",
+        "Jardín",
+        "Asador"
+      ],
+      "centro": {
+        "min": 0,
+        "texto": "Zona centro"
+      },
+      "angulo": 240,
+      "corto": "Copal",
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "casa-copal-01",
+        "casa-copal-02",
+        "casa-copal-03",
+        "casa-copal-04",
+        "casa-copal-05",
+        "casa-copal-06",
+        "casa-copal-07",
+        "casa-copal-08",
+        "casa-copal-09",
+        "casa-copal-10",
+        "casa-copal-11",
+        "casa-copal-12",
+        "casa-copal-13",
+        "casa-copal-14"
       ]
     },
     {
@@ -196,6 +283,48 @@ window.MM = {
         "casa-colibri-12",
         "casa-colibri-13",
         "casa-colibri-14"
+      ]
+    },
+    {
+      "id": "casa-malinma",
+      "nombre": "Casa Malinma",
+      "destino": "Malinalco",
+      "etiqueta": "9 habitaciones",
+      "resumen": "Para grupos de 15 a 20 personas: 9 habitaciones con baño completo, alberca y chapoteadero climatizados todo el año y bar.",
+      "personas": [
+        15,
+        20
+      ],
+      "recamaras": 9,
+      "banos": 9,
+      "camas": "9 camas",
+      "amenidades": [
+        "Alberca 1.40 m y chapoteadero climatizados todo el año",
+        "Bar",
+        "Asador",
+        "Wifi",
+        "Estacionamiento para 6 autos"
+      ],
+      "centro": null,
+      "angulo": 0,
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "casa-malinma-01",
+        "casa-malinma-02",
+        "casa-malinma-03",
+        "casa-malinma-04",
+        "casa-malinma-05",
+        "casa-malinma-06",
+        "casa-malinma-07",
+        "casa-malinma-08",
+        "casa-malinma-09",
+        "casa-malinma-10",
+        "casa-malinma-11",
+        "casa-malinma-12",
+        "casa-malinma-13",
+        "casa-malinma-14"
       ]
     },
     {
@@ -374,6 +503,46 @@ window.MM = {
       ]
     },
     {
+      "id": "loft-shambala",
+      "nombre": "Loft Shambala",
+      "destino": "Malinalco",
+      "etiqueta": "Jalmolonga · Lugar de paz",
+      "resumen": "Loft familiar en Jalmolonga, un lugar de paz: habitación amplia, alberca climatizada, jardín con asador y palapa.",
+      "personas": null,
+      "recamaras": 1,
+      "banos": null,
+      "camas": "2 matrimoniales, 2 individuales y sofá cama",
+      "amenidades": [
+        "Alberca climatizada",
+        "Palapa",
+        "Jardín con asador",
+        "Cocineta",
+        "Parrilla",
+        "Wifi"
+      ],
+      "centro": null,
+      "angulo": 0,
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "loft-shambala-01",
+        "loft-shambala-02",
+        "loft-shambala-03",
+        "loft-shambala-04",
+        "loft-shambala-05",
+        "loft-shambala-06",
+        "loft-shambala-07",
+        "loft-shambala-08",
+        "loft-shambala-09",
+        "loft-shambala-10",
+        "loft-shambala-11",
+        "loft-shambala-12",
+        "loft-shambala-13",
+        "loft-shambala-14"
+      ]
+    },
+    {
       "id": "los-morales",
       "nombre": "Casa Los Morales",
       "destino": "Malinalco",
@@ -459,6 +628,48 @@ window.MM = {
       ]
     },
     {
+      "id": "casa-rincon",
+      "nombre": "Casa Rincón",
+      "destino": "Malinalco",
+      "etiqueta": null,
+      "resumen": "Casa de 3 habitaciones con alberca, terraza con vista a los cerros, jardín y pantalla smart.",
+      "personas": [
+        8,
+        8
+      ],
+      "recamaras": 3,
+      "banos": null,
+      "camas": "3 camas matrimoniales",
+      "amenidades": [
+        "Alberca",
+        "Terraza",
+        "Jardín",
+        "Asador",
+        "Pantalla smart"
+      ],
+      "centro": null,
+      "angulo": 0,
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "casa-rincon-01",
+        "casa-rincon-02",
+        "casa-rincon-03",
+        "casa-rincon-04",
+        "casa-rincon-05",
+        "casa-rincon-06",
+        "casa-rincon-07",
+        "casa-rincon-08",
+        "casa-rincon-09",
+        "casa-rincon-10",
+        "casa-rincon-11",
+        "casa-rincon-12",
+        "casa-rincon-13",
+        "casa-rincon-14"
+      ]
+    },
+    {
       "id": "casa-rosa",
       "nombre": "Casa Rosa",
       "destino": "Malinalco",
@@ -535,6 +746,47 @@ window.MM = {
         "depa-mali-2-08",
         "depa-mali-2-09",
         "depa-mali-2-10"
+      ]
+    },
+    {
+      "id": "casa-marea",
+      "nombre": "Casa Marea",
+      "destino": "Acapulco",
+      "etiqueta": "Acapulco · 5 ★",
+      "resumen": "Casa familiar 5 estrellas en zona exclusiva, con las mejores vistas panorámicas de la bahía de Acapulco.",
+      "personas": [
+        10,
+        14
+      ],
+      "recamaras": "4–5",
+      "banos": null,
+      "camas": null,
+      "amenidades": [
+        "Alberca",
+        "Vista panorámica a la bahía",
+        "Palapa",
+        "Asador",
+        "Zona exclusiva"
+      ],
+      "centro": null,
+      "angulo": 0,
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "casa-marea-01",
+        "casa-marea-02",
+        "casa-marea-03",
+        "casa-marea-04",
+        "casa-marea-05",
+        "casa-marea-06",
+        "casa-marea-07",
+        "casa-marea-08",
+        "casa-marea-09",
+        "casa-marea-10",
+        "casa-marea-11",
+        "casa-marea-12",
+        "casa-marea-13"
       ]
     },
     {

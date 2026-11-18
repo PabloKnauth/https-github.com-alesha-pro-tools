@@ -14,8 +14,8 @@
   function larga(d) { return d.getDate() + " de " + MESES[d.getMonth()]; }
   var t = new Date(), HOY = new Date(t.getFullYear(), t.getMonth(), t.getDate());
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  function max(c) { return c.personas[1]; }
-  function personas(c) { return c.personas[0] === c.personas[1] ? c.personas[1] + " personas" : c.personas[0] + "–" + c.personas[1] + " personas"; }
+  function max(c) { return c.personas ? c.personas[1] : 99; }
+  function personas(c) { if (!c.personas) return "Capacidad a consultar"; return c.personas[0] === c.personas[1] ? c.personas[1] + " personas" : c.personas[0] + "–" + c.personas[1] + " personas"; }
   function datos(c) {
     var p = [personas(c), c.recamaras + (c.recamaras === 1 ? " recámara" : " recámaras")];
     if (c.banos) p.push(c.banos + (c.banos === 1 ? " baño" : " baños"));
@@ -290,7 +290,7 @@
   pintarFiltros(); anillos(); pintar();
 
   /* ---------- fotos destacadas ---------- */
-  var MOSAICO = [["puente-de-dios", 1], ["paso-de-agua", 0], ["casa-colibri", 0], ["los-angeles", 0], ["casa-centro", 0], ["casa-arcadia", 0]];
+  var MOSAICO = [["puente-de-dios", 1], ["casa-copal", 0], ["paso-de-agua", 0], ["casa-mali", 0], ["casa-colibri", 0], ["casa-marea", 0]];
   $("#mosaico").innerHTML = MOSAICO.map(function (m, i) {
     var c = D.casas.find(function (x) { return x.id === m[0]; }); if (!c) return "";
     return '<button type="button" class="mosaico__item mosaico__item--' + (i + 1) + '" data-ver="' + c.id + '" data-foto-n="' + m[1] + '">' +
