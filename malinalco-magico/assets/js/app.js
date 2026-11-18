@@ -290,7 +290,7 @@
   pintarFiltros(); anillos(); pintar();
 
   /* ---------- fotos destacadas ---------- */
-  var MOSAICO = [["puente-de-dios", 1], ["casa-copal", 0], ["paso-de-agua", 0], ["casa-mali", 0], ["casa-colibri", 0], ["casa-marea", 0]];
+  var MOSAICO = [["puente-de-dios", 1], ["casa-lago", 1], ["casa-diablitos", 0], ["casa-copal", 0], ["casa-mali", 0], ["casa-marea", 0]];
   $("#mosaico").innerHTML = MOSAICO.map(function (m, i) {
     var c = D.casas.find(function (x) { return x.id === m[0]; }); if (!c) return "";
     return '<button type="button" class="mosaico__item mosaico__item--' + (i + 1) + '" data-ver="' + c.id + '" data-foto-n="' + m[1] + '">' +

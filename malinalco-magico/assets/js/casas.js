@@ -67,6 +67,49 @@ window.MM = {
       ]
     },
     {
+      "id": "casa-lago",
+      "nombre": "Casa Lago",
+      "destino": "Malinalco",
+      "etiqueta": "Vistas al valle",
+      "resumen": "Casa para grupos con vistas increíbles al valle, lago, alberca y jacuzzi climatizados, cancha de fútbol y billar.",
+      "personas": [
+        15,
+        20
+      ],
+      "recamaras": 4,
+      "banos": 5,
+      "camas": "10 camas y 3 sofá cama",
+      "amenidades": [
+        "Alberca y jacuzzi climatizados",
+        "Lago",
+        "Cancha de fútbol",
+        "Mesa de billar",
+        "Vistas al valle",
+        "Wifi"
+      ],
+      "centro": null,
+      "angulo": 0,
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "casa-lago-01",
+        "casa-lago-02",
+        "casa-lago-03",
+        "casa-lago-04",
+        "casa-lago-05",
+        "casa-lago-06",
+        "casa-lago-07",
+        "casa-lago-08",
+        "casa-lago-09",
+        "casa-lago-10",
+        "casa-lago-11",
+        "casa-lago-12",
+        "casa-lago-13",
+        "casa-lago-14"
+      ]
+    },
+    {
       "id": "casa-mali",
       "nombre": "Casa MaLi",
       "destino": "Malinalco",
@@ -106,6 +149,48 @@ window.MM = {
         "casa-mali-12",
         "casa-mali-13",
         "casa-mali-14"
+      ]
+    },
+    {
+      "id": "casa-diablitos",
+      "nombre": "Casa Diablitos",
+      "destino": "Malinalco",
+      "etiqueta": "Cine y jacuzzi rooftop",
+      "resumen": "Casa moderna para 15 personas con cine, jacuzzi en el rooftop con vista a los cerros y alberca climatizada con playita para niños.",
+      "personas": [
+        15,
+        15
+      ],
+      "recamaras": 4,
+      "banos": 5,
+      "camas": "6 camas y 4 sofá cama",
+      "amenidades": [
+        "Alberca climatizada con playita para niños",
+        "Jacuzzi rooftop",
+        "Cine con sala para 12–15 personas",
+        "Terraza",
+        "Asador"
+      ],
+      "centro": null,
+      "angulo": 0,
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "casa-diablitos-01",
+        "casa-diablitos-02",
+        "casa-diablitos-03",
+        "casa-diablitos-04",
+        "casa-diablitos-05",
+        "casa-diablitos-06",
+        "casa-diablitos-07",
+        "casa-diablitos-08",
+        "casa-diablitos-09",
+        "casa-diablitos-10",
+        "casa-diablitos-11",
+        "casa-diablitos-12",
+        "casa-diablitos-13",
+        "casa-diablitos-14"
       ]
     },
     {
@@ -196,6 +281,49 @@ window.MM = {
         "casa-copal-12",
         "casa-copal-13",
         "casa-copal-14"
+      ]
+    },
+    {
+      "id": "casa-la-cascada",
+      "nombre": "Casa La Cascada",
+      "destino": "Malinalco",
+      "etiqueta": "Salón de juegos",
+      "resumen": "Para grupos de 10 a 20 personas: alberca y chapoteadero climatizados todo el año, salón de juegos, gym, barra y jardín para eventos.",
+      "personas": [
+        10,
+        20
+      ],
+      "recamaras": 6,
+      "banos": 5,
+      "camas": null,
+      "amenidades": [
+        "Alberca y chapoteadero climatizados todo el año (28–30 °C)",
+        "Salón de juegos",
+        "Gym",
+        "Barra",
+        "Jardín para eventos",
+        "Asador"
+      ],
+      "centro": null,
+      "angulo": 0,
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "casa-la-cascada-01",
+        "casa-la-cascada-02",
+        "casa-la-cascada-03",
+        "casa-la-cascada-04",
+        "casa-la-cascada-05",
+        "casa-la-cascada-06",
+        "casa-la-cascada-07",
+        "casa-la-cascada-08",
+        "casa-la-cascada-09",
+        "casa-la-cascada-10",
+        "casa-la-cascada-11",
+        "casa-la-cascada-12",
+        "casa-la-cascada-13",
+        "casa-la-cascada-14"
       ]
     },
     {
@@ -325,6 +453,44 @@ window.MM = {
         "casa-malinma-12",
         "casa-malinma-13",
         "casa-malinma-14"
+      ]
+    },
+    {
+      "id": "casa-la-curva",
+      "nombre": "Casa La Curva",
+      "destino": "Malinalco",
+      "etiqueta": "Acceso controlado",
+      "resumen": "Casa para unas 10 personas en zona con acceso controlado, con alberca y jacuzzi climatizados entre palmeras y bugambilias, y bar.",
+      "personas": [
+        10,
+        10
+      ],
+      "recamaras": 3,
+      "banos": 2.5,
+      "camas": "3 camas, 2 sofá cama y 1 individual en sala",
+      "amenidades": [
+        "Alberca climatizada",
+        "Jacuzzi climatizado",
+        "Bar",
+        "Asador",
+        "Acceso controlado"
+      ],
+      "centro": null,
+      "angulo": 0,
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "casa-la-curva-01",
+        "casa-la-curva-02",
+        "casa-la-curva-03",
+        "casa-la-curva-04",
+        "casa-la-curva-05",
+        "casa-la-curva-06",
+        "casa-la-curva-07",
+        "casa-la-curva-08",
+        "casa-la-curva-09",
+        "casa-la-curva-10"
       ]
     },
     {
@@ -500,6 +666,43 @@ window.MM = {
         "casa-centro-10",
         "casa-centro-11",
         "casa-centro-12"
+      ]
+    },
+    {
+      "id": "quinta-la-palapa",
+      "nombre": "Quinta La Palapa",
+      "destino": "Malinalco",
+      "etiqueta": null,
+      "resumen": "Quinta con alberca y jacuzzi climatizados, jardín con palmeras, terraza y vista a los cerros.",
+      "personas": [
+        4,
+        7
+      ],
+      "recamaras": 2,
+      "banos": null,
+      "camas": "3 matrimoniales y 1 individual",
+      "amenidades": [
+        "Alberca y jacuzzi climatizados",
+        "Jardín",
+        "Terraza",
+        "Asador"
+      ],
+      "centro": null,
+      "angulo": 0,
+      "reglas": [],
+      "maps": "",
+      "ocupada": [],
+      "fotos": [
+        "quinta-la-palapa-01",
+        "quinta-la-palapa-02",
+        "quinta-la-palapa-03",
+        "quinta-la-palapa-04",
+        "quinta-la-palapa-05",
+        "quinta-la-palapa-06",
+        "quinta-la-palapa-07",
+        "quinta-la-palapa-08",
+        "quinta-la-palapa-09",
+        "quinta-la-palapa-10"
       ]
     },
     {
