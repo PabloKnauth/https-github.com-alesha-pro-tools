@@ -94,7 +94,7 @@
   /* ---------- tarjetas ---------- */
   function img(c, n, cls, ansioso, tam) {
     var f = c.fotos[n] || c.fotos[0], dir = FOTOS + (tam ? tam + "/" : "");
-    return '<img' + (cls ? ' class="' + cls + '"' : "") + ' src="' + dir + esc(f) + '.jpg" alt="' + esc(c.nombre) + ", foto " + (n + 1) + ' de ' + c.fotos.length + '" loading="' + (ansioso ? "eager" : "lazy") + '" decoding="async">';
+    return '<img' + (cls ? ' class="' + cls + '"' : "") + ' src="' + dir + esc(f) + '.webp" alt="' + esc(c.nombre) + ", foto " + (n + 1) + ' de ' + c.fotos.length + '" loading="' + (ansioso ? "eager" : "lazy") + '" decoding="async">';
   }
   function pintar() {
     var lista = visibles().map(function (c) { return { c: c, e: estado(c) }; });
@@ -129,7 +129,7 @@
     var e = estado(c); fotoN = 0;
     try { history.replaceState(null, "", "#casa-" + c.id); } catch (er) {}
     $("#galeria-miniaturas").innerHTML = c.fotos.map(function (f, n) {
-      return '<button type="button" data-n="' + n + '" aria-label="Ver foto ' + (n + 1) + '"><img src="' + FOTOS + "min/" + esc(f) + '.jpg" alt="" loading="lazy"></button>';
+      return '<button type="button" data-n="' + n + '" aria-label="Ver foto ' + (n + 1) + '"><img src="' + FOTOS + "min/" + esc(f) + '.webp" alt="" loading="lazy"></button>';
     }).join("");
     foto(n || 0);
     $("#modal-estado").textContent = c.destino + " · " + e.texto;
@@ -137,6 +137,7 @@
     $("#modal-datos").textContent = datos(c) + (c.centro ? " · " + c.centro.texto : "");
     $("#modal-resumen").textContent = c.resumen;
     $("#modal-amenidades").innerHTML = c.amenidades.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
+    var rg = $("#modal-reglas"); rg.hidden = !(c.reglas && c.reglas.length); rg.innerHTML = c.reglas && c.reglas.length ? "<strong>Reglas de la casa:</strong> " + c.reglas.map(esc).join(" · ") : "";
     var r = $("#modal-reservar"); r.href = wa(c); r.setAttribute("aria-disabled", e.reservable ? "false" : "true");
     var m = $("#modal-mapa");
     if (c.maps) { m.href = c.maps; m.textContent = "Cómo llegar"; } else { m.href = wa(c, "ubicacion"); m.textContent = "Pedir ubicación"; }
@@ -189,7 +190,7 @@
 
   /* ---------- mapa de distancias ---------- */
   var CX = 48, CY = 44, activa = null;
-  function radio(min) { return min <= 0 ? 0 : 7 + min * 0.95; }
+  function radio(min) { return min <= 0 ? 3.6 : 7 + min * 0.95; }
   function anillos() {
     var mins = D.casas.filter(function (c) { return c.centro && c.centro.min > 0; }).map(function (c) { return c.centro.min; })
       .filter(function (m, i, a) { return a.indexOf(m) === i; }).sort(function (a, b) { return a - b; });
@@ -289,7 +290,7 @@
   pintarFiltros(); anillos(); pintar();
 
   /* ---------- fotos destacadas ---------- */
-  var MOSAICO = [["puente-de-dios", 2], ["quinta-amate", 0], ["los-angeles", 0], ["los-morales", 2], ["casa-cielo", 0], ["casa-arcadia", 0]];
+  var MOSAICO = [["puente-de-dios", 1], ["paso-de-agua", 0], ["casa-colibri", 0], ["los-angeles", 0], ["casa-centro", 0], ["casa-arcadia", 0]];
   $("#mosaico").innerHTML = MOSAICO.map(function (m, i) {
     var c = D.casas.find(function (x) { return x.id === m[0]; }); if (!c) return "";
     return '<button type="button" class="mosaico__item mosaico__item--' + (i + 1) + '" data-ver="' + c.id + '" data-foto-n="' + m[1] + '">' +
