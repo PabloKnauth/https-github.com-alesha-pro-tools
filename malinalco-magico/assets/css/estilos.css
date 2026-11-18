@@ -384,3 +384,17 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .selector-est--grande button { font-size: 2.2rem; }
 .form-eval__nota { margin: 0; font-size: .82rem; color: var(--muted); }
 .form-eval__gracias h3 { font: 600 1.4rem var(--f-titulo); margin: 6px 0; }
+.trampa { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.lugar__dir { margin: 10px 0 0; font-size: .86rem; color: var(--muted); }
+.lugar__links { margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 14px; font-size: .88rem; }
+.lugar__links:empty { display: none; }
+.lugar__links a { color: var(--terracota-osc); font-weight: 600; }
+.seccion--recomendados { padding-top: 0; }
+.recomendados { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 18px; }
+.recom { display: flex; gap: 16px; padding: 20px; border: 1px solid var(--linea); border-radius: var(--r); background: var(--papel); min-width: 0; }
+.recom .ico { color: var(--terracota-osc); }
+.recom > div { min-width: 0; }
+.recom__cat { margin: 0 0 2px; font: 600 .72rem var(--f-texto); letter-spacing: .14em; text-transform: uppercase; color: var(--terracota-osc); }
+.recom h3 { margin: 0 0 6px; font: 600 1.15rem var(--f-titulo); }
+.recom p { margin: 0; color: var(--muted); font-size: .93rem; }
+#acceso-adm { cursor: default; user-select: none; }

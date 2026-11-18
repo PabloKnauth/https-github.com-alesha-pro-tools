@@ -29,7 +29,7 @@
   <div class="contenedor barra__in">
     <a class="barra__logo" href="#inicio" aria-label="Malinalco Mágico, inicio"><img src="logo/malinalco-magico-horizontal-color.svg" alt="Malinalco Mágico" width="210" height="58"></a>
     <nav class="barra__nav" aria-label="Principal">
-      <a href="#casas">Casas</a><a href="#mapa">Mapa</a><a href="#malinalco">Malinalco</a><a href="#ranking">Opiniones</a><a href="#reservar">Cómo reservar</a>
+      <a href="#casas">Casas</a><a href="#mapa">Mapa</a><a href="#malinalco">Malinalco</a><a href="#recomendados" id="nav-recom" hidden>Recomendados</a><a href="#ranking">Opiniones</a><a href="#reservar">Cómo reservar</a>
     </nav>
     <a class="boton boton--terracota boton--chico" href="#" data-wa="general">Reservar</a>
   </div>
@@ -146,11 +146,23 @@
         <h2 class="seccion__titulo">Malinalco, un pueblo para quedarse</h2>
         <p class="seccion__texto">A unas dos horas de la Ciudad de México, Malinalco combina historia prehispánica, arquitectura colonial y un clima templado casi todo el año.</p>
       </div>
-      <div class="lugares">
+      <div class="lugares" id="atractivos-lista">
         <article class="lugar"><span class="lugar__num">Historia prehispánica</span><h3>Zona arqueológica de Malinalco</h3><p>El templo de Cuauhtinchan está tallado directamente en la roca del cerro. La subida regala una de las mejores vistas del valle.</p></article>
         <article class="lugar"><span class="lugar__num">Arquitectura colonial</span><h3>Ex convento agustino</h3><p>Construido en el siglo XVI, conserva pintura mural con escenas de flora y fauna. Está en el corazón del pueblo.</p></article>
         <article class="lugar"><span class="lugar__num">Cultura</span><h3>Museo Universitario Dr. Luis Mario Schneider</h3><p>Ideal para entender la historia de la región antes o después de visitar la zona arqueológica.</p></article>
       </div>
+    </div>
+  </section>
+
+  <section class="seccion seccion--recomendados" id="recomendados" aria-labelledby="recom-t" hidden>
+    <div class="contenedor">
+      <div class="seccion__cab">
+        <p class="eyebrow">Recomendados</p>
+        <h2 class="seccion__titulo" id="recom-t">Lugares que te recomendamos</h2>
+        <p class="seccion__texto">Restaurantes, cafés y paseos que nos gustan y que recomendamos a nuestros huéspedes.</p>
+      </div>
+      <div class="filtros" id="recom-filtros" role="group" aria-label="Categoría"></div>
+      <div class="recomendados" id="recom-lista"></div>
     </div>
   </section>
 
@@ -188,7 +200,7 @@
       <p><strong>WhatsApp y teléfono</strong><br><a href="#" data-wa="general" id="pie-tel">777 220 5239</a></p>
       <p><strong>Redes</strong><br><a id="pie-fb" href="#" target="_blank" rel="noopener">Facebook</a> · <a id="pie-ig" href="#" target="_blank" rel="noopener">Instagram</a></p>
       <p class="pie__lema">Casas · Estancias · Experiencias</p>
-      <p class="pie__legal">© <span id="anio">2026</span> Malinalco Mágico · Casas vacacionales en Malinalco, Estado de México, y Acapulco, Guerrero.</p>
+      <p class="pie__legal"><span id="acceso-adm" title="">©</span> <span id="anio">2026</span> Malinalco Mágico · Casas vacacionales en Malinalco, Estado de México, y Acapulco, Guerrero.</p>
     </div>
   </div>
 </footer>
@@ -246,6 +258,7 @@
         <div><span>Ubicación</span><div class="selector-est" data-cat="ubicacion"></div></div>
         <div><span>Atención</span><div class="selector-est" data-cat="atencion"></div></div>
       </fieldset>
+      <label class="trampa" aria-hidden="true">Sitio web<input id="ev-web" tabindex="-1" autocomplete="off"></label>
       <label for="ev-texto">Cuéntanos tu experiencia<textarea id="ev-texto" rows="4" maxlength="1200" placeholder="¿Qué te gustó? ¿Qué podríamos mejorar?"></textarea></label>
       <p class="buscador__error" id="ev-error" role="alert" hidden></p>
       <p class="form-eval__nota">Revisamos cada evaluación antes de publicarla. Solo publicamos tu nombre, ciudad, fecha, calificación y comentario.</p>
@@ -254,14 +267,9 @@
     <div class="form-eval__gracias" id="ev-gracias" hidden></div>
   </div>
 </dialog>
-<form name="evaluacion" netlify netlify-honeypot="bot-field" hidden>
-  <input name="casa"><input name="nombre"><input name="ciudad"><input name="fecha"><input name="telefono"><input name="estrellas">
-  <input name="limpieza"><input name="comodidad"><input name="alberca"><input name="ubicacion"><input name="atencion"><textarea name="texto"></textarea><input name="bot-field">
-</form>
 
 <script src="assets/js/casas.js"></script>
 <script src="assets/js/evaluaciones.js"></script>
-<script src="assets/js/extras.js"></script>
-<script src="assets/js/app.js"></script>
+<script src="assets/js/cargador.js"></script>
 </body>
 </html>

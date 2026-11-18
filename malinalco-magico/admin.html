@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Panel · Malinalco Mágico</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="logo/malinalco-magico-icono.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/estilos.css">
+<link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body class="adm">
+
+<section class="adm-login" id="pantalla-login">
+  <form class="adm-login__caja" id="form-login">
+    <img src="logo/malinalco-magico-vertical-color.svg" alt="Malinalco Mágico" width="200" height="157">
+    <h1>Panel de administración</h1>
+    <label for="clave">Contraseña<input id="clave" type="password" autocomplete="current-password" required></label>
+    <p class="adm-error" id="login-error" role="alert" hidden></p>
+    <button class="boton boton--terracota" type="submit">Entrar</button>
+    <a class="adm-volver" href="./">← Volver a la página</a>
+  </form>
+</section>
+
+<div class="adm-app" id="app" hidden>
+  <header class="adm-barra">
+    <img src="logo/malinalco-magico-horizontal-color.svg" alt="Malinalco Mágico" width="170" height="47">
+    <nav class="adm-tabs" id="tabs" role="tablist" aria-label="Secciones">
+      <button role="tab" data-tab="resumen" aria-selected="true">Resumen</button>
+      <button role="tab" data-tab="reservas">Reservas</button>
+      <button role="tab" data-tab="casas">Casas</button>
+      <button role="tab" data-tab="evaluaciones">Evaluaciones <span class="adm-badge" id="badge-pend" hidden></span></button>
+      <button role="tab" data-tab="oportunidad">Áreas de oportunidad <span class="adm-badge" id="badge-op" hidden></span></button>
+      <button role="tab" data-tab="atractivos">Atractivos</button>
+      <button role="tab" data-tab="lugares">Recomendados</button>
+      <button role="tab" data-tab="ajustes">Ajustes</button>
+    </nav>
+    <div class="adm-barra__der"><a class="boton boton--linea boton--chico" href="./" target="_blank" rel="noopener">Ver página</a><button class="boton boton--chico boton--linea" id="salir" type="button">Salir</button></div>
+  </header>
+  <main class="adm-main contenedor" id="vista"></main>
+  <div class="adm-toast" id="toast" role="status" hidden></div>
+</div>
+
+<script src="assets/js/casas.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>

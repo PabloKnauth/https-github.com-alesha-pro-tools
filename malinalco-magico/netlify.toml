@@ -11,3 +11,20 @@
   for = "/logo/*"
   [headers.values]
     Cache-Control = "public, max-age=2592000"
+
+# Backend: reservas, evaluaciones y panel de administración (Netlify Functions + Blobs).
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"
+
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
+  status = 200

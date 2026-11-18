@@ -1,0 +1,9 @@
+{
+  "name": "malinalco-magico",
+  "private": true,
+  "type": "module",
+  "description": "Sitio de Malinalco Mágico con panel de administrador (Netlify Functions + Blobs).",
+  "dependencies": {
+    "@netlify/blobs": "11.1.5"
+  }
+}

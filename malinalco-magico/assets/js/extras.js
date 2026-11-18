@@ -52,6 +52,8 @@
 
   /* ---------- cálculo de calificaciones ---------- */
   function resumen(id) {
+    var RS = window.MM_RESUMEN;
+    if (RS) { var x = RS[id]; return x ? { media: x.media, n: x.n, cats: x.cats || {}, favorito: x.media >= 4.8 && x.n >= 5 } : null; }
     var l = EV[id] || []; if (!l.length) return null;
     var tot = 0, cats = {};
     l.forEach(function (r) {
@@ -145,7 +147,7 @@
     var cont = $("#ranking-lista"); if (!cont) return;
     var lista = D.casas.map(function (c) { return { c: c, r: resumen(c.id) }; }).filter(function (x) { return x.r; })
       .sort(function (a, b) { return b.r.media - a.r.media || b.r.n - a.r.n; }).slice(0, 10);
-    var total = D.casas.reduce(function (s, c) { return s + (EV[c.id] || []).length; }, 0);
+    var total = D.casas.reduce(function (s, c) { var r = resumen(c.id); return s + (r ? r.n : 0); }, 0);
     $("#ranking-total").textContent = total ? total + (total === 1 ? " evaluación publicada" : " evaluaciones publicadas") + " de huéspedes reales." : "";
     if (!lista.length) {
       cont.innerHTML = '<div class="ranking-vacio">' + icono("ok", "ico ico--grande") + "<div><h3>Estamos reuniendo las primeras evaluaciones</h3><p>Aquí aparecerán las casas mejor calificadas, solo con reseñas de huéspedes reales. ¿Ya te hospedaste con nosotros?</p></div>" +
@@ -189,7 +191,7 @@
     CATS.forEach(function (k) { d[k[0]] = (document.querySelector('.selector-est[data-cat="' + k[0] + '"]') || {}).getAttribute ? document.querySelector('.selector-est[data-cat="' + k[0] + '"]').getAttribute("data-valor") || "" : ""; });
     var falta = !d.casa ? "Elige la casa en la que te hospedaste." : !d.nombre ? "Escribe tu nombre." : !d.estrellas ? "Elige tu calificación general." : d.texto.length < 30 ? "Cuéntanos un poco más (al menos 30 caracteres)." : "";
     err.textContent = falta; err.hidden = !falta; if (falta) return;
-    var cuerpo = "form-name=evaluacion&" + Object.keys(d).map(function (k) { return k + "=" + encodeURIComponent(d[k]); }).join("&");
+    d.sitio_web = $("#ev-web").value;
     var casa = (D.casas.find(function (c) { return c.id === d.casa; }) || {}).nombre || d.casa;
     var wa = "https://wa.me/" + D.whatsapp + "?text=" + encodeURIComponent("Mi evaluación de " + casa + " (" + d.estrellas + "/5): " + d.texto + " — " + d.nombre);
     function listo(enviado) {
@@ -197,9 +199,43 @@
       g.innerHTML = enviado ? "<h3>¡Gracias, " + esc(d.nombre.split(" ")[0]) + "!</h3><p>Recibimos tu evaluación. La revisamos y la publicamos en los próximos días.</p>"
         : "<h3>No pudimos enviarla desde aquí</h3><p>Mándanosla por WhatsApp y la publicamos nosotros:</p><a class=\"boton boton--terracota\" target=\"_blank\" rel=\"noopener\" href=\"" + wa + "\">Enviar por WhatsApp</a>";
     }
-    fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: cuerpo })
+    fetch("/api/evaluacion", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) })
       .then(function (r) { listo(r.ok); }).catch(function () { listo(false); });
   });
 
   pintarRanking();
+
+  /* ---------- atractivos y lugares recomendados (editables desde el panel) ---------- */
+  var ICO_LUGAR = { restaurante: "cocina", "café": "cocina", cafe: "cocina", bar: "bar", tienda: "puerta", paseo: "vista", naturaleza: "jardin", cultura: "centro", aventura: "vista", spa: "agua" };
+  function iconoLugar(cat) { var k = String(cat || "").toLowerCase(); for (var p in ICO_LUGAR) if (k.indexOf(p) > -1) return ICO_LUGAR[p]; return "centro"; }
+  function enlaces(l) {
+    return (l.maps ? '<a href="' + esc(l.maps) + '" target="_blank" rel="noopener">Cómo llegar</a>' : "") +
+           (l.web ? '<a href="' + esc(l.web) + '" target="_blank" rel="noopener">Sitio web</a>' : "") +
+           (l.telefono ? "<span>" + esc(l.telefono) + "</span>" : "");
+  }
+  var AT = window.MM_ATRACTIVOS;
+  if (AT && AT.length) {
+    $("#atractivos-lista").innerHTML = AT.map(function (a) {
+      return '<article class="lugar"><span class="lugar__num">' + esc(a.categoria || "Atractivo") + "</span><h3>" + esc(a.nombre) + "</h3><p>" + esc(a.descripcion) + "</p>" +
+        (a.direccion ? '<p class="lugar__dir">' + esc(a.direccion) + "</p>" : "") + '<p class="lugar__links">' + enlaces(a) + "</p></article>";
+    }).join("");
+  }
+  var LU = window.MM_LUGARES || [];
+  if (LU.length) {
+    $("#recomendados").hidden = false; $("#nav-recom").hidden = false;
+    var cats = ["Todos"].concat(LU.map(function (l) { return l.categoria || "Otros"; }).filter(function (c, i, a) { return a.indexOf(c) === i; }));
+    var actual = "Todos";
+    function pintarLugares() {
+      $("#recom-filtros").innerHTML = cats.map(function (c) { return '<button type="button" class="filtro" aria-pressed="' + (c === actual) + '" data-cat="' + esc(c) + '">' + esc(c) + "</button>"; }).join("");
+      $("#recom-lista").innerHTML = LU.filter(function (l) { return actual === "Todos" || (l.categoria || "Otros") === actual; }).map(function (l) {
+        return '<article class="recom">' + icono(iconoLugar(l.categoria), "ico ico--grande") + '<div><p class="recom__cat">' + esc(l.categoria || "") + "</p><h3>" + esc(l.nombre) + "</h3><p>" + esc(l.descripcion) + "</p>" +
+          (l.direccion ? '<p class="lugar__dir">' + esc(l.direccion) + "</p>" : "") + '<p class="lugar__links">' + enlaces(l) + "</p></div></article>";
+      }).join("");
+    }
+    $("#recom-filtros").addEventListener("click", function (e) { var b = e.target.closest("[data-cat]"); if (b) { actual = b.getAttribute("data-cat"); pintarLugares(); } });
+    pintarLugares();
+  }
+
+  /* ---------- acceso discreto al panel: doble clic en el © del pie ---------- */
+  var acc = $("#acceso-adm"); if (acc) acc.addEventListener("dblclick", function () { location.href = "admin.html"; });
 })();

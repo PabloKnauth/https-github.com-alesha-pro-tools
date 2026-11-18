@@ -48,3 +48,26 @@ Tipografías: Cormorant Garamond (títulos) y Jost (textos), ambas gratuitas de 
 ## Recámaras divididas
 En `casas.js`, cada casa acepta `habitaciones: [{ nombre: "Recámara 1", camas: "1 king y 1 individual", foto: 8 }]`
 (`foto` es el número de foto en la lista, desde 0). Sin ese dato se muestra el resumen de personas, recámaras, camas y baños.
+
+## Panel de administración
+
+- Acceso: doble clic en el «©» del pie de página, o directamente `/admin`.
+  El panel no está enlazado ni indexado, pero lo que lo protege es la contraseña, que se valida en el servidor.
+- **Configuración obligatoria en Netlify:** Project configuration → Environment variables:
+  - `ADMIN_PASSWORD`: contraseña del panel (mínimo 8 caracteres; mejor 12 o más).
+  - `MM_TOKEN_SECRET` (opcional): cadena larga aleatoria para firmar las sesiones.
+  Después de crearlas, vuelve a desplegar (Deploys → Trigger deploy).
+- Los datos se guardan en Netlify Blobs (almacén `malinalco-magico`): reservas, cambios de casas,
+  evaluaciones, atractivos, lugares recomendados y ajustes. Descarga un respaldo desde *Ajustes*.
+- Secciones: Resumen (ocupación, ingresos, saldo, llegadas/salidas, casas incompletas), Reservas
+  (con calendario y aviso de choques), Casas, Evaluaciones, Áreas de oportunidad, Atractivos,
+  Recomendados y Ajustes.
+
+### Evaluaciones
+
+- Toda evaluación llega como «pendiente» y solo se publica cuando el administrador la aprueba.
+- Las de **3 ★ o más** se muestran completas en la página.
+- El texto de las de **1–2 ★** nunca se envía a la página pública; se gestiona en *Áreas de oportunidad*.
+- El promedio y el número de evaluaciones públicos incluyen **todas** las publicadas (también las de 1–2 ★).
+  Mostrar un promedio calculado solo con las buenas sería engañoso para el consumidor.
+- Las fotos no se editan desde el panel: se procesan con `scripts/mejorar_fotos.py`.
