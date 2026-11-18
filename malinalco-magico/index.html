@@ -29,7 +29,7 @@
   <div class="contenedor barra__in">
     <a class="barra__logo" href="#inicio" aria-label="Malinalco Mágico, inicio"><img src="logo/malinalco-magico-horizontal-color.svg" alt="Malinalco Mágico" width="210" height="58"></a>
     <nav class="barra__nav" aria-label="Principal">
-      <a href="#casas">Casas</a><a href="#mapa">Mapa</a><a href="#malinalco">Malinalco</a><a href="#reservar">Cómo reservar</a>
+      <a href="#casas">Casas</a><a href="#mapa">Mapa</a><a href="#malinalco">Malinalco</a><a href="#ranking">Opiniones</a><a href="#reservar">Cómo reservar</a>
     </nav>
     <a class="boton boton--terracota boton--chico" href="#" data-wa="general">Reservar</a>
   </div>
@@ -154,6 +154,17 @@
     </div>
   </section>
 
+  <section class="seccion seccion--ranking" id="ranking" aria-labelledby="ranking-t">
+    <div class="contenedor">
+      <div class="seccion__cab">
+        <p class="eyebrow">Ranking</p>
+        <h2 class="seccion__titulo" id="ranking-t">Las favoritas de nuestros huéspedes</h2>
+        <p class="seccion__texto"><span id="ranking-total"></span> Calificaciones de 1 a 5 sobre limpieza, comodidad, alberca, ubicación y atención.</p>
+      </div>
+      <div class="ranking" id="ranking-lista"></div>
+    </div>
+  </section>
+
   <section class="seccion seccion--terracota" id="reservar">
     <div class="contenedor reservar">
       <div>
@@ -193,8 +204,13 @@
     <h2 class="modal__titulo" id="modal-titulo"></h2>
     <p class="modal__datos" id="modal-datos"></p>
     <p id="modal-resumen"></p>
-    <ul class="amenidades" id="modal-amenidades"></ul>
+    <h3 class="modal__sub">Lo que ofrece este lugar</h3>
+    <ul class="amenidades-lista" id="modal-amenidades"></ul>
     <p class="modal__reglas" id="modal-reglas" hidden></p>
+    <h3 class="modal__sub">Dónde vas a dormir</h3>
+    <div class="recamaras" id="modal-recamaras"></div>
+    <h3 class="modal__sub">Evaluaciones</h3>
+    <div id="modal-evaluaciones"></div>
     <h3 class="modal__sub">Disponibilidad</h3>
     <p class="modal__nota" id="modal-nota-cal"></p>
     <div class="leyenda"><span><i class="d d--libre"></i>Libre</span><span><i class="d d--ocupado"></i>Ocupado</span><span><i class="d d--tuyo"></i>Tus fechas</span></div>
@@ -207,7 +223,45 @@
   </div>
 </dialog>
 
+<dialog class="modal modal--form" id="dlg-eval" aria-labelledby="ev-titulo">
+  <form method="dialog" class="modal__cerrar"><button aria-label="Cerrar">×</button></form>
+  <div class="modal__cuerpo">
+    <p class="eyebrow">Tu experiencia</p>
+    <h2 class="modal__titulo" id="ev-titulo">Evalúa tu estancia</h2>
+    <form id="form-eval" class="form-eval" novalidate>
+      <label for="ev-casa">Casa<select id="ev-casa" required></select></label>
+      <div class="form-eval__fila">
+        <label for="ev-nombre">Tu nombre<input id="ev-nombre" autocomplete="name" required maxlength="60"></label>
+        <label for="ev-ciudad">Ciudad<input id="ev-ciudad" autocomplete="address-level2" maxlength="60"></label>
+      </div>
+      <div class="form-eval__fila">
+        <label for="ev-fecha">Mes de tu estancia<input id="ev-fecha" type="month"></label>
+        <label for="ev-tel">Teléfono con el que reservaste <small>(no se publica)</small><input id="ev-tel" type="tel" autocomplete="tel" maxlength="20"></label>
+      </div>
+      <fieldset class="form-eval__general"><legend>Calificación general</legend><div class="selector-est selector-est--grande" id="ev-general" role="group" aria-label="Calificación general"></div></fieldset>
+      <fieldset class="form-eval__cats"><legend>Por categoría <small>(opcional)</small></legend>
+        <div><span>Limpieza</span><div class="selector-est" data-cat="limpieza"></div></div>
+        <div><span>Comodidad</span><div class="selector-est" data-cat="comodidad"></div></div>
+        <div><span>Alberca</span><div class="selector-est" data-cat="alberca"></div></div>
+        <div><span>Ubicación</span><div class="selector-est" data-cat="ubicacion"></div></div>
+        <div><span>Atención</span><div class="selector-est" data-cat="atencion"></div></div>
+      </fieldset>
+      <label for="ev-texto">Cuéntanos tu experiencia<textarea id="ev-texto" rows="4" maxlength="1200" placeholder="¿Qué te gustó? ¿Qué podríamos mejorar?"></textarea></label>
+      <p class="buscador__error" id="ev-error" role="alert" hidden></p>
+      <p class="form-eval__nota">Revisamos cada evaluación antes de publicarla. Solo publicamos tu nombre, ciudad, fecha, calificación y comentario.</p>
+      <button class="boton boton--terracota" type="submit">Enviar evaluación</button>
+    </form>
+    <div class="form-eval__gracias" id="ev-gracias" hidden></div>
+  </div>
+</dialog>
+<form name="evaluacion" netlify netlify-honeypot="bot-field" hidden>
+  <input name="casa"><input name="nombre"><input name="ciudad"><input name="fecha"><input name="telefono"><input name="estrellas">
+  <input name="limpieza"><input name="comodidad"><input name="alberca"><input name="ubicacion"><input name="atencion"><textarea name="texto"></textarea><input name="bot-field">
+</form>
+
 <script src="assets/js/casas.js"></script>
+<script src="assets/js/evaluaciones.js"></script>
+<script src="assets/js/extras.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>

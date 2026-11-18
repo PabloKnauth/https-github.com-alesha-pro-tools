@@ -106,7 +106,7 @@
           '<span class="estado estado--' + e.tipo + '">' + esc(e.texto) + "</span>" +
           (c.etiqueta ? '<span class="casa__etiqueta">' + esc(c.etiqueta) + "</span>" : "") +
           '<button class="casa__fotos" type="button" data-ver="' + c.id + '">' + c.fotos.length + " fotos</button></div>" +
-        '<div class="casa__cuerpo"><p class="casa__destino">' + esc(c.destino) + (c.centro ? " · " + esc(c.centro.texto) : "") + "</p>" +
+        '<div class="casa__cuerpo"><div class="casa__fila"><p class="casa__destino">' + esc(c.destino) + (c.centro ? " · " + esc(c.centro.texto) : "") + "</p>" + (window.MMX ? MMX.chipTarjeta(c) : "") + "</div>" +
         '<h3 class="casa__nombre">' + esc(c.nombre) + "</h3>" +
         '<p class="casa__datos">' + esc(datos(c)) + '</p><p class="casa__resumen">' + esc(c.resumen) + "</p>" +
         '<ul class="amenidades">' + c.amenidades.slice(0, 4).map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") +
@@ -136,7 +136,8 @@
     $("#modal-titulo").textContent = c.nombre;
     $("#modal-datos").textContent = datos(c) + (c.centro ? " · " + c.centro.texto : "");
     $("#modal-resumen").textContent = c.resumen;
-    $("#modal-amenidades").innerHTML = c.amenidades.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
+    $("#modal-amenidades").innerHTML = c.amenidades.map(window.MMX ? MMX.amenidad : function (a) { return "<li>" + esc(a) + "</li>"; }).join("");
+    if (window.MMX) MMX.ficha(c);
     var rg = $("#modal-reglas"); rg.hidden = !(c.reglas && c.reglas.length); rg.innerHTML = c.reglas && c.reglas.length ? "<strong>Reglas de la casa:</strong> " + c.reglas.map(esc).join(" · ") : "";
     var r = $("#modal-reservar"); r.href = wa(c); r.setAttribute("aria-disabled", e.reservable ? "false" : "true");
     var m = $("#modal-mapa");
@@ -263,6 +264,8 @@
     animar(".mapa__txt", "izq");
     animar(".mapa__lienzo", "der");
     animar(".lugar", "subir", 0.14);
+    animar(".rank", "subir", 0.08);
+    animar(".ranking-vacio", "subir");
     animar(".reservar > div", "izq");
     animar(".pasos li", "subir", 0.14);
     animar(".reservar > .boton", "der");

@@ -37,3 +37,14 @@ Tipografías: Cormorant Garamond (títulos) y Jost (textos), ambas gratuitas de 
   Requiere `opencv-contrib-python-headless<5` y el modelo `FSRCNN_x2.pb`.
 - Las fotos originales que se recibieron miden 720 × 960 px (descargadas de Facebook). Con las originales
   del celular la calidad mejoraría mucho más.
+
+## Evaluaciones y ranking
+- Los huéspedes califican desde la página (botón **Escribir evaluación**): general de 1 a 5, cinco categorías y comentario.
+- Llegan a Netlify → **Forms → evaluacion** (activa *form detection* en Netlify). Nada se publica solo.
+- Para publicar una, cópiala en `assets/js/evaluaciones.js` (formato al inicio del archivo) o pásamela.
+- El ranking de la portada se arma solo con las evaluaciones publicadas. «Favorita de nuestros huéspedes» aparece con promedio ≥ 4.8 y al menos 5 evaluaciones.
+- Nunca publicar reseñas inventadas: además de engañar al cliente, la Profeco puede sancionarlo.
+
+## Recámaras divididas
+En `casas.js`, cada casa acepta `habitaciones: [{ nombre: "Recámara 1", camas: "1 king y 1 individual", foto: 8 }]`
+(`foto` es el número de foto en la lista, desde 0). Sin ese dato se muestra el resumen de personas, recámaras, camas y baños.
