@@ -195,7 +195,7 @@
       .filter(function (m, i, a) { return a.indexOf(m) === i; }).sort(function (a, b) { return a - b; });
     $("#anillos").innerHTML = mins.map(function (m) {
       var r = radio(m);
-      return '<circle cx="' + CX + '" cy="' + CY + '" r="' + r + '" fill="none" stroke="#B4502B" stroke-width=".35" stroke-dasharray="1.2 1" opacity=".55"/>' +
+      return '<circle cx="' + CX + '" cy="' + CY + '" r="' + r + '" fill="none" stroke="#F36B16" stroke-width=".35" stroke-dasharray="1.2 1" opacity=".55"/>' +
         '<text x="' + (CX - 1.2) + '" y="' + (CY + r + 2.4) + '" text-anchor="end" class="anillo">' + m + " min</text>";
     }).join("");
   }
@@ -225,6 +225,48 @@
   svgMapa.addEventListener("keydown", function (e) { var p = e.target.closest("[data-pin]"); if (p && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); ficha(p.getAttribute("data-pin")); } });
   $("#otras-casas").addEventListener("click", function (e) { var b = e.target.closest("[data-ficha]"); if (b) ficha(b.getAttribute("data-ficha")); });
   $(".mapa__google").addEventListener("toggle", function () { var f = $("#iframe-mapa"); if (this.open && !f.src) f.src = D.mapaGoogle; });
+
+  /* ---------- animaciones al desplazarse ---------- */
+  var reducir = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var barra = $("#barra"), progreso = document.createElement("div");
+  progreso.className = "progreso"; progreso.setAttribute("aria-hidden", "true"); document.body.appendChild(progreso);
+  function alDesplazar() {
+    var y = window.scrollY, alto = document.documentElement.scrollHeight - window.innerHeight;
+    progreso.style.transform = "scaleX(" + (alto > 0 ? Math.min(1, y / alto) : 0) + ")";
+    barra.classList.toggle("compacta", y > 40);
+  }
+  window.addEventListener("scroll", alDesplazar, { passive: true }); alDesplazar();
+
+  var revelador = null;
+  if (!reducir && "IntersectionObserver" in window) {
+    revelador = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("visible"); revelador.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+  }
+  // Solo se ocultan los elementos que aún no están en pantalla, para que nada quede invisible al cargar.
+  function animar(selector, tipo, escalon) {
+    if (!revelador) return;
+    [].forEach.call(document.querySelectorAll(selector), function (el, i) {
+      if (el.classList.contains("anim")) return;
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.92) return;
+      el.classList.add("anim", "anim--" + tipo);
+      if (escalon) el.style.setProperty("--retraso", ((i % 3) * escalon).toFixed(2) + "s");
+      revelador.observe(el);
+    });
+  }
+  function prepararAnimaciones() {
+    animar(".seccion__cab", "subir");
+    animar(".filtros", "subir");
+    animar(".casa", "subir", 0.12);
+    animar(".mosaico__item", "zoom", 0.1);
+    animar(".mapa__txt", "izq");
+    animar(".mapa__lienzo", "der");
+    animar(".lugar", "subir", 0.14);
+    animar(".reservar > div", "izq");
+    animar(".pasos li", "subir", 0.14);
+    animar(".reservar > .boton", "der");
+    animar(".pie__in > *", "subir", 0.12);
+  }
 
   /* ---------- paralaje ---------- */
   var capas = [].slice.call(document.querySelectorAll(".hero__paisaje .capa"));
@@ -267,4 +309,5 @@
     else listo(false);
   });
   var primera = D.casas.find(function (c) { return c.centro; }); if (primera) ficha(primera.id);
+  prepararAnimaciones();
 })();
