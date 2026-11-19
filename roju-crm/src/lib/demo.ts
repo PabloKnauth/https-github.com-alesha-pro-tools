@@ -1,0 +1,118 @@
+/**
+ * Modo vista previa (VITE_DEMO=1): sin servidor. Los datos viven solo en este navegador
+ * y empiezan con registros de ejemplo. El CRM real usa la API de Netlify y empieza vacío.
+ */
+import type { Database } from "@/lib/db/types";
+
+type Tablas = Database["public"]["Tables"];
+type Nombre = keyof Tablas;
+type Fila = Record<string, unknown> & { id: string };
+
+const LLAVE = "roju-crm-vista-previa";
+let memoria: Record<string, Fila[]> | null = null;
+
+const dia = (n: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
+const instante = (n: number, h: number, m = 0) => {
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  d.setHours(h, m, 0, 0);
+  return d.toISOString();
+};
+const id = () => (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
+
+function ejemplo(): Record<string, Fila[]> {
+  const ahora = new Date().toISOString();
+  const base = { created_at: ahora, updated_at: ahora };
+  const c = (o: Record<string, unknown>): Fila => ({
+    id: id(), company: "", contact: "", email: "", phone: "", notes: "", next_follow_up: null, next_appointment: null, ...base, ...o,
+  } as Fila);
+  const clients = [
+    c({ name: "Café Aurora", company: "Aurora Tostadores", contact: "Mariana López", email: "mariana@ejemplo.com", phone: "5512345678", service: "Identidad", responsable: "Pablo Knauth", stage: "Propuesta enviada", next_follow_up: dia(-1), notes: "Quiere rediseño de logo y empaque." }),
+    c({ name: "Clínica Dental Sonríe", company: "Sonríe", contact: "Dr. Ramírez", service: "Redes sociales", responsable: "Kevin Juárez", stage: "Diagnóstico agendado", next_follow_up: dia(0), next_appointment: instante(1, 11) }),
+    c({ name: "Gimnasio Fuerza Norte", company: "Fuerza Norte", service: "Pauta", responsable: "Kevin Juárez", stage: "Nuevo contacto", next_follow_up: dia(2) }),
+    c({ name: "Hotel Casa Jade", company: "Casa Jade", service: "Web", responsable: "Pablo Knauth", stage: "Negociación", next_follow_up: dia(4) }),
+    c({ name: "Panadería La Espiga", company: "La Espiga", service: "Contenido", responsable: "Pablo Knauth", stage: "Cliente ganado" }),
+    c({ name: "Ferretería El Clavo", service: "Estrategia", responsable: "Kevin Juárez", stage: "Contactado", next_follow_up: dia(6) }),
+  ];
+  const [aurora, sonrie, fuerza, jade, espiga] = clients;
+  const t = (o: Record<string, unknown>): Fila => ({ id: id(), notes: "", due_date: null, status: "Pendiente", ...base, ...o } as Fila);
+  const tasks = [
+    t({ title: "Enviar propuesta de identidad", client_id: aurora!.id, encargado: "Pablo Knauth", due_date: dia(-2) }),
+    t({ title: "Preparar diagnóstico de redes", client_id: sonrie!.id, encargado: "Kevin Juárez", due_date: dia(0), status: "En proceso" }),
+    t({ title: "Cotizar campaña de Meta Ads", client_id: fuerza!.id, encargado: "Kevin Juárez", due_date: dia(3) }),
+    t({ title: "Mapa del sitio y textos", client_id: jade!.id, encargado: "Pablo Knauth", due_date: dia(9) }),
+    t({ title: "Calendario de contenido de diciembre", client_id: espiga!.id, encargado: "Pablo Knauth" }),
+    t({ title: "Entrega de manual de marca", client_id: espiga!.id, encargado: "Kevin Juárez", due_date: dia(-6), status: "Terminada" }),
+  ];
+  const k = (o: Record<string, unknown>): Fila => ({ id: id(), email: "", phone: "", notes: "", ...base, ...o } as Fila);
+  const collaborators = [
+    k({ name: "Ana Torres", role: "Fotografía", email: "ana@ejemplo.com", phone: "5598765432" }),
+    k({ name: "Luis Mendoza", role: "Desarrollo web", email: "luis@ejemplo.com" }),
+  ];
+  const [ana, luis] = collaborators;
+  const collaborator_tasks = [
+    t({ collaborator_id: ana!.id, title: "Sesión de fotos para Café Aurora", due_date: dia(1) }),
+    t({ collaborator_id: luis!.id, title: "Maqueta del sitio de Casa Jade", due_date: dia(5), status: "En proceso" }),
+  ];
+  const collaborator_appointments = [
+    { id: id(), collaborator_id: ana!.id, title: "Revisión de fotos", starts_at: instante(2, 16), duration_minutes: 60, meet_link: "https://meet.google.com/abc-defg-hij", notes: "", ...base },
+    { id: id(), collaborator_id: luis!.id, title: "Kickoff del sitio web", starts_at: instante(3, 10, 30), duration_minutes: 30, meet_link: "", notes: "", ...base },
+  ] as Fila[];
+  const s = (o: Record<string, unknown>): Fila => ({ id: id(), contact_person: "", email: "", phone: "", notes: "", product_service: "", ...base, ...o } as Fila);
+  const suppliers = [
+    s({ name: "Imprenta Luna", contact_person: "Jorge Luna", product_service: "Impresión de tarjetas y lonas" }),
+    s({ name: "Hosting Sol", product_service: "Hosting y dominios" }),
+    s({ name: "Estudio Eco", contact_person: "Paola Ruiz", product_service: "Grabación de voz y audio" }),
+  ];
+  return { clients, tasks, collaborators, collaborator_tasks, collaborator_appointments, suppliers };
+}
+
+function datos(): Record<string, Fila[]> {
+  if (memoria) return memoria;
+  try {
+    const g = localStorage.getItem(LLAVE);
+    if (g) return (memoria = JSON.parse(g));
+  } catch { /* sin almacenamiento */ }
+  return (memoria = ejemplo());
+}
+function guardar() {
+  try { localStorage.setItem(LLAVE, JSON.stringify(memoria)); } catch { /* sin almacenamiento */ }
+}
+export function reiniciarEjemplo() {
+  memoria = ejemplo();
+  guardar();
+}
+
+const espera = <T,>(v: T) => new Promise<T>((ok) => setTimeout(() => ok(structuredClone(v)), 120));
+const CASCADA: Record<string, Array<[string, string]>> = {
+  clients: [["tasks", "client_id"]],
+  collaborators: [["collaborator_tasks", "collaborator_id"], ["collaborator_appointments", "collaborator_id"]],
+};
+
+export const demoDb = {
+  listar: (t: Nombre) => espera(datos()[t] ?? []),
+  crear: (t: Nombre, v: Record<string, unknown>) => {
+    const ahora = new Date().toISOString();
+    const fila = { ...v, id: id(), created_at: ahora, updated_at: ahora } as Fila;
+    datos()[t] = [...(datos()[t] ?? []), fila];
+    guardar();
+    return espera(fila);
+  },
+  actualizar: (t: Nombre, fid: string, v: Record<string, unknown>) => {
+    let nueva: Fila | undefined;
+    datos()[t] = (datos()[t] ?? []).map((f) => (f.id === fid ? (nueva = { ...f, ...v, updated_at: new Date().toISOString() }) : f));
+    guardar();
+    if (!nueva) return Promise.reject(new Error("El registro ya no existe"));
+    return espera(nueva);
+  },
+  eliminar: (t: Nombre, fid: string) => {
+    datos()[t] = (datos()[t] ?? []).filter((f) => f.id !== fid);
+    for (const [h, campo] of CASCADA[t] ?? []) datos()[h] = (datos()[h] ?? []).filter((f) => f[campo] !== fid);
+    guardar();
+    return espera(undefined);
+  },
+};

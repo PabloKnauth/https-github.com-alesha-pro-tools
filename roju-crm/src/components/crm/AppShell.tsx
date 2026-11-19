@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { cerrarSesion, leerSesion } from "@/lib/api";
+import { cerrarSesion, DEMO, leerSesion } from "@/lib/api";
+import { reiniciarEjemplo } from "@/lib/demo";
 
 const NAV = [
   { to: "/", label: "Hoy y esta semana" },
@@ -48,6 +49,23 @@ export function BrandMark() {
 export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
+      {DEMO && (
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-primary px-4 py-2 text-center text-xs text-primary-foreground">
+          <span>
+            Vista previa con datos de ejemplo. Los cambios se guardan solo en este navegador, no en el CRM real.
+          </span>
+          <button
+            type="button"
+            className="font-semibold underline underline-offset-2"
+            onClick={() => {
+              reiniciarEjemplo();
+              window.location.reload();
+            }}
+          >
+            Restablecer ejemplo
+          </button>
+        </div>
+      )}
       <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-4 pt-4 sm:px-6 lg:px-8">
           <BrandMark />

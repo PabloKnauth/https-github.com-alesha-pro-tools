@@ -3,6 +3,10 @@
  * La sesión se guarda en este dispositivo; Pablo y Kevin ven los mismos datos en el servidor.
  */
 import type { Database } from "@/lib/db/types";
+import { demoDb } from "@/lib/demo";
+
+/** Vista previa sin servidor (compilación aparte con VITE_DEMO=1). */
+export const DEMO = import.meta.env["VITE_DEMO"] === "1";
 
 export type TableName = keyof Database["public"]["Tables"];
 export type Row<T extends TableName> = Database["public"]["Tables"][T]["Row"];
@@ -80,7 +84,9 @@ async function llamar<T>(cuerpo: Record<string, unknown>, conSesion = true): Pro
 }
 
 export async function entrar(usuario: Usuario, clave: string) {
-  const r = await llamar<{ token: string; vence: number }>({ accion: "entrar", usuario, clave }, false);
+  const r = DEMO
+    ? { token: "vista-previa", vence: Date.now() + 864e5 * 30 }
+    : await llamar<{ token: string; vence: number }>({ accion: "entrar", usuario, clave }, false);
   try {
     window.localStorage.setItem(LLAVE, JSON.stringify({ token: r.token, usuario, vence: r.vence }));
   } catch {
@@ -89,7 +95,7 @@ export async function entrar(usuario: Usuario, clave: string) {
   avisar();
 }
 
-export const db = {
+const dbReal = {
   listar: <T extends TableName>(tabla: T) =>
     llamar<{ filas: Row<T>[] }>({ accion: "listar", tabla }).then((r) => r.filas),
   crear: <T extends TableName>(tabla: T, valores: Insert<T>) =>
@@ -99,3 +105,5 @@ export const db = {
   eliminar: <T extends TableName>(tabla: T, id: string) =>
     llamar<{ ok: true }>({ accion: "eliminar", tabla, id }).then(() => undefined),
 };
+
+export const db = (DEMO ? demoDb : dbReal) as typeof dbReal;

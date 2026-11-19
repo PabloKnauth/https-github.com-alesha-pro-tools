@@ -167,7 +167,7 @@ function ClientsPage() {
           }
         />
       ) : (
-        <div className="scrollbar-thin -mx-4 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <div className="scrollbar-thin relative -mx-4 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <div className="flex gap-4">
             {STAGES.map((stage) => {
               const list = filtered.filter((c) => c.stage === stage);

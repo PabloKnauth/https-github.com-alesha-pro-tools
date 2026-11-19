@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { alCambiarSesion, entrar, leerSesion, USUARIOS, type Usuario } from "@/lib/api";
+import { alCambiarSesion, DEMO, entrar, leerSesion, USUARIOS, type Usuario } from "@/lib/api";
 import { Wordmark } from "./AppShell";
 
 /** Muestra el CRM solo con sesión iniciada; si no, la pantalla de acceso. */
@@ -103,7 +103,9 @@ function PantallaEntrar() {
           {enviando ? "Entrando…" : "Entrar"}
         </Button>
         <p className="mt-4 text-center text-xs text-muted-foreground">
-          Acceso exclusivo para Pablo Knauth y Kevin Juárez.
+          {DEMO
+            ? "Vista previa: escribe cualquier contraseña para entrar."
+            : "Acceso exclusivo para Pablo Knauth y Kevin Juárez."}
         </p>
       </form>
     </main>
