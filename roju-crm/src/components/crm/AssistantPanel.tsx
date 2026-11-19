@@ -84,7 +84,7 @@ export function AssistantPanel() {
         <button
           type="button"
           onClick={() => setAbierto(true)}
-          className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-50 inline-flex min-h-12 items-center gap-2 rounded-full bg-highlight px-5 font-display text-sm font-bold text-white shadow-lg transition-transform hover:-translate-y-0.5 active:scale-95"
+          className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-50 inline-flex min-h-12 items-center gap-2 rounded-full bg-highlight px-5 font-display text-sm font-bold text-white shadow-lg transition-transform hover:-translate-y-0.5 active:scale-95"
           aria-label="Abrir asistente de IA"
         >
           <Sparkles className="h-4 w-4" aria-hidden="true" />
@@ -95,7 +95,7 @@ export function AssistantPanel() {
         <section
           role="dialog"
           aria-label="Asistente de IA"
-          className="fixed inset-0 z-50 flex flex-col border-l bg-background sm:inset-auto sm:bottom-4 sm:right-4 sm:h-[min(640px,calc(100vh-2rem))] sm:w-[400px] sm:rounded-2xl sm:border sm:shadow-2xl"
+          className="fixed inset-0 z-50 flex flex-col border-r bg-background sm:inset-auto sm:bottom-4 sm:left-4 sm:h-[min(640px,calc(100vh-2rem))] sm:w-[400px] sm:rounded-2xl sm:border sm:shadow-2xl"
         >
           <header className="flex items-center justify-between gap-3 border-b px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:pt-3">
             <div className="min-w-0">
