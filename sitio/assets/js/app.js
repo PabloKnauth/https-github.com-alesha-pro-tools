@@ -131,8 +131,12 @@
   /* ---------- aviso ---------- */
   var tToast;
   function aviso(msg) {
-    var t = $("#toast"); t.textContent = msg; t.hidden = false;
-    clearTimeout(tToast); tToast = setTimeout(function () { t.hidden = true; }, 3200);
+    var t = $("#toast"); t.textContent = msg; t.classList.remove("toast--sale"); t.hidden = false;
+    clearTimeout(tToast);
+    tToast = setTimeout(function () {
+      t.classList.add("toast--sale");
+      tToast = setTimeout(function () { t.hidden = true; t.classList.remove("toast--sale"); }, 300);
+    }, 3200);
   }
 
   /* ---------- tienda ---------- */

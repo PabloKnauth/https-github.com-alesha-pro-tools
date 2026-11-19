@@ -79,10 +79,10 @@ a { color: inherit; }
   text-decoration: none; text-transform: uppercase; letter-spacing: .04em;
   padding: .95em 1.4em; border-radius: 999px; border: 2.5px solid var(--line);
   background: var(--b-bg); color: var(--b-fg); cursor: pointer;
-  box-shadow: 4px 4px 0 var(--shadow); transition: transform 150ms var(--ease-out), box-shadow 150ms var(--ease-out);
+  box-shadow: 4px 4px 0 var(--shadow); transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) { .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--shadow); } }
-.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); transition-duration: 100ms; }
 .btn[disabled] { opacity: .55; cursor: not-allowed; transform: none; box-shadow: 2px 2px 0 var(--shadow); }
 .btn--tomato { --b-bg: var(--tomato); --b-fg: var(--on-color); }
 .btn--mustard { --b-bg: var(--mustard); --b-fg: var(--on-color); }

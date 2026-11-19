@@ -45,7 +45,9 @@
   document.getElementById("reto-datos").innerHTML = datos.map(function (d) {
     return "<li><strong class=\"display\">" + d[0] + "</strong>" + d[1] + "</li>";
   }).join("");
-  document.getElementById("reto-barra").style.width = avance + "%";
+  // Se revela con clip-path para no animar el ancho (las franjas no se deforman).
+  var barra = document.getElementById("reto-barra");
+  requestAnimationFrame(function () { barra.style.clipPath = "inset(0 " + (100 - avance) + "% 0 0)"; });
 
   /* ---- meses ---- */
   var html = [], m = new Date(inicio.getFullYear(), inicio.getMonth(), 1);

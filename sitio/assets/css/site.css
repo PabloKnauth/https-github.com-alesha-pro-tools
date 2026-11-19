@@ -74,7 +74,8 @@ html.sin-mov .cinta-texto__mov, html.sin-mov .hero__d1 { animation-play-state: p
 .buscar input { border: 0; background: transparent; font: inherit; color: var(--fg); padding: 12px 0; width: 100%; min-width: 0; outline: none; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { font: 700 var(--step--1)/1 var(--f-body); font-variation-settings: "wdth" 108; text-transform: uppercase; letter-spacing: .05em;
-  padding: .7em 1em; border-radius: 999px; border: 2px solid var(--line); background: transparent; color: var(--fg); cursor: pointer; }
+  padding: .7em 1em; border-radius: 999px; border: 2px solid var(--line); background: transparent; color: var(--fg); cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease; }
 .chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 @media (hover: hover) and (pointer: fine) { .chip:hover { background: var(--mustard); color: var(--on-color); } }
 
@@ -150,8 +151,11 @@ html.sin-mov .cinta-texto__mov, html.sin-mov .hero__d1 { animation-play-state: p
 
 /* MODAL */
 .modal { width: min(480px, calc(100% - 32px)); border: 2.5px solid var(--line); border-radius: 20px; padding: 34px 28px 28px; background: var(--surface);
-  color: var(--fg); box-shadow: 10px 10px 0 var(--tomato); overflow: visible; }
-.modal::backdrop { background: rgba(23, 19, 15, .62); backdrop-filter: blur(3px); }
+  color: var(--fg); box-shadow: 10px 10px 0 var(--tomato); overflow: visible;
+  transition: opacity 250ms var(--ease-out), transform 250ms var(--ease-out); }
+@starting-style { .modal[open] { opacity: 0; transform: scale(.96); } }
+.modal::backdrop { background: rgba(23, 19, 15, .62); backdrop-filter: blur(3px); transition: opacity 250ms var(--ease-out); }
+@starting-style { .modal[open]::backdrop { opacity: 0; } }
 .modal__cerrar { position: absolute; right: 12px; top: 10px; margin: 0; }
 .modal__cerrar button { font-size: 1.8rem; line-height: 1; border: 0; background: none; color: var(--fg); cursor: pointer; padding: 6px 10px; }
 .modal__d { position: absolute; width: 84px; left: -24px; top: -50px; transform: rotate(-14deg); }
@@ -165,7 +169,10 @@ html.sin-mov .cinta-texto__mov, html.sin-mov .hero__d1 { animation-play-state: p
 
 /* TOAST */
 .toast { position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); translate: -50% 0; z-index: 60; background: var(--mustard); color: var(--on-color);
-  border: 2.5px solid var(--line); border-radius: 999px; padding: 12px 22px; font-weight: 800; box-shadow: 4px 4px 0 var(--shadow); max-width: calc(100% - 32px); }
+  border: 2.5px solid var(--line); border-radius: 999px; padding: 12px 22px; font-weight: 800; box-shadow: 4px 4px 0 var(--shadow); max-width: calc(100% - 32px);
+  transition: transform 400ms ease, opacity 400ms ease; }
+@starting-style { .toast { transform: translateY(calc(100% + 30px)); opacity: 0; } }
+.toast.toast--sale { transform: translateY(calc(100% + 30px)); opacity: 0; transition-duration: 300ms; }
 
 /* RETO: banda oscura fija en ambos temas, días marcados con zarpazos */
 .reto { --r-bg: #17130F; --r-fg: #F3EAD8; --r-muted: #B9AA95; --r-cel: #2A221B;
@@ -181,7 +188,7 @@ html.sin-mov .cinta-texto__mov, html.sin-mov .hero__d1 { animation-play-state: p
 .reto__datos strong { display: block; color: var(--r-fg); font-size: var(--step-3); line-height: 1; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
 @media (max-width: 640px) { .reto__datos { grid-template-columns: repeat(2, 1fr); } }
 .reto__barra { height: 14px; border-radius: 999px; background: var(--r-cel); border: 2px solid color-mix(in srgb, var(--r-fg) 30%, transparent); overflow: hidden; margin-bottom: 22px; }
-.reto__barra span { display: block; height: 100%; width: 0; background: repeating-linear-gradient(-45deg, var(--tomato) 0 10px, var(--mustard) 10px 20px); transition: width 800ms var(--ease-out); }
+.reto__barra span { display: block; height: 100%; width: 100%; clip-path: inset(0 100% 0 0); background: repeating-linear-gradient(-45deg, var(--tomato) 0 10px, var(--mustard) 10px 20px); transition: clip-path 800ms var(--ease-out); }
 .reto__leyenda { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-bottom: 22px; font-size: var(--step--1); color: var(--r-muted); }
 .reto__leyenda span { display: inline-flex; align-items: center; gap: 8px; }
 .reto__leyenda .dia { width: 22px; height: 22px; aspect-ratio: auto; font-size: 0; }
@@ -193,7 +200,8 @@ html.sin-mov .cinta-texto__mov, html.sin-mov .hero__d1 { animation-play-state: p
 .mes__sem, .mes__dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
 .mes__sem { margin-bottom: 5px; font-size: .7rem; font-weight: 800; color: var(--r-muted); text-align: center; }
 .dia { aspect-ratio: 1; display: grid; place-items: start; padding: 3px 5px; border-radius: 7px; font: 700 .72rem/1 var(--f-body);
-  color: var(--r-muted); background: var(--r-cel); border: 1.5px solid transparent; position: relative; min-width: 0; }
+  color: var(--r-muted); background: var(--r-cel); border: 1.5px solid transparent; position: relative; min-width: 0;
+  transition: transform 150ms var(--ease-out); }
 .dia--vacio { background: none; }
 .dia--fuera { background: none; opacity: .62; }
 .dia--futuro { border-color: color-mix(in srgb, var(--r-fg) 14%, transparent); }
@@ -204,7 +212,8 @@ html.sin-mov .cinta-texto__mov, html.sin-mov .hero__d1 { animation-play-state: p
 .dia--descanso { background: var(--moss); color: #F3EAD8; cursor: pointer; }
 .dia--hoy { border: 2.5px solid var(--mustard); box-shadow: 0 0 0 3px color-mix(in srgb, var(--mustard) 35%, transparent); color: var(--r-fg); }
 button.dia { font: 700 .72rem/1 var(--f-body); text-align: left; }
-button.dia:hover { transform: scale(1.08); }
+@media (hover: hover) and (pointer: fine) { button.dia:hover { transform: scale(1.05); } }
+button.dia:active { transform: scale(.97); transition-duration: 100ms; }
 
 .reto__pie { display: grid; grid-template-columns: 1fr auto; gap: 22px 30px; align-items: center; margin-top: 30px; }
 .reto__detalle { min-width: 0; border-left: 4px solid var(--mustard); padding: 4px 0 4px 18px; }
