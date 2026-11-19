@@ -6,3 +6,8 @@ productos-pago/plantillas/
 productos-pago/kit-skills/
 productos-pago/entregables/
 node_modules/
+
+# Reportes temporales de las skills de diseño
+.taste-skill/
+.impeccable/
+__pycache__/
