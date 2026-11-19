@@ -16,7 +16,7 @@ export default async (req, context) => {
     const parecidas = Object.keys(process.env).filter((k) => /clave|crm|pablo|kevin/i.test(k)).map((k) => JSON.stringify(k).slice(1, -1));
     const crudo = (u) => process.env[USUARIOS[u]];
     const detalle = (u) => (crudo(u) === undefined ? "no existe con ese nombre exacto" : crudo(u).trim() === "" ? "existe pero está vacía o solo tiene espacios" : estado(u));
-    return json({ servidor: "activo", CRM_CLAVE_PABLO: detalle("Pablo Knauth"), CRM_CLAVE_KEVIN: detalle("Kevin Juárez"), variables_parecidas: parecidas });
+    return json({ servidor: "activo", CRM_CLAVE_PABLO: detalle("Pablo Knauth"), CRM_CLAVE_KEVIN: detalle("Kevin Juárez"), ASISTENTE_IA: process.env.ANTHROPIC_API_KEY ? "lista" : "falta ANTHROPIC_API_KEY", variables_parecidas: parecidas });
   }
   if (req.method !== "POST") return json({ error: "Método no permitido" }, 405);
   let d;
