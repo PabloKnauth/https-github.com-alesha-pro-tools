@@ -14,6 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
+      attachments: {
+        Row: {
+          author: string
+          blob_key: string | null
+          created_at: string
+          id: string
+          kind: string
+          name: string
+          owner_id: string
+          owner_table: string
+          size: number | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          author?: string
+          blob_key?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          name: string
+          owner_id: string
+          owner_table: string
+          size?: number | null
+          updated_at?: string
+          url?: string
+        }
+        Update: {
+          author?: string
+          blob_key?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          name?: string
+          owner_id?: string
+          owner_table?: string
+          size?: number | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar: string | null
+          color: string
+          created_at: string
+          id: string
+          nickname: string
+          title: string
+          updated_at: string
+          user: string
+        }
+        Insert: {
+          avatar?: string | null
+          color?: string
+          created_at?: string
+          id?: string
+          nickname?: string
+          title?: string
+          updated_at?: string
+          user: string
+        }
+        Update: {
+          avatar?: string | null
+          color?: string
+          created_at?: string
+          id?: string
+          nickname?: string
+          title?: string
+          updated_at?: string
+          user?: string
+        }
+        Relationships: []
+      }
       client_activity: {
         Row: {
           author: string

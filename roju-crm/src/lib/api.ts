@@ -3,7 +3,7 @@
  * La sesión se guarda en este dispositivo; Pablo y Kevin ven los mismos datos en el servidor.
  */
 import type { Database } from "@/lib/db/types";
-import { demoDb } from "@/lib/demo";
+import { demoAsistente, demoDb, demoLeerPdf, demoSubirPdf } from "@/lib/demo";
 
 /** Vista previa sin servidor (compilación aparte con VITE_DEMO=1). */
 export const DEMO = import.meta.env["VITE_DEMO"] === "1";
@@ -118,3 +118,93 @@ const dbReal = {
 };
 
 export const db = (DEMO ? demoDb : dbReal) as typeof dbReal;
+
+/* ---------- Documentos PDF de tareas ---------- */
+export async function subirPdf(tabla: "tasks" | "collaborator_tasks", tareaId: string, archivo: File) {
+  if (DEMO) return demoSubirPdf(tabla, tareaId, archivo);
+  const sesion = leerSesion();
+  if (!sesion) {
+    avisar();
+    throw new SesionVencida();
+  }
+  const res = await fetch("/api/archivos", {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${sesion.token}`,
+      "content-type": "application/pdf",
+      "x-tabla": tabla,
+      "x-tarea": tareaId,
+      "x-nombre": encodeURIComponent(archivo.name),
+    },
+    body: archivo,
+  }).catch(() => {
+    throw new Error("Sin conexión. Revisa tu internet e intenta de nuevo.");
+  });
+  const datos = (await res.json().catch(() => ({}))) as { error?: string; fila?: Row<"attachments"> };
+  if (res.status === 401) {
+    cerrarSesion();
+    throw new SesionVencida();
+  }
+  if (!res.ok || !datos.fila) throw new Error(datos.error ?? `Error ${res.status}`);
+  return datos.fila;
+}
+
+/** Abre el PDF en una pestaña nueva (se descarga con la sesión, nunca queda público). */
+export async function abrirPdf(id: string) {
+  const ventana = window.open("", "_blank");
+  try {
+    let blob: Blob;
+    if (DEMO) blob = demoLeerPdf(id);
+    else {
+      const sesion = leerSesion();
+      if (!sesion) throw new SesionVencida();
+      const res = await fetch(`/api/archivos?id=${encodeURIComponent(id)}`, { headers: { authorization: `Bearer ${sesion.token}` } });
+      if (!res.ok) throw new Error(res.status === 404 ? "El documento ya no existe" : `Error ${res.status}`);
+      blob = await res.blob();
+    }
+    const url = URL.createObjectURL(blob);
+    if (ventana) ventana.location.href = url;
+    else window.location.href = url;
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  } catch (e) {
+    ventana?.close();
+    throw e;
+  }
+}
+
+/* ---------- Asistente de IA ---------- */
+export type MensajeChat = { role: "user" | "assistant"; texto: string };
+export type RespuestaAsistente = { respuesta?: string; acciones: string[]; continuar?: unknown[] };
+
+export async function preguntarAsistente(mensaje: string, historial: MensajeChat[]): Promise<{ respuesta: string; acciones: string[] }> {
+  if (DEMO) return demoAsistente(mensaje);
+  const sesion = leerSesion();
+  if (!sesion) {
+    avisar();
+    throw new SesionVencida();
+  }
+  const acciones: string[] = [];
+  let cuerpo: Record<string, unknown> = { mensaje, historial };
+  for (let i = 0; i < 6; i++) {
+    const res = await fetch("/api/asistente", {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${sesion.token}` },
+      body: JSON.stringify(cuerpo),
+    }).catch(() => {
+      throw new Error("Sin conexión. Revisa tu internet e intenta de nuevo.");
+    });
+    const datos = (await res.json().catch(() => ({}))) as RespuestaAsistente & { error?: string };
+    if (res.status === 401) {
+      cerrarSesion();
+      throw new SesionVencida();
+    }
+    if (!res.ok) throw new Error(datos.error ?? `Error ${res.status}`);
+    acciones.push(...(datos.acciones ?? []));
+    if (datos.continuar) {
+      cuerpo = { continuar: datos.continuar };
+      continue;
+    }
+    return { respuesta: datos.respuesta ?? "Listo.", acciones };
+  }
+  return { respuesta: "Hice varias acciones pero no terminé; dime si sigo.", acciones };
+}

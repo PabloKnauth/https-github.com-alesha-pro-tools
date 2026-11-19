@@ -139,3 +139,27 @@ export const demoDb = {
     return espera(undefined);
   },
 };
+
+/* Vista previa: PDF solo en memoria y asistente simulado (sin servidor ni clave de IA). */
+const pdfsDemo = new Map<string, Blob>();
+export function demoSubirPdf(tabla: string, tareaId: string, archivo: File) {
+  const ahora = new Date().toISOString();
+  const fila = { id: id(), owner_table: tabla, owner_id: tareaId, kind: "pdf", name: archivo.name, url: "", blob_key: null, size: archivo.size, author: autor(), created_at: ahora, updated_at: ahora } as Fila;
+  pdfsDemo.set(fila.id, archivo);
+  datos()["attachments"] = [...(datos()["attachments"] ?? []), fila];
+  guardar();
+  return espera(fila) as unknown as Promise<Tablas["attachments"]["Row"]>;
+}
+export function demoLeerPdf(fid: string): Blob {
+  const b = pdfsDemo.get(fid);
+  if (!b) throw new Error("En la vista previa los PDF solo duran mientras la página está abierta.");
+  return b;
+}
+export async function demoAsistente(mensaje: string) {
+  await new Promise((ok) => setTimeout(ok, 500));
+  const pendientes = (datos()["tasks"] ?? []).filter((t) => t["status"] !== "Terminada").length;
+  return {
+    respuesta: `Esta es la vista previa: aquí el asistente no está conectado a la IA. En el CRM real respondería a «${mensaje.slice(0, 80)}» con tus datos y podría crear clientes, tareas y notas. Por ejemplo, ahora hay ${pendientes} tareas sin terminar.`,
+    acciones: [] as string[],
+  };
+}

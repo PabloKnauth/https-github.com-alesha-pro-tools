@@ -1,8 +1,11 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { cerrarSesion, DEMO, leerSesion } from "@/lib/api";
 import { reiniciarEjemplo } from "@/lib/demo";
 import { BackupDialog } from "./BackupDialog";
+import { AssistantPanel } from "./AssistantPanel";
+import { Avatar, useApodo } from "./Avatar";
+import { ProfileDialog } from "./ProfileDialog";
 
 const NAV = [
   { to: "/", label: "Hoy y esta semana" },
@@ -47,6 +50,26 @@ export function BrandMark() {
   );
 }
 
+function PerfilBoton() {
+  const usuario = leerSesion()?.usuario ?? "Pablo Knauth";
+  const apodo = useApodo(usuario);
+  const [abierto, setAbierto] = useState(false);
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setAbierto(true)}
+        className="inline-flex min-h-9 items-center gap-2 rounded-full border py-1 pl-1 pr-3 text-xs font-semibold text-foreground transition-colors hover:bg-accent"
+        aria-label={`Mi perfil: ${usuario}`}
+      >
+        <Avatar name={usuario} size={28} />
+        <span className="hidden max-w-[10rem] truncate sm:inline">Hola, {apodo}</span>
+      </button>
+      <ProfileDialog open={abierto} onOpenChange={setAbierto} user={usuario} />
+    </>
+  );
+}
+
 export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
@@ -71,7 +94,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-4 pt-4 sm:px-6 lg:px-8">
           <BrandMark />
           <div className="flex items-center gap-2 sm:gap-3">
-            <span className="hidden text-xs text-muted-foreground sm:block">{leerSesion()?.usuario}</span>
+            <PerfilBoton />
             <BackupDialog />
             <button
               type="button"
@@ -105,7 +128,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         {children}
       </main>
-      <footer className="border-t">
+      <AssistantPanel />
+      <footer className="border-t pb-20">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-1 px-4 py-6 text-xs text-muted-foreground sm:flex-row sm:justify-between sm:px-6 lg:px-8">
           <span>ROJU Consulting. Pensamos. Creamos. Crecemos.</span>
           <span>Datos compartidos entre Pablo Knauth y Kevin Juárez</span>

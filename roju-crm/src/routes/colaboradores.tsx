@@ -373,6 +373,7 @@ function CollaboratorDetail({ collaborator, onEdit }: { collaborator: Collaborat
           <LoadingBlock rows={1} />
         ) : (
           <TaskBoard
+            docsTabla="collaborator_tasks"
             compact
             tasks={myTasks}
             onOpen={(id) => setTaskDialog({ open: true, task: myTasks.find((t) => t.id === id) ?? null })}
@@ -386,6 +387,7 @@ function CollaboratorDetail({ collaborator, onEdit }: { collaborator: Collaborat
         onOpenChange={(o) => !o && setTaskDialog({ open: false, task: null })}
         initial={taskInitial}
         isEditing={!!editingTask}
+        documentos={editingTask ? { tabla: "collaborator_tasks", id: editingTask.id } : undefined}
         ownerLabel="Colaborador"
         statuses={TASK_STATUSES}
         saving={saveTask.isPending}

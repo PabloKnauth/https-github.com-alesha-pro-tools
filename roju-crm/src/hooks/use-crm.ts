@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { db, SesionVencida, type TableName, type Row } from "@/lib/api";
+import { db, SesionVencida, subirPdf, type TableName, type Row } from "@/lib/api";
 import type {
   ClientInsert,
   CollaboratorAppointmentInsert,
@@ -34,6 +34,8 @@ export const crmKeys = {
   collaboratorAppointments: ["collaborator_appointments"] as const,
   suppliers: ["suppliers"] as const,
   clientActivity: ["client_activity"] as const,
+  attachments: ["attachments"] as const,
+  profiles: ["profiles"] as const,
 };
 
 /* ---------- Queries ---------- */
@@ -296,6 +298,64 @@ export function useDeleteSupplier() {
   return useMutation({
     mutationFn: (id: string) => db.eliminar("suppliers", id),
     onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.suppliers }),
+    onError,
+  });
+}
+
+/* ---------- Documentos de tareas ---------- */
+export function useAttachments() {
+  return useQuery({
+    queryKey: crmKeys.attachments,
+    queryFn: () => db.listar("attachments").then((f) => ordenar<"attachments">(f, "created_at")),
+    refetchInterval: SHARED_REFRESH_MS,
+  });
+}
+
+export function useAddLink() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (v: { owner_table: "tasks" | "collaborator_tasks"; owner_id: string; name: string; url: string }) =>
+      db.crear("attachments", { ...v, kind: "link" }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.attachments }),
+    onError,
+  });
+}
+
+export function useUploadPdf() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (v: { owner_table: "tasks" | "collaborator_tasks"; owner_id: string; file: File }) =>
+      subirPdf(v.owner_table, v.owner_id, v.file),
+    onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.attachments }),
+    onError,
+  });
+}
+
+export function useDeleteAttachment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => db.eliminar("attachments", id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.attachments }),
+    onError,
+  });
+}
+
+/* ---------- Perfiles ---------- */
+export function useProfiles() {
+  return useQuery({
+    queryKey: crmKeys.profiles,
+    queryFn: () => db.listar("profiles"),
+    refetchInterval: 60_000,
+    staleTime: 30_000,
+  });
+}
+
+export function useSaveProfile() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (v: { user: string; nickname: string; title: string; color: string; avatar: string | null }) =>
+      db.crear("profiles", { ...v, avatar: v.avatar ?? "" }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.profiles }),
     onError,
   });
 }

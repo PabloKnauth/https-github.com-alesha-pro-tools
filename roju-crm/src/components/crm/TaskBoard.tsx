@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { CalendarDays } from "lucide-react";
 import { DeadlineBadge } from "./DeadlineBadge";
 import { ChoiceSelect, PersonTag } from "./ui-bits";
+import { AttachmentCount } from "./TaskAttachments";
 import { compareByUrgency, describeDaysLeft } from "@/lib/deadline";
 import { formatDay } from "@/lib/dates";
 import { TASK_STATUSES } from "@/lib/crm";
@@ -22,10 +23,12 @@ export function TaskCard({
   task,
   onOpen,
   onStatusChange,
+  docsTabla,
 }: {
   task: BoardTask;
   onOpen: () => void;
   onStatusChange: (status: string) => void;
+  docsTabla?: "tasks" | "collaborator_tasks";
 }) {
   const done = task.status === "Terminada";
   return (
@@ -51,6 +54,11 @@ export function TaskCard({
           </p>
         )}
         {task.notes && <p className="mt-2 line-clamp-2 text-xs text-muted-foreground">{task.notes}</p>}
+        {docsTabla && (
+          <div className="mt-2">
+            <AttachmentCount tabla={docsTabla} tareaId={task.id} />
+          </div>
+        )}
       </button>
       <div className="mt-3 flex items-center justify-between gap-3 border-t pt-3">
         {task.person ? <PersonTag name={task.person} /> : <span />}
@@ -71,14 +79,16 @@ export function TaskBoard({
   onOpen,
   onStatusChange,
   compact,
+  docsTabla,
 }: {
   tasks: BoardTask[];
   onOpen: (id: string) => void;
   onStatusChange: (id: string, status: string) => void;
   compact?: boolean;
+  docsTabla?: "tasks" | "collaborator_tasks";
 }) {
   return (
-    <div className={cn("grid gap-5", compact ? "lg:grid-cols-3" : "md:grid-cols-3")}>
+    <div className={cn("grid grid-cols-1 gap-5", compact ? "lg:grid-cols-3" : "md:grid-cols-3")}>
       {TASK_STATUSES.map((status) => {
         const list = tasks.filter((t) => t.status === status).sort((a, b) => compareByUrgency(a, b));
         return (
@@ -103,6 +113,7 @@ export function TaskBoard({
                     task={t}
                     onOpen={() => onOpen(t.id)}
                     onStatusChange={(s) => onStatusChange(t.id, s)}
+                    docsTabla={docsTabla}
                   />
                 ))
               )}

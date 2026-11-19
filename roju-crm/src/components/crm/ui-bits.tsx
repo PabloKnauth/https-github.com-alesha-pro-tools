@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { Avatar } from "./Avatar";
 
 export function PageHeader({
   eyebrow,
@@ -182,16 +183,9 @@ export function ErrorBlock({ message }: { message: string }) {
 }
 
 export function PersonTag({ name }: { name: string }) {
-  const initials = name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((p) => p[0])
-    .join("");
   return (
     <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
-      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground">
-        {initials}
-      </span>
+      <Avatar name={name} size={20} />
       {name}
     </span>
   );

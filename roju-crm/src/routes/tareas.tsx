@@ -164,6 +164,7 @@ function TasksPage() {
         />
       ) : (
         <TaskBoard
+          docsTabla="tasks"
           tasks={boardTasks}
           onOpen={(id) => setEditing(tasks.data.find((t) => t.id === id) ?? null)}
           onStatusChange={(id, status) => updateStatus.mutate({ id, status })}
@@ -175,6 +176,7 @@ function TasksPage() {
         onOpenChange={(o) => !o && close()}
         initial={initial}
         isEditing={!!editing}
+        documentos={editing ? { tabla: "tasks", id: editing.id } : undefined}
         ownerLabel="Cliente"
         ownerOptions={clientOptions}
         encargadoOptions={RESPONSABLES}

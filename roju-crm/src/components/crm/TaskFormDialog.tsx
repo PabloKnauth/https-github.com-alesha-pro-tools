@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ChoiceSelect, Field } from "./ui-bits";
 import { ConfirmDelete } from "./ConfirmDelete";
+import { TaskAttachments } from "./TaskAttachments";
 
 export type TaskFormValues = {
   title: string;
@@ -42,6 +43,7 @@ export function TaskFormDialog({
   saving,
   onSave,
   onDelete,
+  documentos,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -54,6 +56,8 @@ export function TaskFormDialog({
   saving: boolean;
   onSave: (values: TaskFormValues) => void;
   onDelete?: () => void;
+  /** Tarea ya guardada: muestra la sección de documentos (PDF y enlaces). */
+  documentos?: { tabla: "tasks" | "collaborator_tasks"; id: string };
 }) {
   const [form, setForm] = useState<TaskFormValues>(initial);
 
@@ -157,6 +161,7 @@ export function TaskFormDialog({
             </div>
           </DialogFooter>
         </form>
+        {documentos && <TaskAttachments tabla={documentos.tabla} tareaId={documentos.id} />}
       </DialogContent>
     </Dialog>
   );
