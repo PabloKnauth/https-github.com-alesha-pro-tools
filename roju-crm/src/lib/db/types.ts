@@ -19,6 +19,7 @@ export type Database = {
           author: string
           client_id: string
           created_at: string
+          edited_by?: string | null
           id: string
           kind: string
           text: string

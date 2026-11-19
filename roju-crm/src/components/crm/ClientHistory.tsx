@@ -1,9 +1,9 @@
 import { useState, type FormEvent } from "react";
-import { ArrowRightLeft, StickyNote, Trash2, UserPlus } from "lucide-react";
+import { ArrowRightLeft, Pencil, StickyNote, Trash2, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useAddClientNote, useClientActivity, useDeleteClientNote } from "@/hooks/use-crm";
-import { leerSesion } from "@/lib/api";
+import { useAddClientNote, useClientActivity, useDeleteClientNote, useEditClientNote } from "@/hooks/use-crm";
+import { ConfirmDelete } from "./ConfirmDelete";
 import { LIMITS } from "@/lib/crm";
 import { formatDateTime } from "@/lib/dates";
 
@@ -14,8 +14,9 @@ export function ClientHistory({ clientId }: { clientId: string }) {
   const activity = useClientActivity();
   const add = useAddClientNote();
   const remove = useDeleteClientNote();
+  const edit = useEditClientNote();
   const [text, setText] = useState("");
-  const yo = leerSesion()?.usuario;
+  const [editando, setEditando] = useState<{ id: string; text: string } | null>(null);
   const items = (activity.data ?? []).filter((a) => a.client_id === clientId);
 
   function onSubmit(e: FormEvent) {
@@ -31,7 +32,8 @@ export function ClientHistory({ clientId }: { clientId: string }) {
         Historial
       </h3>
       <p className="mt-0.5 text-xs text-muted-foreground">
-        Cada nota queda con fecha y autor. Los cambios de etapa se registran solos.
+        Cada nota queda con fecha y autor. Los cambios de etapa se registran solos. Pablo y Kevin pueden editar y borrar
+        cualquier registro.
       </p>
       <form onSubmit={onSubmit} className="mt-3 grid gap-2">
         <label htmlFor="h-nota" className="sr-only">
@@ -61,22 +63,72 @@ export function ClientHistory({ clientId }: { clientId: string }) {
               <li key={a.id} className="flex gap-3">
                 <Icono className="mt-0.5 h-4 w-4 shrink-0 text-primary-soft" aria-hidden="true" />
                 <div className="min-w-0 flex-1">
-                  <p className="whitespace-pre-wrap text-sm text-foreground [overflow-wrap:anywhere]">{a.text}</p>
+                  {editando?.id === a.id ? (
+                    <div className="grid gap-2">
+                      <label htmlFor={`h-edit-${a.id}`} className="sr-only">
+                        Editar nota
+                      </label>
+                      <Textarea
+                        id={`h-edit-${a.id}`}
+                        rows={3}
+                        maxLength={LIMITS.activity}
+                        value={editando.text}
+                        onChange={(e) => setEditando({ id: a.id, text: e.target.value })}
+                        autoFocus
+                      />
+                      <div className="flex justify-end gap-2">
+                        <Button type="button" size="sm" variant="outline" onClick={() => setEditando(null)}>
+                          Cancelar
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          disabled={!editando.text.trim() || edit.isPending}
+                          onClick={() => edit.mutate({ id: a.id, text: editando.text.trim() }, { onSuccess: () => setEditando(null) })}
+                        >
+                          Guardar nota
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="whitespace-pre-wrap text-sm text-foreground [overflow-wrap:anywhere]">{a.text}</p>
+                  )}
                   <p className="mt-0.5 text-xs text-muted-foreground">
                     {a.author} · {formatDateTime(a.created_at, "d MMM yyyy, HH:mm")}
+                    {a.edited_by ? ` · editada por ${a.edited_by}` : ""}
                   </p>
                 </div>
-                {a.kind === "nota" && a.author === yo && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 shrink-0 text-muted-foreground"
-                    aria-label="Borrar nota"
-                    onClick={() => remove.mutate(a.id)}
-                  >
-                    <Trash2 />
-                  </Button>
+                {editando?.id !== a.id && (
+                  <div className="flex shrink-0 gap-1">
+                    {a.kind === "nota" && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground"
+                        aria-label="Editar nota"
+                        onClick={() => setEditando({ id: a.id, text: a.text })}
+                      >
+                        <Pencil />
+                      </Button>
+                    )}
+                    <ConfirmDelete
+                      title="Borrar del historial"
+                      description="Se borrará este registro para Pablo y Kevin. Esta acción no se puede deshacer."
+                      onConfirm={() => remove.mutate(a.id)}
+                      trigger={
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground"
+                          aria-label="Borrar del historial"
+                        >
+                          <Trash2 />
+                        </Button>
+                      }
+                    />
+                  </div>
                 )}
               </li>
             );

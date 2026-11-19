@@ -126,7 +126,8 @@ export const demoDb = {
       const motivo = v["stage"] === "Perdido" && v["lost_reason"] ? ` Motivo: ${String(v["lost_reason"])}.` : "";
       datos()["client_activity"] = [...(datos()["client_activity"] ?? []), { id: id(), client_id: fid, author: autor(), kind: "etapa", text: `Movió de «${String(previa["stage"])}» a «${String(v["stage"])}».${motivo}`, created_at: ahora, updated_at: ahora }];
     }
-    datos()[t] = (datos()[t] ?? []).map((f) => (f.id === fid ? (nueva = { ...f, ...v, updated_at: new Date().toISOString() }) : f));
+    const extra = t === "client_activity" ? { edited_by: autor() } : {};
+    datos()[t] = (datos()[t] ?? []).map((f) => (f.id === fid ? (nueva = { ...f, ...v, ...extra, updated_at: new Date().toISOString() }) : f));
     guardar();
     if (!nueva) return Promise.reject(new Error("El registro ya no existe"));
     return espera(nueva);

@@ -107,6 +107,15 @@ export function useAddClientNote() {
   });
 }
 
+export function useEditClientNote() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, text }: { id: string; text: string }) => db.actualizar("client_activity", id, { text }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.clientActivity }),
+    onError,
+  });
+}
+
 export function useDeleteClientNote() {
   const qc = useQueryClient();
   return useMutation({

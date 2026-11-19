@@ -217,8 +217,20 @@ export default async (req, context) => {
       return json({ fila });
     }
     if (d.accion === "actualizar") {
-      if (tabla === "client_activity") return json({ error: "El historial no se edita: agrega una nota nueva." }, 400);
       const id = txt(d.id, 60);
+      if (tabla === "client_activity") {
+        // Pablo y Kevin pueden editar cualquier nota; solo cambia el texto y queda quién la editó.
+        const nota = (await leer(tabla)).filas.find((f) => f.id === id);
+        if (!nota) return json({ error: "La nota ya no existe" }, 404);
+        if (nota.kind !== "nota") return json({ error: "Los registros automáticos no se editan; puedes borrarlos." }, 400);
+        const texto = txt(d.valores?.text, 2000);
+        if (!texto) return json({ error: "La nota no puede quedar vacía" }, 400);
+        const fila = await modificar(tabla, (filas) => {
+          const nueva = { ...filas.find((f) => f.id === id), text: texto, edited_by: usuario, updated_at: new Date().toISOString() };
+          return { nuevas: filas.map((f) => (f.id === id ? nueva : f)), resultado: nueva };
+        });
+        return json({ fila });
+      }
       const previo = (await leer(tabla)).filas.find((f) => f.id === id);
       if (!previo) return json({ error: "El registro ya no existe" }, 404);
       const limpio = await limpiar(tabla, d.valores, previo);
@@ -236,11 +248,6 @@ export default async (req, context) => {
       return json({ fila });
     }
     if (d.accion === "eliminar") {
-      if (tabla === "client_activity") {
-        const nota = (await leer(tabla)).filas.find((f) => f.id === txt(d.id, 60));
-        if (!nota) return json({ error: "La nota ya no existe" }, 404);
-        if (nota.kind !== "nota" || nota.author !== usuario) return json({ error: "Solo puedes borrar tus propias notas." }, 403);
-      }
       await eliminarConCascada(tabla, txt(d.id, 60));
       return json({ ok: true });
     }
