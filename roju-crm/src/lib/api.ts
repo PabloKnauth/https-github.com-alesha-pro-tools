@@ -74,6 +74,14 @@ async function llamar<T>(cuerpo: Record<string, unknown>, conSesion = true): Pro
   } catch {
     throw new Error("Sin conexión. Revisa tu internet e intenta de nuevo.");
   }
+  const esJson = (res.headers.get("content-type") ?? "").includes("application/json");
+  if (!esJson) {
+    throw new Error(
+      res.status === 404 || res.ok
+        ? "El servidor del CRM no está activo. En Netlify revisa que el último despliegue esté en verde y que en Logs → Functions aparezca «crm»."
+        : `El servidor respondió con un error (${res.status}). Intenta de nuevo en un minuto.`,
+    );
+  }
   const datos = (await res.json().catch(() => ({}))) as { error?: string } & T;
   if (res.status === 401 && conSesion) {
     cerrarSesion();
@@ -87,6 +95,9 @@ export async function entrar(usuario: Usuario, clave: string) {
   const r = DEMO
     ? { token: "vista-previa", vence: Date.now() + 864e5 * 30 }
     : await llamar<{ token: string; vence: number }>({ accion: "entrar", usuario, clave }, false);
+  if (!r || typeof r.token !== "string" || !r.token) {
+    throw new Error("El servidor no devolvió una sesión. Revisa que la función «crm» esté desplegada en Netlify.");
+  }
   try {
     window.localStorage.setItem(LLAVE, JSON.stringify({ token: r.token, usuario, vence: r.vence }));
   } catch {

@@ -57,7 +57,7 @@ function almacen() {
 }
 
 /* ---------- Sesión ---------- */
-const clave = (u) => process.env[USUARIOS[u]] || "";
+const clave = (u) => (process.env[USUARIOS[u]] || "").trim();
 const configurado = () => RESPONSABLES.every((u) => clave(u).length >= 10);
 const secreto = () => process.env.CRM_TOKEN_SECRET || RESPONSABLES.map(clave).join("\u0000");
 const firmar = (s) => createHmac("sha256", secreto()).update(s).digest("base64url");
@@ -156,6 +156,11 @@ async function eliminarConCascada(tabla, id) {
 }
 
 export default async (req, context) => {
+  // GET /api/crm: diagnóstico sin datos sensibles (no muestra contraseñas, solo si están listas).
+  if (req.method === "GET") {
+    const estado = (u) => { const n = clave(u).length; return n === 0 ? "falta" : n < 10 ? "muy corta (mínimo 10 caracteres)" : "lista"; };
+    return json({ servidor: "activo", CRM_CLAVE_PABLO: estado("Pablo Knauth"), CRM_CLAVE_KEVIN: estado("Kevin Juárez") });
+  }
   if (req.method !== "POST") return json({ error: "Método no permitido" }, 405);
   let d;
   try { d = await req.json(); } catch { return json({ error: "Datos inválidos" }, 400); }
@@ -163,9 +168,9 @@ export default async (req, context) => {
   if (d.accion === "entrar") {
     if (!configurado()) return json({ error: "Falta configurar CRM_CLAVE_PABLO y CRM_CLAVE_KEVIN (mínimo 10 caracteres) en Netlify." }, 503);
     if (!(await limitar(context?.ip))) return json({ error: "Demasiados intentos. Espera 15 minutos." }, 429);
-    if (!RESPONSABLES.includes(d.usuario) || !iguales(d.clave, clave(d.usuario))) {
+    if (!RESPONSABLES.includes(d.usuario) || !iguales(String(d.clave ?? "").trim(), clave(d.usuario))) {
       await new Promise((ok) => setTimeout(ok, 600));
-      return json({ error: "Usuario o contraseña incorrectos" }, 401);
+      return json({ error: "Contraseña incorrecta para " + (RESPONSABLES.includes(d.usuario) ? d.usuario : "ese usuario") + ". Cada uno tiene su propia contraseña." }, 401);
     }
     return json(crearToken(d.usuario));
   }

@@ -33,6 +33,7 @@ function PantallaEntrar() {
   const [clave, setClave] = useState("");
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [ver, setVer] = useState(false);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -85,14 +86,22 @@ function PantallaEntrar() {
         </fieldset>
         <div className="mt-4 grid gap-2">
           <Label htmlFor="clave">Contraseña</Label>
-          <Input
-            id="clave"
-            type="password"
-            autoComplete="current-password"
-            value={clave}
-            onChange={(e) => setClave(e.target.value)}
-            required
-          />
+          <div className="flex gap-2">
+            <Input
+              id="clave"
+              type={ver ? "text" : "password"}
+              autoComplete="current-password"
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck={false}
+              value={clave}
+              onChange={(e) => setClave(e.target.value)}
+              required
+            />
+            <Button type="button" variant="outline" onClick={() => setVer((v) => !v)} aria-pressed={ver}>
+              {ver ? "Ocultar" : "Mostrar"}
+            </Button>
+          </div>
         </div>
         {error && (
           <p role="alert" className="mt-3 text-sm text-status-late">
