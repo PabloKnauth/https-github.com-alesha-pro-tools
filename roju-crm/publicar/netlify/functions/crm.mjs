@@ -58,7 +58,8 @@ function almacen() {
 
 /* ---------- Sesión ---------- */
 const clave = (u) => (process.env[USUARIOS[u]] || "").trim();
-const configurado = () => RESPONSABLES.every((u) => clave(u).length >= 10);
+const lista = (u) => clave(u).length >= 10;
+const configurado = () => RESPONSABLES.some(lista);
 const secreto = () => process.env.CRM_TOKEN_SECRET || RESPONSABLES.map(clave).join("\u0000");
 const firmar = (s) => createHmac("sha256", secreto()).update(s).digest("base64url");
 function iguales(a, b) {
@@ -76,7 +77,7 @@ function usuarioDelToken(req) {
   if (!carga || !firma || !configurado() || !iguales(firma, firmar(carga))) return null;
   try {
     const d = JSON.parse(Buffer.from(carga, "base64url").toString());
-    return d.vence > Date.now() && RESPONSABLES.includes(d.u) ? d.u : null;
+    return d.vence > Date.now() && RESPONSABLES.includes(d.u) && lista(d.u) ? d.u : null;
   } catch { return null; }
 }
 async function limitar(ip) {
@@ -166,7 +167,8 @@ export default async (req, context) => {
   try { d = await req.json(); } catch { return json({ error: "Datos inválidos" }, 400); }
 
   if (d.accion === "entrar") {
-    if (!configurado()) return json({ error: "Falta configurar CRM_CLAVE_PABLO y CRM_CLAVE_KEVIN (mínimo 10 caracteres) en Netlify." }, 503);
+    if (RESPONSABLES.includes(d.usuario) && !lista(d.usuario))
+      return json({ error: `La contraseña de ${d.usuario} no está lista en Netlify: ${USUARIOS[d.usuario]} debe tener 10 caracteres o más. Corrígela y vuelve a desplegar.` }, 503);
     if (!(await limitar(context?.ip))) return json({ error: "Demasiados intentos. Espera 15 minutos." }, 429);
     if (!RESPONSABLES.includes(d.usuario) || !iguales(String(d.clave ?? "").trim(), clave(d.usuario))) {
       await new Promise((ok) => setTimeout(ok, 600));
