@@ -6,6 +6,7 @@
   --surface: #FBF6EC;   /* hoja limpia */
   --fg: #17130F;        /* tinta */
   --muted: #5F5347;
+  --ease-out: cubic-bezier(.23, 1, .32, 1);
   --line: #17130F;
   --shadow: #17130F;
   --tomato: #EC4A27;
@@ -78,9 +79,9 @@ a { color: inherit; }
   text-decoration: none; text-transform: uppercase; letter-spacing: .04em;
   padding: .95em 1.4em; border-radius: 999px; border: 2.5px solid var(--line);
   background: var(--b-bg); color: var(--b-fg); cursor: pointer;
-  box-shadow: 4px 4px 0 var(--shadow); transition: transform .15s ease, box-shadow .15s ease;
+  box-shadow: 4px 4px 0 var(--shadow); transition: transform 150ms var(--ease-out), box-shadow 150ms var(--ease-out);
 }
-.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--shadow); }
+@media (hover: hover) and (pointer: fine) { .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--shadow); } }
 .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); }
 .btn[disabled] { opacity: .55; cursor: not-allowed; transform: none; box-shadow: 2px 2px 0 var(--shadow); }
 .btn--tomato { --b-bg: var(--tomato); --b-fg: var(--on-color); }
@@ -95,10 +96,12 @@ a { color: inherit; }
 /* Foto recortada con borde de papel y cinta */
 .recorte { position: relative; background: #F6EEDF; padding: 10px; border-radius: 6px;
   box-shadow: 0 1px 0 rgba(0,0,0,.08), 8px 10px 0 rgba(23,19,15,.18); }
-.recorte img { border-radius: 3px; }
+.recorte img { border-radius: 3px; width: 100%; }
+.recorte picture { display: block; }
 .cinta { position: absolute; width: 96px; height: 28px; background: color-mix(in srgb, var(--mustard) 70%, transparent);
   box-shadow: 0 1px 2px rgba(0,0,0,.15); }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  /* Sin desplazamientos, pero se conservan los cambios de color y opacidad (retroalimentación). */
+  *, *::before, *::after { animation: none !important; transition-property: color, background-color, border-color, opacity !important; scroll-behavior: auto !important; }
 }

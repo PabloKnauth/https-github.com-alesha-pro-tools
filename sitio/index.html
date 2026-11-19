@@ -80,7 +80,10 @@
         <figure class="recorte hero__retrato">
           <span class="cinta" style="top:-12px;left:22px;transform:rotate(-8deg)"></span>
           <span class="cinta" style="bottom:-10px;right:18px;transform:rotate(6deg)"></span>
-          <img src="assets/img/retrato.jpg" width="1086" height="1448" alt="Pablo Knauth con lentes amarillos, sentado en un sillón">
+          <picture>
+            <source type="image/webp" srcset="assets/img/retrato-560.webp 560w, assets/img/retrato-840.webp 840w, assets/img/retrato-1086.webp 1086w" sizes="(max-width: 760px) 70vw, 360px">
+            <img src="assets/img/retrato.jpg" srcset="assets/img/retrato-sm.jpg 560w, assets/img/retrato.jpg 1086w" sizes="(max-width: 760px) 70vw, 360px" width="1086" height="1448" fetchpriority="high" alt="Pablo Knauth con lentes amarillos, sentado en un sillón">
+          </picture>
         </figure>
         <svg class="doodle hero__d1" viewBox="0 0 100 100" aria-hidden="true"><use href="#g-estrella"/></svg>
         <svg class="doodle hero__d2" viewBox="0 0 100 100" aria-hidden="true"><use href="#g-rayo"/></svg>
@@ -89,11 +92,15 @@
     </div>
   </section>
 
-  <div class="cinta-texto" aria-hidden="true">
-    <div class="cinta-texto__mov">
+  <div class="cinta-texto">
+    <div class="cinta-texto__mov" aria-hidden="true">
       <span>Prompts</span><svg class="i"><use href="#g-estrella"/></svg><span>Skills</span><svg class="i"><use href="#g-estrella"/></svg><span>Plugins</span><svg class="i"><use href="#g-estrella"/></svg><span>Manuales</span><svg class="i"><use href="#g-estrella"/></svg><span>Guías</span><svg class="i"><use href="#g-estrella"/></svg><span>Plantillas</span><svg class="i"><use href="#g-estrella"/></svg>
       <span>Prompts</span><svg class="i"><use href="#g-estrella"/></svg><span>Skills</span><svg class="i"><use href="#g-estrella"/></svg><span>Plugins</span><svg class="i"><use href="#g-estrella"/></svg><span>Manuales</span><svg class="i"><use href="#g-estrella"/></svg><span>Guías</span><svg class="i"><use href="#g-estrella"/></svg><span>Plantillas</span><svg class="i"><use href="#g-estrella"/></svg>
     </div>
+    <button class="cinta-texto__pausa" id="pausar-mov" type="button" aria-pressed="false" aria-label="Pausar animaciones">
+      <svg class="i i--pausa" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+      <svg class="i i--play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+    </button>
   </div>
 
   <section class="seccion" id="biblioteca">

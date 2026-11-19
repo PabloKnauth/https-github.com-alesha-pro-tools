@@ -165,6 +165,19 @@
   if (cP) cP.textContent = nP;
 
   pintarChips(); pintar();
+
+  /* ---------- pausar animaciones (cinta y estrella) ---------- */
+  var bPausa = $("#pausar-mov");
+  function fijarPausa(on) {
+    document.documentElement.classList.toggle("sin-mov", on);
+    if (bPausa) { bPausa.setAttribute("aria-pressed", on ? "true" : "false"); bPausa.setAttribute("aria-label", on ? "Reanudar animaciones" : "Pausar animaciones"); }
+  }
+  try { fijarPausa(localStorage.getItem("pk-sin-mov") === "1"); } catch (e) { fijarPausa(false); }
+  if (bPausa) bPausa.addEventListener("click", function () {
+    var on = !document.documentElement.classList.contains("sin-mov");
+    fijarPausa(on);
+    try { localStorage.setItem("pk-sin-mov", on ? "1" : "0"); } catch (e) {}
+  });
   var abrirSlug = new URLSearchParams(location.search).get("r");
   if (abrirSlug && !desbloqueado) abrir(abrirSlug);
 })();
