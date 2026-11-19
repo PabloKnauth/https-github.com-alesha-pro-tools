@@ -33,3 +33,23 @@ El contenedor tiene un proxy de red que bloquea algunos hosts. Lo que funciona:
   y comprobar contra `model.sha256`. Pasale el audio ya decodificado como array float32 de 16 kHz
   (la versión de PyAV instalada no acepta rutas de archivo).
 - Los archivos que el usuario sube viven fuera del repo; los entregables van al scratchpad o a `films/`.
+
+## Diseño web (sitios de Pablo, Malinalco Mágico, CRM ROJU)
+
+Skills instaladas en `.claude/skills/` (cada una conserva su licencia):
+
+- `design-taste-frontend` (Taste Skill, Leonxlnx): criterio visual y referencias reales; evita diseños genéricos.
+- `ui-ux-pro-max` (nextlevelbuilder): paleta, tipografías y sistema de diseño según el giro del negocio.
+- `impeccable` (Paul Bakaus): reglas de tipografía, espaciado y auditoría (`/impeccable audit`, `/polish`).
+  Su ejecutable se descarga la primera vez; si un permiso lo bloquea, pide autorización al usuario.
+- Skills de Emil Kowalski (`emil-design-eng`, `animate`, `review-animations`, etc.): animación e interacción.
+
+Flujo para cada sitio:
+
+1. Antes de diseñar, pide o busca 2–3 sitios de referencia del mismo giro y estudia su estructura.
+2. Define el sistema (colores, tipografías, espaciado) con `ui-ux-pro-max` respetando la marca del cliente.
+3. Construye y revisa con Playwright (servidor MCP `playwright` en `.mcp.json`, o `require('playwright')`):
+   capturas a 390 px y 1366 px, sin desborde horizontal y sin errores de consola.
+4. Pide a un subagente una auditoría independiente (`/impeccable audit` y revisión de capturas) y corrige
+   hasta que no queden errores.
+5. Figma: si el usuario conectó el conector de Figma en claude.ai, puedes leer sus diseños desde ahí.
