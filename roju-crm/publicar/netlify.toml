@@ -1,0 +1,33 @@
+# CRM de ROJU Consulting en Netlify.
+# Base directory: roju-crm/publicar · Build command: (vacío) · Publish directory: sitio
+# La app ya viene compilada en sitio/ (se genera con roju-crm/scripts/publicar.sh).
+[build]
+  publish = "sitio"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "same-origin"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_shell.html"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+# Todas las rutas del CRM (/clientes, /tareas…) las resuelve la app.
+[[redirects]]
+  from = "/*"
+  to = "/_shell.html"
+  status = 200
