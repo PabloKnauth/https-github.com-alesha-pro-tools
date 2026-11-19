@@ -26,6 +26,22 @@
 
 Si cambias una variable, vuelve a desplegar (Deploys → Trigger deploy).
 
+Dirección publicada: **https://rojuconsulting.netlify.app**
+
+## Si no deja entrar
+
+1. Abre `https://rojuconsulting.netlify.app/api/crm`. Debe responder
+   `{"servidor":"activo","CRM_CLAVE_PABLO":"lista","CRM_CLAVE_KEVIN":"lista"}` (no muestra las contraseñas).
+2. **«This site is private»**: Netlify tiene el proyecto en privado. Project configuration →
+   Visitor access → Edit visibility → **Production visibility: Public**. Es seguro: el CRM tiene su propio
+   inicio de sesión y la API rechaza todo lo que no trae sesión.
+3. **«Site not found»**: el nombre del proyecto no coincide (al recrear un proyecto Netlify le pone uno al azar).
+   Corrígelo en General → Project details → Change project name.
+4. **«falta» o «muy corta»** en el diagnóstico: revisa el nombre exacto de la variable, que tenga 10 caracteres o
+   más y que su *scope* incluya Functions; después Trigger deploy.
+5. **«Contraseña incorrecta para …»**: cada persona tiene su propia contraseña; revisa que esté elegida la
+   persona correcta y usa «Mostrar» para comparar.
+
 ## Actualizar el CRM después de cambiar código
 
 ```bash
