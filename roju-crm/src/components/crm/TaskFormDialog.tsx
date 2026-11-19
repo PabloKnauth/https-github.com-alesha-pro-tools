@@ -87,7 +87,7 @@ export function TaskFormDialog({
         </DialogHeader>
         <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
           <Field label="Tarea" htmlFor="t-title" required className="sm:col-span-2">
-            <Input id="t-title" value={form.title} onChange={(e) => set("title", e.target.value)} autoFocus />
+            <Input id="t-title" maxLength={200} value={form.title} onChange={(e) => set("title", e.target.value)} autoFocus />
           </Field>
           {ownerOptions && (
             <Field label={ownerLabel} htmlFor="t-owner" required>
@@ -129,7 +129,7 @@ export function TaskFormDialog({
             </div>
           </Field>
           <Field label="Notas" htmlFor="t-notes" className="sm:col-span-2">
-            <Textarea id="t-notes" rows={3} value={form.notes} onChange={(e) => set("notes", e.target.value)} />
+            <Textarea id="t-notes" rows={3} maxLength={5000} value={form.notes} onChange={(e) => set("notes", e.target.value)} />
           </Field>
           <DialogFooter className="gap-2 sm:col-span-2 sm:justify-between">
             {isEditing && onDelete ? (

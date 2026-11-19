@@ -101,7 +101,7 @@ export function AppointmentFormDialog({
         </DialogHeader>
         <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
           <Field label="Asunto" htmlFor="a-title" required className="sm:col-span-2">
-            <Input id="a-title" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <Input id="a-title" maxLength={200} value={title} onChange={(e) => setTitle(e.target.value)} />
           </Field>
           <Field label="Fecha y hora" htmlFor="a-start" required>
             <Input id="a-start" type="datetime-local" value={startsAt} onChange={(e) => setStartsAt(e.target.value)} />
@@ -128,7 +128,7 @@ export function AppointmentFormDialog({
             <MeetButtons meetLink={meetLink} calendarUrl={calendarUrl} />
           </div>
           <Field label="Notas" htmlFor="a-notes" className="sm:col-span-2">
-            <Textarea id="a-notes" rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} />
+            <Textarea id="a-notes" rows={3} maxLength={5000} value={notes} onChange={(e) => setNotes(e.target.value)} />
           </Field>
           <DialogFooter className="gap-2 sm:col-span-2 sm:justify-between">
             {appointment ? (

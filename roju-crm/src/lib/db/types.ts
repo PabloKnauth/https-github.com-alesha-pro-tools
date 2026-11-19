@@ -14,9 +14,43 @@ export type Database = {
   }
   public: {
     Tables: {
+      client_activity: {
+        Row: {
+          author: string
+          client_id: string
+          created_at: string
+          id: string
+          kind: string
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string
+          client_id: string
+          created_at?: string
+          id?: string
+          kind?: string
+          text: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          client_id?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           company: string
+          deal_type: string
+          deal_value: number | null
+          lost_reason: string
+          source: string
           contact: string
           created_at: string
           email: string
@@ -33,6 +67,10 @@ export type Database = {
         }
         Insert: {
           company?: string
+          deal_type?: string
+          deal_value?: number | null
+          lost_reason?: string
+          source?: string
           contact?: string
           created_at?: string
           email?: string
@@ -49,6 +87,10 @@ export type Database = {
         }
         Update: {
           company?: string
+          deal_type?: string
+          deal_value?: number | null
+          lost_reason?: string
+          source?: string
           contact?: string
           created_at?: string
           email?: string

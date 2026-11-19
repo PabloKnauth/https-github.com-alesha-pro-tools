@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ClientFormDialog } from "@/components/crm/ClientFormDialog";
+import { LostReasonDialog } from "@/components/crm/LostReasonDialog";
 import {
   ALL,
   ChoiceSelect,
@@ -29,6 +30,7 @@ import {
   RESPONSABLES,
   SERVICES,
   STAGES,
+  formatMoney,
   matchesSearch,
   whatsappUrl,
   type Client,
@@ -72,6 +74,7 @@ function ClientsPage() {
   const [editing, setEditing] = useState<Client | null>(null);
   const [creatingStage, setCreatingStage] = useState<Stage | null>(null);
   const [dragOver, setDragOver] = useState<Stage | null>(null);
+  const [perdiendo, setPerdiendo] = useState<Client | null>(null);
 
   const filtered = useMemo(
     () =>
@@ -88,7 +91,14 @@ function ClientsPage() {
   const dialogOpen = editing !== null || creatingStage !== null;
 
   function moveTo(id: string, stage: Stage) {
-    update.mutate({ id, values: { stage } });
+    if (stage === "Perdido") {
+      const c = clients.data?.find((x) => x.id === id);
+      if (c) {
+        setPerdiendo(c);
+        return;
+      }
+    }
+    update.mutate({ id, values: { stage, ...(stage !== "Perdido" ? { lost_reason: "" } : {}) } });
   }
 
   function onDrop(e: DragEvent, stage: Stage) {
@@ -197,6 +207,11 @@ function ClientsPage() {
                       {list.length}
                     </span>
                   </header>
+                  {list.some((c) => c.deal_value != null) && (
+                    <p className="-mt-2 mb-3 px-1 text-xs tabular-nums text-muted-foreground">
+                      {formatMoney(list.reduce((t, c) => t + (c.deal_value ?? 0), 0))} en esta etapa
+                    </p>
+                  )}
                   <div className="flex min-h-24 flex-1 flex-col gap-3">
                     {list.map((c) => (
                       <ClientCard
@@ -238,6 +253,15 @@ function ClientsPage() {
         }}
         client={editing}
         defaultStage={creatingStage ?? undefined}
+      />
+      <LostReasonDialog
+        open={perdiendo !== null}
+        clientName={perdiendo?.name ?? ""}
+        onCancel={() => setPerdiendo(null)}
+        onConfirm={(reason) => {
+          if (perdiendo) update.mutate({ id: perdiendo.id, values: { stage: "Perdido", lost_reason: reason } });
+          setPerdiendo(null);
+        }}
       />
     </>
   );
@@ -298,7 +322,20 @@ function ClientCard({
       <button type="button" onClick={onOpen} className="mt-3 block w-full cursor-pointer space-y-2 text-left">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="service">{client.service}</Badge>
+          {client.deal_value != null && (
+            <span className="text-xs font-semibold tabular-nums text-foreground">
+              {formatMoney(client.deal_value)}
+              {client.deal_type === "Iguala mensual" ? " /mes" : ""}
+            </span>
+          )}
         </div>
+        {(client.source || (client.stage === "Perdido" && client.lost_reason)) && (
+          <p className="text-xs text-muted-foreground">
+            {client.source ? `Origen: ${client.source}` : ""}
+            {client.source && client.stage === "Perdido" && client.lost_reason ? " · " : ""}
+            {client.stage === "Perdido" && client.lost_reason ? `Motivo: ${client.lost_reason}` : ""}
+          </p>
+        )}
         <dl className="space-y-1 text-xs">
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <CalendarClock className="h-3.5 w-3.5 shrink-0" />

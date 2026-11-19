@@ -13,7 +13,7 @@ import {
   SearchInput,
 } from "@/components/crm/ui-bits";
 import { useDeleteSupplier, useSaveSupplier, useSuppliers } from "@/hooks/use-crm";
-import { matchesSearch, type Supplier } from "@/lib/crm";
+import { LIMITS, matchesSearch, type Supplier } from "@/lib/crm";
 
 export const Route = createFileRoute("/proveedores")({
   head: () => ({
@@ -30,12 +30,12 @@ export const Route = createFileRoute("/proveedores")({
 });
 
 const FIELDS: RecordField[] = [
-  { key: "name", label: "Nombre / empresa", required: true, wide: true },
-  { key: "contact_person", label: "Persona de contacto" },
-  { key: "product_service", label: "Producto o servicio", placeholder: "Impresión, fotografía, hosting..." },
-  { key: "email", label: "Correo", type: "email" },
-  { key: "phone", label: "Teléfono", type: "tel" },
-  { key: "notes", label: "Notas", type: "textarea" },
+  { key: "name", label: "Nombre / empresa", required: true, wide: true, maxLength: LIMITS.supplierName },
+  { key: "contact_person", label: "Persona de contacto", maxLength: LIMITS.contact },
+  { key: "product_service", label: "Producto o servicio", placeholder: "Impresión, fotografía, hosting...", maxLength: LIMITS.productService },
+  { key: "email", label: "Correo", type: "email", maxLength: LIMITS.email },
+  { key: "phone", label: "Teléfono", type: "tel", maxLength: LIMITS.phone },
+  { key: "notes", label: "Notas", type: "textarea", maxLength: LIMITS.notes },
 ];
 
 function SuppliersPage() {
@@ -100,7 +100,7 @@ function SuppliersPage() {
       ) : list.length === 0 ? (
         <EmptyState title="Sin resultados" description="Prueba con otra búsqueda." />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {list.map((s) => (
             <button
               type="button"

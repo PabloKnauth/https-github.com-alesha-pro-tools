@@ -27,6 +27,7 @@ import {
   useUpdateCollaboratorTaskStatus,
 } from "@/hooks/use-crm";
 import {
+  LIMITS,
   TASK_STATUSES,
   initials,
   matchesSearch,
@@ -59,11 +60,11 @@ export const Route = createFileRoute("/colaboradores")({
 });
 
 const COLLAB_FIELDS: RecordField[] = [
-  { key: "name", label: "Nombre", required: true },
-  { key: "role", label: "Función", placeholder: "Diseño, fotografía, desarrollo..." },
-  { key: "email", label: "Correo", type: "email" },
-  { key: "phone", label: "Teléfono / WhatsApp", type: "tel" },
-  { key: "notes", label: "Notas", type: "textarea" },
+  { key: "name", label: "Nombre", required: true, maxLength: LIMITS.name },
+  { key: "role", label: "Función", placeholder: "Diseño, fotografía, desarrollo...", maxLength: LIMITS.role },
+  { key: "email", label: "Correo", type: "email", maxLength: LIMITS.email },
+  { key: "phone", label: "Teléfono / WhatsApp", type: "tel", maxLength: LIMITS.phone },
+  { key: "notes", label: "Notas", type: "textarea", maxLength: LIMITS.notes },
 ];
 
 function CollaboratorsPage() {
@@ -132,7 +133,7 @@ function CollaboratorsPage() {
           }
         />
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
           <aside className="space-y-3">
             <SearchInput value={search} onChange={setSearch} placeholder="Buscar colaborador" />
             <ul className="space-y-2">
@@ -290,9 +291,9 @@ function CollaboratorDetail({ collaborator, onEdit }: { collaborator: Collaborat
         </div>
         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
           {collaborator.email ? (
-            <a href={`mailto:${collaborator.email}`} className="inline-flex items-center gap-2 text-primary-soft hover:underline">
-              <Mail className="h-4 w-4" />
-              {collaborator.email}
+            <a href={`mailto:${collaborator.email}`} className="inline-flex min-w-0 max-w-full items-center gap-2 text-primary-soft hover:underline [overflow-wrap:anywhere]">
+              <Mail className="h-4 w-4 shrink-0" />
+              <span className="min-w-0">{collaborator.email}</span>
             </a>
           ) : (
             <span className="inline-flex items-center gap-2 text-muted-foreground">
@@ -455,7 +456,7 @@ function AppointmentRow({
           </p>
           {appt.notes && <p className="mt-2 text-xs text-muted-foreground">{appt.notes}</p>}
         </div>
-        <Button variant="ghost" size="sm" onClick={onEdit}>
+        <Button variant="ghost" size="sm" onClick={onEdit} aria-label={`Editar cita: ${appt.title}`}>
           <Pencil />
           Editar
         </Button>

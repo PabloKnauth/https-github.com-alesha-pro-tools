@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { cerrarSesion, DEMO, leerSesion } from "@/lib/api";
 import { reiniciarEjemplo } from "@/lib/demo";
+import { BackupDialog } from "./BackupDialog";
 
 const NAV = [
   { to: "/", label: "Hoy y esta semana" },
@@ -69,8 +70,9 @@ export function AppShell({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-4 pt-4 sm:px-6 lg:px-8">
           <BrandMark />
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <span className="hidden text-xs text-muted-foreground sm:block">{leerSesion()?.usuario}</span>
+            <BackupDialog />
             <button
               type="button"
               onClick={cerrarSesion}

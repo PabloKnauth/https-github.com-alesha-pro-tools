@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { CalendarX2, Trash2 } from "lucide-react";
+import { CalendarPlus, CalendarX2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { ChoiceSelect, Field } from "./ui-bits";
 import { ConfirmDelete } from "./ConfirmDelete";
 import { useDeleteClient, useSaveClient } from "@/hooks/use-crm";
-import { RESPONSABLES, SERVICES, STAGES, type Client, type ClientInsert, type Stage } from "@/lib/crm";
+import {
+  DEAL_TYPES,
+  LIMITS,
+  LOST_REASONS,
+  RESPONSABLES,
+  SERVICES,
+  SOURCES,
+  STAGES,
+  type Client,
+  type ClientInsert,
+  type Stage,
+} from "@/lib/crm";
+import { buildGoogleCalendarUrl } from "@/lib/google";
+import { ClientHistory } from "./ClientHistory";
+import { WhatsAppTemplate } from "./WhatsAppTemplate";
 import { fromDateTimeLocal, toDateTimeLocal } from "@/lib/dates";
 
 type FormState = {
@@ -30,7 +44,13 @@ type FormState = {
   notes: string;
   next_follow_up: string;
   next_appointment: string;
+  deal_value: string;
+  deal_type: string;
+  source: string;
+  lost_reason: string;
 };
+
+const SIN_DATO = "Sin dato";
 
 function toForm(client: Client | null | undefined, defaultStage?: Stage): FormState {
   return {
@@ -45,6 +65,10 @@ function toForm(client: Client | null | undefined, defaultStage?: Stage): FormSt
     notes: client?.notes ?? "",
     next_follow_up: client?.next_follow_up ?? "",
     next_appointment: toDateTimeLocal(client?.next_appointment),
+    deal_value: client?.deal_value != null ? String(client.deal_value) : "",
+    deal_type: client?.deal_type || DEAL_TYPES[0],
+    source: client?.source || SIN_DATO,
+    lost_reason: client?.lost_reason || LOST_REASONS[0],
   };
 }
 
@@ -76,6 +100,11 @@ export function ClientFormDialog({
       toast.error("Escribe el nombre del cliente");
       return;
     }
+    const monto = form.deal_value.trim() === "" ? null : Number(form.deal_value.replace(/[$,\s]/g, ""));
+    if (monto !== null && (!Number.isFinite(monto) || monto < 0)) {
+      toast.error("Escribe el valor del trato solo con números, por ejemplo 15000");
+      return;
+    }
     const values: ClientInsert = {
       name: form.name.trim(),
       company: form.company.trim(),
@@ -88,6 +117,10 @@ export function ClientFormDialog({
       notes: form.notes.trim(),
       next_follow_up: form.next_follow_up || null,
       next_appointment: fromDateTimeLocal(form.next_appointment),
+      deal_value: monto,
+      deal_type: form.deal_type,
+      source: form.source === SIN_DATO ? "" : form.source,
+      lost_reason: form.stage === "Perdido" ? form.lost_reason : "",
     };
     save.mutate(
       { id: client?.id, values },
@@ -114,24 +147,25 @@ export function ClientFormDialog({
 
         <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
           <Field label="Nombre" htmlFor="c-name" required>
-            <Input id="c-name" value={form.name} onChange={(e) => set("name", e.target.value)} autoFocus />
+            <Input id="c-name" maxLength={LIMITS.name} value={form.name} onChange={(e) => set("name", e.target.value)} autoFocus />
           </Field>
           <Field label="Empresa" htmlFor="c-company">
-            <Input id="c-company" value={form.company} onChange={(e) => set("company", e.target.value)} />
+            <Input id="c-company" maxLength={LIMITS.company} value={form.company} onChange={(e) => set("company", e.target.value)} />
           </Field>
           <Field label="Contacto" htmlFor="c-contact">
             <Input
               id="c-contact"
+              maxLength={LIMITS.contact}
               value={form.contact}
               onChange={(e) => set("contact", e.target.value)}
               placeholder="Persona de contacto"
             />
           </Field>
           <Field label="Correo" htmlFor="c-email">
-            <Input id="c-email" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} />
+            <Input id="c-email" maxLength={LIMITS.email} type="email" value={form.email} onChange={(e) => set("email", e.target.value)} />
           </Field>
           <Field label="Teléfono / WhatsApp" htmlFor="c-phone">
-            <Input id="c-phone" type="tel" value={form.phone} onChange={(e) => set("phone", e.target.value)} />
+            <Input id="c-phone" maxLength={LIMITS.phone} type="tel" value={form.phone} onChange={(e) => set("phone", e.target.value)} />
           </Field>
           <Field label="Servicio" htmlFor="c-service">
             <ChoiceSelect id="c-service" value={form.service} onChange={(v) => set("service", v)} options={SERVICES} />
@@ -146,6 +180,26 @@ export function ClientFormDialog({
           </Field>
           <Field label="Etapa" htmlFor="c-stage">
             <ChoiceSelect id="c-stage" value={form.stage} onChange={(v) => set("stage", v)} options={STAGES} />
+          </Field>
+          {form.stage === "Perdido" && (
+            <Field label="Motivo de pérdida" htmlFor="c-lost">
+              <ChoiceSelect id="c-lost" value={form.lost_reason} onChange={(v) => set("lost_reason", v)} options={LOST_REASONS} />
+            </Field>
+          )}
+          <Field label="Origen del cliente" htmlFor="c-source" hint="¿Por dónde llegó? Sirve para saber qué canal funciona.">
+            <ChoiceSelect id="c-source" value={form.source} onChange={(v) => set("source", v)} options={[SIN_DATO, ...SOURCES]} />
+          </Field>
+          <Field label="Valor del trato (MXN)" htmlFor="c-value" hint="Opcional. Monto total o mensual.">
+            <Input
+              id="c-value"
+              inputMode="decimal"
+              placeholder="Ej.: 15000"
+              value={form.deal_value}
+              onChange={(e) => set("deal_value", e.target.value)}
+            />
+          </Field>
+          <Field label="Tipo de cobro" htmlFor="c-dealtype">
+            <ChoiceSelect id="c-dealtype" value={form.deal_type} onChange={(v) => set("deal_type", v)} options={DEAL_TYPES} />
           </Field>
           <Field label="Próximo seguimiento" htmlFor="c-follow">
             <Input
@@ -174,10 +228,46 @@ export function ClientFormDialog({
                 </Button>
               )}
             </div>
+            {form.next_appointment && fromDateTimeLocal(form.next_appointment) && (
+              <Button asChild type="button" variant="ghost" size="sm" className="mt-1 justify-start px-0 text-primary-soft">
+                <a
+                  href={buildGoogleCalendarUrl({
+                    title: `ROJU · ${form.name || "Cita con cliente"}`,
+                    start: new Date(fromDateTimeLocal(form.next_appointment)!),
+                    durationMinutes: 60,
+                    details: [form.company, form.contact, form.phone, `Servicio: ${form.service}`, `Responsable: ${form.responsable}`]
+                      .filter(Boolean)
+                      .join("\n"),
+                    guests: form.email ? [form.email] : [],
+                  })}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <CalendarPlus />
+                  Crear cita en Google Calendar
+                </a>
+              </Button>
+            )}
           </Field>
           <Field label="Notas" htmlFor="c-notes" className="sm:col-span-2">
-            <Textarea id="c-notes" rows={4} value={form.notes} onChange={(e) => set("notes", e.target.value)} />
+            <Textarea
+              id="c-notes"
+              rows={4}
+              maxLength={LIMITS.notes}
+              value={form.notes}
+              onChange={(e) => set("notes", e.target.value)}
+            />
+            {form.notes.length > LIMITS.notes * 0.8 && (
+              <p className="mt-1 text-right text-xs text-muted-foreground" aria-live="polite">
+                {form.notes.length.toLocaleString("es-MX")} / {LIMITS.notes.toLocaleString("es-MX")} caracteres
+              </p>
+            )}
           </Field>
+          {client && (
+            <>
+              <WhatsAppTemplate client={{ ...client, stage: form.stage, responsable: form.responsable, phone: form.phone, name: form.name, contact: form.contact }} />
+            </>
+          )}
 
           <DialogFooter className="gap-2 sm:col-span-2 sm:justify-between">
             {client ? (
@@ -212,6 +302,7 @@ export function ClientFormDialog({
             </div>
           </DialogFooter>
         </form>
+        {client && <ClientHistory clientId={client.id} />}
       </DialogContent>
     </Dialog>
   );

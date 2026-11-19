@@ -186,3 +186,13 @@
   scrollbar-width: thin;
   scrollbar-color: var(--color-input) transparent;
 }
+
+/* Controles de 44 px en pantallas táctiles (en computadora el diseño no cambia). */
+@media (pointer: coarse) {
+  :where(button, [role="combobox"], select, input:not([type="checkbox"]):not([type="radio"])) {
+    min-height: 44px;
+  }
+  :where(main a[href]) {
+    min-height: 32px;
+  }
+}

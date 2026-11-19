@@ -117,7 +117,7 @@ function AgendaPage() {
       ) : error ? (
         <ErrorBlock message={error.message} />
       ) : (
-        <div className="grid gap-3 md:grid-cols-7">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-7">
           {days.map((day) => {
             const list = events.filter((e) => isSameDay(e.start, day));
             const today = isToday(day);

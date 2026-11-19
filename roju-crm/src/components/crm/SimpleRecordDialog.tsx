@@ -22,6 +22,7 @@ export type RecordField = {
   type?: "text" | "email" | "tel" | "textarea";
   placeholder?: string;
   wide?: boolean;
+  maxLength?: number;
 };
 
 /** Generic dialog for simple directory records (collaborators, suppliers). */
@@ -90,6 +91,7 @@ export function SimpleRecordDialog({
                 <Textarea
                   id={`r-${f.key}`}
                   rows={3}
+                  maxLength={f.maxLength}
                   value={values[f.key] ?? ""}
                   placeholder={f.placeholder}
                   onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))}
@@ -98,6 +100,7 @@ export function SimpleRecordDialog({
                 <Input
                   id={`r-${f.key}`}
                   type={f.type ?? "text"}
+                  maxLength={f.maxLength}
                   value={values[f.key] ?? ""}
                   placeholder={f.placeholder}
                   autoFocus={i === 0}

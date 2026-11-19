@@ -33,6 +33,7 @@ export const crmKeys = {
   collaboratorTasks: ["collaborator_tasks"] as const,
   collaboratorAppointments: ["collaborator_appointments"] as const,
   suppliers: ["suppliers"] as const,
+  clientActivity: ["client_activity"] as const,
 };
 
 /* ---------- Queries ---------- */
@@ -86,7 +87,34 @@ export function useSuppliers() {
   });
 }
 
+export function useClientActivity() {
+  return useQuery({
+    queryKey: crmKeys.clientActivity,
+    queryFn: () => db.listar("client_activity").then((f) => ordenar<"client_activity">(f, "created_at", false)),
+    refetchInterval: SHARED_REFRESH_MS,
+  });
+}
+
 /* ---------- Mutations ---------- */
+
+export function useAddClientNote() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ client_id, text }: { client_id: string; text: string }) =>
+      db.crear("client_activity", { client_id, text, kind: "nota" }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.clientActivity }),
+    onError,
+  });
+}
+
+export function useDeleteClientNote() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => db.eliminar("client_activity", id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.clientActivity }),
+    onError,
+  });
+}
 
 type Save<T> = { id?: string; values: T };
 
@@ -97,7 +125,10 @@ export function useSaveClient() {
       id
         ? db.actualizar("clients", id, values)
         : db.crear("clients", values),
-    onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.clients }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: crmKeys.clients });
+      qc.invalidateQueries({ queryKey: crmKeys.clientActivity });
+    },
     onError,
   });
 }
@@ -107,7 +138,10 @@ export function useUpdateClient() {
   return useMutation({
     mutationFn: ({ id, values }: { id: string; values: Partial<ClientInsert> }) =>
       db.actualizar("clients", id, values),
-    onSuccess: () => qc.invalidateQueries({ queryKey: crmKeys.clients }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: crmKeys.clients });
+      qc.invalidateQueries({ queryKey: crmKeys.clientActivity });
+    },
     onError,
   });
 }
@@ -119,6 +153,7 @@ export function useDeleteClient() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: crmKeys.clients });
       qc.invalidateQueries({ queryKey: crmKeys.tasks });
+      qc.invalidateQueries({ queryKey: crmKeys.clientActivity });
     },
     onError,
   });

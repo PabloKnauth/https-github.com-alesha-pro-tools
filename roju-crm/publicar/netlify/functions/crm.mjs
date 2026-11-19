@@ -11,6 +11,9 @@ const RESPONSABLES = Object.keys(USUARIOS);
 const SERVICIOS = ["Estrategia", "Identidad", "Redes sociales", "Contenido", "Web", "Pauta"];
 const ETAPAS = ["Nuevo contacto", "Contactado", "Diagnóstico agendado", "Propuesta enviada", "Negociación", "Cliente ganado", "Perdido"];
 const ESTATUS = ["Pendiente", "En proceso", "Terminada"];
+const ORIGENES = ["", "Instagram", "Facebook", "Meta Ads", "Google", "Sitio web", "WhatsApp", "Referido", "Evento o networking", "Otro"];
+const MOTIVOS = ["", "Precio", "Eligió a otra agencia", "No era el momento", "Sin presupuesto", "Dejó de responder", "No encajaba con nuestros servicios", "Otro"];
+const COBROS = ["Pago único", "Iguala mensual"];
 const DIAS_SESION = 30;
 
 // Mismo esquema que la base original (drizzle/migrations/0000_create_crm_tables.sql en el ZIP de Lovable).
@@ -21,6 +24,12 @@ const ESQUEMA = {
     name: { ...T(120), requerido: true }, company: T(120), contact: T(120), email: T(160), phone: T(40),
     service: E(SERVICIOS), responsable: E(RESPONSABLES), stage: E(ETAPAS), notes: T(5000),
     next_follow_up: { tipo: "fecha" }, next_appointment: { tipo: "instante" },
+    deal_value: { tipo: "monto" }, deal_type: E(COBROS), source: E(ORIGENES), lost_reason: E(MOTIVOS),
+  },
+  // Historial del cliente: notas con fecha y autor, y cambios de etapa (estos los escribe el servidor).
+  client_activity: {
+    client_id: { tipo: "ref", tabla: "clients", requerido: true }, kind: { tipo: "enum", opciones: ["nota"], def: "nota" },
+    text: { ...T(2000), requerido: true },
   },
   tasks: {
     title: { ...T(200), requerido: true }, client_id: { tipo: "ref", tabla: "clients", requerido: true },
@@ -43,7 +52,7 @@ const ESQUEMA = {
 };
 // Borrado en cascada (ON DELETE CASCADE del esquema original).
 const CASCADA = {
-  clients: [["tasks", "client_id"]],
+  clients: [["tasks", "client_id"], ["client_activity", "client_id"]],
   collaborators: [["collaborator_tasks", "collaborator_id"], ["collaborator_appointments", "collaborator_id"]],
 };
 
@@ -115,6 +124,12 @@ function valor(def, v) {
       return s;
     }
     case "ref": return txt(v, 60);
+    case "monto": {
+      if (v == null || v === "") return null;
+      const n = Math.round(Number(v) * 100) / 100;
+      if (!Number.isFinite(n) || n < 0 || n > 1e9) throw new ErrorDatos("Monto inválido");
+      return n;
+    }
   }
 }
 async function limpiar(tabla, entrada, previo) {
@@ -146,6 +161,12 @@ async function modificar(tabla, cambio) {
   }
   throw new Error("Otra persona está guardando al mismo tiempo. Intenta de nuevo.");
 }
+async function registrar(client_id, author, kind, text) {
+  const ahora = new Date().toISOString();
+  const fila = { id: randomUUID(), client_id, author, kind, text: txt(text, 2000), created_at: ahora, updated_at: ahora };
+  await modificar("client_activity", (filas) => ({ nuevas: [...filas, fila], resultado: fila }));
+}
+
 async function eliminarConCascada(tabla, id) {
   await modificar(tabla, (filas) => {
     if (!filas.some((f) => f.id === id)) throw new ErrorDatos("El registro ya no existe");
@@ -187,13 +208,16 @@ export default async (req, context) => {
     if (d.accion === "crear") {
       const base = await limpiar(tabla, d.valores, null), ahora = new Date().toISOString();
       const fila = { ...base, id: randomUUID(), created_at: ahora, updated_at: ahora };
+      if (tabla === "client_activity") fila.author = usuario;
       await modificar(tabla, (filas) => {
         if (filas.length >= 20000) throw new ErrorDatos("Se alcanzó el límite de registros");
         return { nuevas: [...filas, fila], resultado: fila };
       });
+      if (tabla === "clients") await registrar(fila.id, usuario, "creado", `Registró al cliente en la etapa «${fila.stage}».`);
       return json({ fila });
     }
     if (d.accion === "actualizar") {
+      if (tabla === "client_activity") return json({ error: "El historial no se edita: agrega una nota nueva." }, 400);
       const id = txt(d.id, 60);
       const previo = (await leer(tabla)).filas.find((f) => f.id === id);
       if (!previo) return json({ error: "El registro ya no existe" }, 404);
@@ -205,9 +229,18 @@ export default async (req, context) => {
         const nueva = { ...actual, ...cambios, updated_at: new Date().toISOString() };
         return { nuevas: filas.map((f) => (f.id === id ? nueva : f)), resultado: nueva };
       });
+      if (tabla === "clients" && previo.stage !== fila.stage) {
+        const motivo = fila.stage === "Perdido" && fila.lost_reason ? ` Motivo: ${fila.lost_reason}.` : "";
+        await registrar(id, usuario, "etapa", `Movió de «${previo.stage}» a «${fila.stage}».${motivo}`);
+      }
       return json({ fila });
     }
     if (d.accion === "eliminar") {
+      if (tabla === "client_activity") {
+        const nota = (await leer(tabla)).filas.find((f) => f.id === txt(d.id, 60));
+        if (!nota) return json({ error: "La nota ya no existe" }, 404);
+        if (nota.kind !== "nota" || nota.author !== usuario) return json({ error: "Solo puedes borrar tus propias notas." }, 403);
+      }
       await eliminarConCascada(tabla, txt(d.id, 60));
       return json({ ok: true });
     }
