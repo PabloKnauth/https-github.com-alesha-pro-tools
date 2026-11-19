@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import logoRoju from "@/assets/logo-roju.png";
 import { Link } from "@tanstack/react-router";
 import { cerrarSesion, DEMO, leerSesion } from "@/lib/api";
 import { reiniciarEjemplo } from "@/lib/demo";
@@ -16,21 +17,23 @@ const NAV = [
   { to: "/agenda", label: "Agenda" },
 ] as const;
 
-/** Wordmark del manual: ROJU con la R en azul y la J en naranja, CONSULTING debajo. */
+/** Logotipo oficial de ROJU (imagen) con «CONSULTING» debajo. */
 export function Wordmark({ size = "md" }: { size?: "md" | "lg" }) {
   const grande = size === "lg";
   return (
     <span className="inline-flex flex-col items-start leading-none" aria-label="ROJU Consulting">
-      <span
+      <img
+        src={logoRoju}
+        alt=""
         aria-hidden="true"
-        className={`font-display font-extrabold tracking-[0.04em] text-white ${grande ? "text-4xl" : "text-[22px]"}`}
-      >
-        <span className="text-roju-digital">R</span>O<span className="text-highlight">J</span>U
-      </span>
+        width={480}
+        height={132}
+        className={grande ? "h-12 w-auto" : "h-7 w-auto"}
+      />
       <span
         aria-hidden="true"
         className={`font-display font-semibold uppercase text-muted-foreground ${
-          grande ? "mt-1.5 text-[11px] tracking-[0.42em]" : "mt-1 text-[8.5px] tracking-[0.36em]"
+          grande ? "mt-2 self-center text-[11px] tracking-[0.42em]" : "mt-1 text-[8.5px] tracking-[0.36em]"
         }`}
       >
         Consulting

@@ -21,6 +21,19 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# App instalable: el service worker se revisa en cada visita para que las actualizaciones lleguen al instante.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+    Cache-Control = "no-cache"
+
 [[headers]]
   for = "/_shell.html"
   [headers.values]

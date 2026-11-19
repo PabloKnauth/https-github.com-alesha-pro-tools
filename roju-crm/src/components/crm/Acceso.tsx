@@ -13,6 +13,13 @@ export function Acceso({ children }: { children: ReactNode }) {
   const qc = useQueryClient();
 
   useEffect(() => {
+    // App instalable: registra el service worker (no en la vista previa ni en desarrollo local).
+    if (!DEMO && "serviceWorker" in navigator && location.protocol === "https:") {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
+
+  useEffect(() => {
     const leer = () => setUsuario(leerSesion()?.usuario ?? null);
     leer();
     setListo(true);
