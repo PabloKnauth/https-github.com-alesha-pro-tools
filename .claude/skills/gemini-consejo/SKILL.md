@@ -1,6 +1,6 @@
 ---
-name: consejo
-description: Consejo de IAs. Consulta a Gemini (y a ChatGPT cuando esté conectado) sobre la pregunta del usuario, compara sus respuestas con la de Claude y entrega una recomendación. Usar con /consejo, "pregúntale a Gemini", "segunda opinión", "qué opinan las otras IAs".
+name: gemini-consejo
+description: Consejo de IAs. Consulta a Gemini (y a ChatGPT cuando esté conectado) sobre la pregunta del usuario, compara sus respuestas con la de Claude y entrega una recomendación. Usar con /gemini-consejo, "pregúntale a Gemini", "segunda opinión", "qué opinan las otras IAs".
 argument-hint: "<pregunta>"
 ---
 
@@ -10,7 +10,7 @@ argument-hint: "<pregunta>"
 2. Consulta a Gemini con la pregunta completa y el contexto necesario (sin datos confidenciales de clientes:
    el nivel gratuito de Google puede usar las consultas para entrenar):
    ```bash
-   .claude/skills/consejo/ask_gemini.sh "<pregunta con contexto>"
+   .claude/skills/gemini-consejo/ask_gemini.sh "<pregunta con contexto>"
    ```
    Segundo argumento opcional: modelo (por defecto `gemini-3-flash-preview`; Pro no tiene cuota gratuita).
    Si devuelve `ERROR Gemini`, dilo tal cual y sigue solo con tu respuesta.
