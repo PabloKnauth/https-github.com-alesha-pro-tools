@@ -9,8 +9,7 @@ Sitio estático (HTML, CSS y JS sin dependencias). Se publica tal cual en Netlif
 - Al tener dominio, cambiar `og:image` en `index.html` por la URL absoluta (`https://<dominio>/assets/img/compartir.jpg`).
 
 ## Contenido
-Textos, precios y medios salen del Instagram @motoroka_fixshop. Pendiente de confirmar con el cliente:
-la dirección exacta (calle o colonia) para el botón "Cómo llegar". Confirmados: horario, WhatsApp 722 666 5997, logotipos, Matt 250 y frases.
+Textos, precios y medios salen del Instagram @motoroka_fixshop. Datos confirmados por el cliente: horario, WhatsApp 722 666 5997, ubicación en Google Maps, logotipos, Matt 250 y frases.
 
 ## Medios
 - `assets/vid/portada.mp4` (escritorio) y `portada-movil.mp4` (teléfono, vertical).
