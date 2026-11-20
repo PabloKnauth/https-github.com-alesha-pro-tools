@@ -49,7 +49,9 @@ button { font: inherit; color: inherit; }
 h1, h2, h3, p, ul, ol, figure { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-:focus-visible { outline: 3px solid var(--azul-claro); outline-offset: 3px; border-radius: 4px; }
+:focus-visible { outline: 3px solid var(--anillo, var(--azul)); outline-offset: 3px; border-radius: 4px; }
+.portada, .barra, .cinta, .declaracion, .videos, .pie, .visor { --anillo: var(--azul-claro); }
+.cinta { --anillo: #fff; }
 
 .saltar {
   position: fixed; left: 16px; top: 12px; z-index: 100; padding: 12px 18px; border-radius: 10px;
@@ -137,6 +139,7 @@ ul, ol { padding: 0; list-style: none; }
   .menu a:hover::after { transform: scaleX(1); transform-origin: left; }
 }
 .barra__cta { min-height: 44px; padding: 0 18px; font-size: 15px; }
+.menu .menu__wa { display: none; }
 .menu-btn { display: none; }
 
 /* ---------- portada ---------- */
@@ -194,7 +197,15 @@ ul, ol { padding: 0; list-style: none; }
 @keyframes sube { from { transform: translateY(105%); } to { transform: none; } }
 
 /* ---------- cinta de marcas ---------- */
-.cinta { background: var(--azul); color: #fff; overflow: hidden; border-block: 1px solid rgba(255, 255, 255, .12); }
+.cinta { position: relative; background: var(--azul); color: #fff; overflow: hidden; border-block: 1px solid rgba(255, 255, 255, .12); }
+.cinta__pausa {
+  position: absolute; z-index: 1; right: var(--margen); top: 50%; translate: 0 -50%; display: grid; place-items: center;
+  width: 44px; height: 44px; border: 1px solid rgba(255, 255, 255, .4); border-radius: 50%; background: var(--azul); color: #fff; cursor: pointer;
+  transition: background-color .2s;
+}
+.cinta__pausa svg { width: 14px; height: 14px; }
+@media (hover: hover) and (pointer: fine) { .cinta__pausa:hover { background: var(--azul-hondo); } }
+.cinta.pausada .cinta__pista, .cinta:focus-within .cinta__pista { animation-play-state: paused; }
 .cinta__pista { display: flex; align-items: center; gap: 36px; width: max-content; padding: 20px 0; animation: cinta 38s linear infinite; }
 .cinta span { font-size: clamp(22px, 1rem + 1.4vw, 34px); font-weight: 800; font-stretch: 118%; letter-spacing: -.01em; text-transform: uppercase; white-space: nowrap; }
 .cinta i { width: 10px; height: 10px; border: 2px solid rgba(255, 255, 255, .7); border-radius: 50%; flex: none; }
@@ -239,7 +250,7 @@ ul, ol { padding: 0; list-style: none; }
 .declaracion .etiqueta { grid-column: 1 / -1; }
 .declaracion__txt { font-size: clamp(28px, 1rem + 2.7vw, 60px); line-height: 1.1; font-weight: 700; font-stretch: 108%; letter-spacing: -.02em; text-wrap: pretty; }
 .declaracion__txt strong { font-weight: 800; color: var(--azul-claro); }
-.js .declaracion__txt .pal { color: rgba(255, 255, 255, .2); transition: color .35s linear; }
+.js .declaracion__txt .pal { color: rgba(255, 255, 255, .4); transition: color .35s linear; }
 .js .declaracion__txt .pal.on { color: #fff; }
 .js .declaracion__txt strong .pal.on { color: var(--azul-claro); }
 .declaracion__foto { aspect-ratio: 4 / 5; overflow: hidden; }
@@ -271,14 +282,19 @@ ul, ol { padding: 0; list-style: none; }
 .moto__precio--consulta { font-size: 16px; font-weight: 500; color: var(--gris); }
 .moto__cta { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
 .moto__cta svg { width: 16px; height: 16px; transition: transform .25s var(--ease); }
-.moto--sala .moto__foto { aspect-ratio: 4 / 3; }
 @media (hover: hover) and (pointer: fine) {
   .moto__a:hover { transform: translateY(-2px); }
   .moto__a:hover .moto__foto img { transform: scale(1.03); }
   .moto__a:hover .moto__cta svg { transform: translateX(3px); }
 }
-.nota { margin-top: 32px; font-size: 15px; color: var(--gris); }
-::view-transition-group(*) { animation-duration: .45s; animation-timing-function: var(--ease); }
+.catalogo__pie { display: flex; justify-content: space-between; align-items: center; gap: 8px 32px; flex-wrap: wrap; margin-top: 32px; }
+.nota { font-size: 15px; color: var(--gris); }
+::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+::view-transition-group(*) { animation-duration: .38s; animation-timing-function: var(--ease); }
+::view-transition-old(*):only-child { animation: vt-sale .2s var(--ease) both; }
+::view-transition-new(*):only-child { animation: vt-entra .32s var(--ease) both; }
+@keyframes vt-sale { to { opacity: 0; transform: scale(.96); } }
+@keyframes vt-entra { from { opacity: 0; transform: scale(.96); } }
 
 /* boutique */
 .boutique { background: var(--papel-2); }
@@ -299,7 +315,7 @@ ul, ol { padding: 0; list-style: none; }
   transition: transform .35s var(--ease);
 }
 .reel video { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
-.reel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(11, 13, 18, .85), rgba(11, 13, 18, 0) 46%); }
+.reel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(11, 13, 18, .96) 0%, rgba(11, 13, 18, .78) 28%, rgba(11, 13, 18, 0) 60%); }
 .reel__txt { position: absolute; z-index: 1; left: 14px; right: 14px; bottom: 14px; display: flex; align-items: flex-end; gap: 10px; font-size: 15px; font-weight: 650; line-height: 1.25; }
 .reel__txt svg { width: 34px; height: 34px; padding: 9px; flex: none; border-radius: 50%; background: #fff; color: var(--tinta); transition: background-color .2s, color .2s; }
 @media (hover: hover) and (pointer: fine) {
@@ -329,9 +345,10 @@ ul, ol { padding: 0; list-style: none; }
 .ruta.vivo .ruta__foto { position: absolute; inset: 0; clip-path: inset(100% 0 0 0); }
 .ruta.vivo .ruta__foto img { transform: scale(var(--z, 1.08)); }
 .ruta.vivo .ruta__foto[data-foto="0"] { clip-path: none; }
-.ruta.vivo .cap { transition: opacity .4s var(--ease); opacity: .35; }
-.ruta.vivo .cap.actual { opacity: 1; }
-.ruta.vivo .cap.actual .cap__n { color: var(--azul); }
+.ruta.vivo .cap { transition: border-color .4s var(--ease), color .4s var(--ease); border-top-width: 2px; }
+.ruta.vivo .cap h3, .ruta.vivo .cap__n { transition: color .4s var(--ease); }
+.ruta.vivo .cap:not(.actual) h3, .ruta.vivo .cap:not(.actual) .cap__n { color: var(--gris); }
+.ruta.vivo .cap.actual { border-top-color: var(--azul); }
 .ruta__barra { position: absolute; left: 0; right: 0; bottom: -18px; height: 2px; background: var(--linea); }
 .ruta__barra i { position: absolute; inset: 0; background: var(--azul); transform-origin: left; transform: scaleX(var(--p, 0)); }
 
@@ -402,9 +419,18 @@ ul, ol { padding: 0; list-style: none; }
   }
   .barra.menu-abierto .menu a { min-height: 64px; padding: 6px 0; line-height: 1.05; font-size: 30px; font-weight: 800; font-stretch: 112%; text-transform: uppercase; border-bottom: 1px solid var(--linea-clara); }
   .barra.menu-abierto .menu a::after { display: none; }
+  .barra.menu-abierto .menu .menu__wa { display: inline-flex; margin-top: 28px; min-height: 56px; padding: 0 24px; border: 0; font-size: 17px; font-weight: 600; font-stretch: 100%; text-transform: none; color: #fff; }
   .taller__grid, .boutique__grid, .ruta__grid, .visita__grid, .declaracion .envoltura { grid-template-columns: minmax(0, 1fr); }
   .taller__fotos { position: relative; top: 0; max-width: 560px; margin-bottom: 12%; }
   .declaracion__foto { max-width: 420px; }
+  .ruta__grid { display: flex; flex-direction: column; gap: 0; }
+  .ruta__texto, .ruta__caps, .ruta__fotos { display: contents; }
+  .ruta .h2 { order: 0; margin-bottom: 32px; }
+  .ruta__foto[data-foto="0"] { order: 1; } .cap[data-cap="0"] { order: 2; }
+  .ruta__foto[data-foto="1"] { order: 3; } .cap[data-cap="1"] { order: 4; }
+  .ruta__foto[data-foto="2"] { order: 5; } .cap[data-cap="2"] { order: 6; }
+  .ruta__foto[data-foto="3"] { order: 7; } .cap[data-cap="3"] { order: 8; }
+  .cap { border-top: 0; padding: 14px 0 36px; }
   .visita__foto { max-height: 560px; }
 }
 @media (max-width: 760px) {
@@ -416,6 +442,7 @@ ul, ol { padding: 0; list-style: none; }
   .pie__h { font-stretch: 104%; }
   .portada__pausa span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .portada__pausa { padding: 0; width: 44px; justify-content: center; }
+  .portada__media { inset: -11% 0 0; } /* la marca de agua del reel queda detrás de la barra */
   .portada__acc { width: 100%; }
   .portada__acc .btn { width: 100%; }
   .filas li { grid-template-columns: minmax(0, 1fr); }
@@ -431,17 +458,20 @@ ul, ol { padding: 0; list-style: none; }
     box-shadow: 0 -1px 0 var(--linea); transform: translateY(110%); transition: transform .4s var(--ease);
   }
   .accion.visible { transform: none; }
+  .accion.visible.al-final { transform: translateY(110%); }
   .accion .btn { padding: 0 12px; }
   .pie { padding-bottom: 76px; }
 }
 
 /* ---------- movimiento reducido ---------- */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-property: color, background-color, border-color, box-shadow, opacity !important; }
+  .cinta__pausa { display: none; }
   .js [data-entra], .js .linea > [data-entra] { opacity: 1; transform: none; }
   .js .portada__media { transform: none; }
   .cinta__pista { animation: none; flex-wrap: wrap; width: auto; justify-content: center; }
-  .cinta__pista > :nth-child(n+13) { display: none; }
+  .cinta__pista > :nth-child(n+13), .cinta__pista > i:nth-child(12) { display: none; }
+  .cinta__pista { gap: 12px 28px; padding-inline: var(--margen); }
   .js .declaracion__txt .pal { color: inherit; }
 }
 

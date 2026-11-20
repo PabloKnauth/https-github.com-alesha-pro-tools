@@ -3,38 +3,48 @@
 (() => {
   const doc = document.documentElement;
   const quieto = matchMedia('(prefers-reduced-motion: reduce)');
+  const fino = matchMedia('(hover: hover) and (pointer: fine)');
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const icono = (btn, pausa, txtPausa, txtSeguir) => {
+    btn.setAttribute('aria-pressed', String(pausa));
+    btn.querySelector('use').setAttribute('href', pausa ? '#play' : '#pausa');
+    const t = btn.querySelector('span');
+    if (t) t.textContent = pausa ? txtSeguir : txtPausa;
+  };
 
-  /* ---------- portada: entrada única y video ---------- */
+  /* ---------- portada: entrada única (en cuanto hay fuente, sin esperar a las imágenes) ---------- */
+  let arrancado = false;
+  const arrancar = () => { if (arrancado) return; arrancado = true; requestAnimationFrame(() => doc.classList.add('listo')); };
+  Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 300))]).then(arrancar);
+
   const video = $('[data-portada]');
   const btnPausa = $('[data-pausa-video]');
   let pausadoPorUsuario = false;
-  const arrancar = () => requestAnimationFrame(() => doc.classList.add('listo'));
-  if (document.readyState === 'complete') arrancar(); else addEventListener('load', arrancar, { once: true });
-  setTimeout(arrancar, 1200); // por si una imagen tarda: la portada no se queda escondida
-
-  const ponerPausa = (pausa) => {
-    btnPausa.setAttribute('aria-pressed', String(pausa));
-    btnPausa.querySelector('use').setAttribute('href', pausa ? '#play' : '#pausa');
-    btnPausa.querySelector('span').textContent = pausa ? 'Reproducir video' : 'Pausar video';
-  };
-  if (video) {
-    if (quieto.matches) { pausadoPorUsuario = true; ponerPausa(true); }
-    else video.play().catch(() => ponerPausa(true));
+  if (video && btnPausa) {
+    if (quieto.matches) { pausadoPorUsuario = true; icono(btnPausa, true, 'Pausar video', 'Reproducir video'); }
+    else video.play().catch(() => icono(btnPausa, true, 'Pausar video', 'Reproducir video'));
     btnPausa.addEventListener('click', () => {
-      if (video.paused) { pausadoPorUsuario = false; video.play(); ponerPausa(false); }
-      else { pausadoPorUsuario = true; video.pause(); ponerPausa(true); }
+      if (video.paused) { pausadoPorUsuario = false; video.play(); icono(btnPausa, false, 'Pausar video', 'Reproducir video'); }
+      else { pausadoPorUsuario = true; video.pause(); icono(btnPausa, true, 'Pausar video', 'Reproducir video'); }
     });
-    // fuera de pantalla no gasta batería
     new IntersectionObserver(([e]) => {
       if (pausadoPorUsuario) return;
       if (e.isIntersecting) video.play().catch(() => {}); else video.pause();
     }).observe(video);
   }
 
-  /* ---------- barra: sólida después de la portada, se esconde al bajar ---------- */
+  /* ---------- cinta de marcas: se puede pausar ---------- */
+  const cinta = $('[data-cinta]');
+  const btnCinta = $('[data-pausa-cinta]');
+  if (cinta && btnCinta) btnCinta.addEventListener('click', () => {
+    const pausa = !cinta.classList.contains('pausada');
+    cinta.classList.toggle('pausada', pausa);
+    icono(btnCinta, pausa, 'Pausar cinta de marcas', 'Reanudar cinta de marcas');
+  });
+
+  /* ---------- barra: sólida tras la portada, se esconde al bajar y vuelve al subir ---------- */
   const barra = $('[data-barra]');
   const portada = $('.portada');
   const accion = $('[data-accion]');
@@ -43,30 +53,41 @@
     const y = scrollY;
     const tras = portada ? portada.offsetHeight - 80 : 0;
     barra.classList.toggle('es-solida', y > 40);
-    const bajando = y > ultimoY && y > tras;
-    if (!barra.classList.contains('menu-abierto')) barra.classList.toggle('se-oculta', bajando && Math.abs(y - ultimoY) > 2);
+    if (Math.abs(y - ultimoY) > 6) {
+      if (!barra.classList.contains('menu-abierto') && !barra.contains(document.activeElement)) barra.classList.toggle('se-oculta', y > ultimoY && y > tras);
+      ultimoY = y;
+    }
+    if (y < tras) barra.classList.remove('se-oculta');
     if (accion) accion.classList.toggle('visible', y > tras * .7);
-    ultimoY = y;
   };
   addEventListener('scroll', alDesplazar, { passive: true });
+  barra.addEventListener('focusin', () => barra.classList.remove('se-oculta'));
   alDesplazar();
+  // la barra de acción se retira cuando el cierre del pie ya muestra el mismo botón
+  const cierre = $('.pie__cierre');
+  if (accion && cierre) new IntersectionObserver(([e]) => accion.classList.toggle('al-final', e.isIntersecting)).observe(cierre);
 
-  /* ---------- menú del teléfono ---------- */
+  /* ---------- menú del teléfono: el resto de la página queda inerte mientras está abierto ---------- */
   const btnMenu = $('[data-menu-btn]');
+  const fuera = $$('main, footer, .accion');
+  const ponerInerte = v => fuera.forEach(n => { n.inert = v; });
   const cerrarMenu = () => {
+    if (!barra.classList.contains('menu-abierto')) return;
     barra.classList.remove('menu-abierto');
     btnMenu.setAttribute('aria-expanded', 'false');
     btnMenu.querySelector('.sr').textContent = 'Abrir menú';
     document.body.style.overflow = '';
+    ponerInerte(false);
   };
   btnMenu.addEventListener('click', () => {
-    const abrir = btnMenu.getAttribute('aria-expanded') !== 'true';
-    if (!abrir) return cerrarMenu();
+    if (btnMenu.getAttribute('aria-expanded') === 'true') return cerrarMenu();
     barra.classList.add('menu-abierto');
     barra.classList.remove('se-oculta');
     btnMenu.setAttribute('aria-expanded', 'true');
     btnMenu.querySelector('.sr').textContent = 'Cerrar menú';
     document.body.style.overflow = 'hidden';
+    ponerInerte(true);
+    $('#menu a').focus();
   });
   $$('#menu a').forEach(a => a.addEventListener('click', cerrarMenu));
   addEventListener('keydown', e => { if (e.key === 'Escape' && barra.classList.contains('menu-abierto')) { cerrarMenu(); btnMenu.focus(); } });
@@ -95,8 +116,8 @@
       pendiente = false;
       const r = texto.getBoundingClientRect();
       const vh = innerHeight;
-      // empieza cuando el texto entra al 85% de la pantalla y termina cuando su pie llega al 45%
-      const p = clamp((vh * .85 - r.top) / (r.height + vh * .4), 0, 1);
+      // termina de encenderse cuando el texto aún está completo en pantalla
+      const p = clamp((vh * .9 - r.top) / (r.height + vh * .15), 0, 1);
       const n = Math.round(p * pals.length);
       pals.forEach((s, i) => s.classList.toggle('on', i < n));
     };
@@ -115,26 +136,40 @@
       const marca = b.dataset.marca;
       const aplicar = () => {
         $$('button', filtros).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-        motos.forEach(m => { m.hidden = !(marca === 'todas' || m.dataset.marca === marca || m.dataset.marca === 'todas'); });
+        motos.forEach(m => { m.hidden = !(marca === 'todas' || m.dataset.marca === marca); });
       };
       if (document.startViewTransition && !quieto.matches) document.startViewTransition(aplicar);
       else aplicar();
     });
   }
 
-  /* ---------- reels: vista previa muda cuando se ven, visor con sonido al tocar ---------- */
+  /* ---------- reels: una sola vista previa a la vez; visor con sonido al tocar ---------- */
   const reels = $$('.reel');
   if (reels.length) {
-    const io = new IntersectionObserver(entradas => {
-      entradas.forEach(({ target, isIntersecting }) => {
-        const v = target.querySelector('video');
-        if (isIntersecting && !quieto.matches) {
-          if (!v.src) v.src = v.dataset.vista;
-          v.play().catch(() => {});
-        } else if (v.src) v.pause();
+    let activo = null;
+    const vista = (r, si) => {
+      const v = r.querySelector('video');
+      if (si && !quieto.matches) {
+        if (activo && activo !== r) vista(activo, false);
+        if (!v.src) v.src = v.dataset.vista;
+        v.play().catch(() => {});
+        activo = r;
+      } else if (v.src) { v.pause(); if (activo === r) activo = null; }
+    };
+    if (fino.matches) {
+      // con ratón: corre la que está bajo el cursor o con el foco
+      reels.forEach(r => {
+        r.addEventListener('pointerenter', () => vista(r, true));
+        r.addEventListener('pointerleave', () => vista(r, false));
+        r.addEventListener('focus', () => vista(r, true));
+        r.addEventListener('blur', () => vista(r, false));
       });
-    }, { threshold: .35 });
-    reels.forEach(r => io.observe(r));
+    } else {
+      // en el teléfono: solo la que queda al centro del carrusel
+      const io = new IntersectionObserver(es => es.forEach(({ target, isIntersecting }) => vista(target, isIntersecting)),
+        { rootMargin: '0px -38% 0px -38%', threshold: .01 });
+      reels.forEach(r => io.observe(r));
+    }
 
     const visor = $('[data-visor]');
     const vv = $('[data-visor-video]');
@@ -142,62 +177,66 @@
     let origen = null;
     reels.forEach(r => r.addEventListener('click', () => {
       origen = r;
+      if (activo) vista(activo, false);
       vv.src = r.dataset.reel;
       vv.poster = r.querySelector('video').poster;
       ig.href = r.dataset.ig;
+      visor.setAttribute('aria-label', 'Video: ' + r.querySelector('.reel__txt').textContent.replace('Reproducir:', '').trim());
       visor.showModal();
       vv.play().catch(() => {});
     }));
-    const cerrar = () => visor.close();
-    $('[data-visor-cerrar]').addEventListener('click', cerrar);
-    visor.addEventListener('click', e => { if (e.target === visor) cerrar(); });
+    $('[data-visor-cerrar]').addEventListener('click', () => visor.close());
+    visor.addEventListener('click', e => { if (e.target === visor) visor.close(); });
     visor.addEventListener('close', () => { vv.pause(); vv.removeAttribute('src'); vv.load(); origen?.focus(); });
   }
 
   /* ---------- comunidad: capítulos que se descubren al avanzar ---------- */
   const ruta = $('[data-capitulos]');
-  const altoSuficiente = () => innerHeight >= 600 && innerWidth >= 961;
   if (ruta && !quieto.matches) {
     const fotos = $$('.ruta__foto', ruta);
     const caps = $$('.cap', ruta);
     const marco = $('.ruta__fotos', ruta);
+    const textoR = $('.ruta__texto', ruta);
     const barraP = document.createElement('div');
     barraP.className = 'ruta__barra'; barraP.innerHTML = '<i></i>';
     let vivo = false, pendiente = false;
+    // solo se fija si todo el texto cabe en la pantalla (si no, el capítulo 04 quedaría fuera)
+    const cabe = () => innerWidth >= 961 && textoR.offsetHeight + 72 + 48 <= innerHeight;
     const pintar = () => {
       pendiente = false;
       if (!vivo) return;
       const r = ruta.getBoundingClientRect();
-      const recorrido = ruta.offsetHeight - innerHeight;
-      const p = clamp(-r.top / recorrido, 0, 1);
+      const p = clamp(-r.top / (ruta.offsetHeight - innerHeight), 0, 1);
       const n = fotos.length;
-      const t = p * (n - 1); // 0..n-1
+      // un respiro quieto al inicio y al final; en medio, cada foto se destapa y luego se queda para leer
+      const t = clamp(p * (n - 1) * 1.2 - .3, 0, n - 1);
       fotos.forEach((f, i) => {
-        if (i === 0) { f.style.setProperty('--z', (1.08 - .08 * clamp(t, 0, 1)).toFixed(4)); return; }
-        // cada foto se destapa en la primera mitad de su tramo y luego se queda quieta para leer
-        const local = clamp((t - (i - 1)) / .55, 0, 1);
+        if (i === 0) { f.style.setProperty('--z', (1.08 - .08 * clamp(t * 2, 0, 1)).toFixed(4)); return; }
+        const local = clamp((t - (i - .5)) / .5, 0, 1);
         const e = 1 - Math.pow(1 - local, 3);
         f.style.clipPath = `inset(${(100 - e * 100).toFixed(2)}% 0 0 0)`;
         f.style.setProperty('--z', (1.08 - .08 * e).toFixed(4));
       });
-      const actual = clamp(Math.floor(t + .7), 0, n - 1);
+      const actual = clamp(Math.floor(t + .25), 0, n - 1);
       caps.forEach((c, i) => c.classList.toggle('actual', i === actual));
       barraP.style.setProperty('--p', p.toFixed(4));
     };
     const montar = () => {
-      const debe = altoSuficiente();
-      if (debe === vivo) return pintar();
-      vivo = debe;
-      ruta.classList.toggle('vivo', vivo);
-      if (vivo) marco.append(barraP); else {
-        barraP.remove();
-        fotos.forEach(f => { f.style.clipPath = ''; f.style.removeProperty('--z'); });
-        caps.forEach(c => c.classList.remove('actual'));
+      if (vivo) ruta.classList.remove('vivo'); // medir el texto en su forma normal
+      const debe = cabe();
+      ruta.classList.toggle('vivo', debe);
+      if (debe !== vivo) {
+        vivo = debe;
+        if (vivo) marco.append(barraP); else {
+          barraP.remove();
+          fotos.forEach(f => { f.style.clipPath = ''; f.style.removeProperty('--z'); });
+          caps.forEach(c => c.classList.remove('actual'));
+        }
       }
       pintar();
     };
     addEventListener('scroll', () => { if (!pendiente) { pendiente = true; requestAnimationFrame(pintar); } }, { passive: true });
-    addEventListener('resize', montar);
+    let espera; addEventListener('resize', () => { clearTimeout(espera); espera = setTimeout(montar, 120); });
     montar();
   }
 

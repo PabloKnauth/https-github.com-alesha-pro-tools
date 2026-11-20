@@ -47,7 +47,9 @@
       <a href="#motos">Motos</a>
       <a href="#boutique">Cascos y boutique</a>
       <a href="#videos">Videos</a>
+      <a href="#comunidad">Comunidad</a>
       <a href="#visita">Visítanos</a>
+      <a class="btn btn--azul menu__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20quiero%20agendar%20un%20servicio%20para%20mi%20moto." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#wa"/></svg>Agendar servicio</a>
     </nav>
     <a class="btn btn--azul barra__cta" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20quiero%20agendar%20un%20servicio%20para%20mi%20moto." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#wa"/></svg>Agendar servicio</a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-btn><span class="sr">Abrir menú</span><i></i><i></i></button>
@@ -60,10 +62,11 @@
   <section class="portada" id="inicio" aria-labelledby="portada-h">
     <div class="portada__media" aria-hidden="true">
       <video class="portada__video" data-portada muted playsinline loop preload="metadata" poster="assets/img/portada-poster.webp">
-        <source src="assets/vid/portada-720.mp4" type="video/mp4" media="(max-width: 760px)">
+        <source src="assets/vid/portada-movil.mp4" type="video/mp4" media="(max-width: 760px)">
         <source src="assets/vid/portada.mp4" type="video/mp4">
       </video>
     </div>
+    <button class="portada__pausa" type="button" data-pausa-video aria-pressed="false"><svg aria-hidden="true"><use href="#pausa"/></svg><span>Pausar video</span></button>
     <div class="portada__in envoltura">
       <p class="portada__pre" data-entra="1"><span class="punto" aria-hidden="true"></span>Centro de Servicio Oficial Liqui Moly · Malinalco</p>
       <h1 id="portada-h" class="portada__h">
@@ -80,11 +83,12 @@
         </div>
       </div>
     </div>
-    <button class="portada__pausa" type="button" data-pausa-video aria-pressed="false"><svg aria-hidden="true"><use href="#pausa"/></svg><span>Pausar video</span></button>
   </section>
 
   <!-- marcas: texto, no logotipos -->
-  <div class="cinta" aria-label="Marcas: Liqui Moly, Benda, QJ Motor, Treck, Kove, EDGE">
+  <div class="cinta" data-cinta>
+    <p class="sr">Marcas: Liqui Moly, Benda, QJ Motor, Treck, Kove y EDGE.</p>
+    <button class="cinta__pausa" type="button" data-pausa-cinta aria-pressed="false"><svg aria-hidden="true"><use href="#pausa"/></svg><span class="sr">Pausar cinta de marcas</span></button>
     <div class="cinta__pista" aria-hidden="true">
       <span>Liqui Moly</span><i></i><span>Benda</span><i></i><span>QJ Motor</span><i></i><span>Treck</span><i></i><span>Kove</span><i></i><span>EDGE</span><i></i>
       <span>Liqui Moly</span><i></i><span>Benda</span><i></i><span>QJ Motor</span><i></i><span>Treck</span><i></i><span>Kove</span><i></i><span>EDGE</span><i></i>
@@ -95,8 +99,7 @@
   <section class="seccion taller" id="taller" aria-labelledby="taller-h">
     <div class="envoltura taller__grid">
       <div class="taller__texto">
-        <p class="etiqueta">El taller</p>
-        <h2 id="taller-h" class="h2">Tu moto, en manos de mecánicos certificados</h2>
+        <h2 id="taller-h" class="h2">Tu moto, en manos de personal certificado</h2>
         <p class="lead">Cambiamos tu aceite y revisamos a fondo cadena, frenos y llantas para entregarte la moto lista para rodar. Atendemos Italika, Vento, Veloci, Bajaj y muchas marcas más.</p>
         <p class="precio" data-precio><span class="precio__desde">Servicio desde</span><span class="precio__num">$499</span><span class="precio__mxn">MXN</span></p>
         <ul class="filas">
@@ -122,7 +125,6 @@
   <!-- 3 · Declaración (momento: las palabras se encienden al avanzar) -->
   <section class="declaracion" aria-label="Centro de Servicio Oficial Liqui Moly">
     <div class="envoltura">
-      <p class="etiqueta etiqueta--clara">Liqui Moly · Hecho en Alemania</p>
       <p class="declaracion__txt" data-palabras>Somos el primer Centro de Servicio Oficial Liqui Moly enfocado en motos en México. Cada servicio lleva aceite <strong>Liqui Moly original</strong>, y aquí, en Malinalco, lo hacemos a precio justo.</p>
       <figure class="declaracion__foto">
         <img src="assets/img/taller-sala-960.webp" srcset="assets/img/taller-sala-640.webp 640w, assets/img/taller-sala-960.webp 960w" sizes="(max-width: 860px) 92vw, 30vw" width="960" height="1200" alt="El área de servicio de Moto Roka con luces hexagonales y la pantalla de Centro de Servicio Liqui Moly" loading="lazy" decoding="async">
@@ -135,7 +137,6 @@
     <div class="envoltura">
       <div class="cabeza">
         <div>
-          <p class="etiqueta">Venta de motos</p>
           <h2 id="motos-h" class="h2">Motos nuevas en piso</h2>
         </div>
         <p class="cabeza__lado">Con refacciones, servicio especializado y garantía oficial. Pregunta por disponibilidad y financiamiento.</p>
@@ -256,17 +257,11 @@
             <p class="moto__pie"><span class="moto__precio moto__precio--consulta">Precio por WhatsApp</span><span class="moto__cta">Preguntar<svg aria-hidden="true"><use href="#flecha"/></svg></span></p>
           </a>
         </li>
-        <li class="moto moto--sala" data-marca="benda">
-          <a class="moto__a" href="https://drive.google.com/file/d/1ViwTy-XhxOiL_FX8LOjT93GlyQnREPIM/view" target="_blank" rel="noopener">
-            <figure class="moto__foto"><img src="assets/img/sala-motos-640.webp" width="640" height="800" alt="Sala de exhibición de Moto Roka con motos Benda y luces hexagonales" loading="lazy" decoding="async"></figure>
-            <span class="moto__marca">Catálogo completo</span>
-            <h3 class="moto__nombre">Catálogo Benda 2025</h3>
-            <p class="moto__dato">Todos los modelos Benda en PDF. Pregúntanos cuál está en piso.</p>
-            <p class="moto__pie"><span class="moto__cta">Abrir catálogo<svg aria-hidden="true"><use href="#flecha"/></svg></span></p>
-          </a>
-        </li>
       </ul>
-      <p class="nota">Precios publicados en nuestro Instagram; confirma vigencia y disponibilidad por WhatsApp.</p>
+      <div class="catalogo__pie">
+        <p class="nota">Precios publicados en nuestro Instagram; confirma vigencia y disponibilidad por WhatsApp.</p>
+        <a class="enlace" href="https://drive.google.com/file/d/1ViwTy-XhxOiL_FX8LOjT93GlyQnREPIM/view" target="_blank" rel="noopener">Catálogo Benda 2025 (PDF)<svg aria-hidden="true"><use href="#flecha"/></svg></a>
+      </div>
     </div>
   </section>
 
@@ -274,7 +269,6 @@
   <section class="seccion boutique" id="boutique" aria-labelledby="boutique-h">
     <div class="envoltura boutique__grid">
       <div class="boutique__texto">
-        <p class="etiqueta">Cascos y boutique</p>
         <h2 id="boutique-h" class="h2">Cascos EDGE desde $799</h2>
         <p class="lead">Somos distribuidores oficiales de EDGE: modelos con certificación ECE y DOT, en diseños para todos los estilos.</p>
         <ul class="filas filas--cortas">
@@ -299,30 +293,29 @@
     <div class="envoltura">
       <div class="cabeza cabeza--clara">
         <div>
-          <p class="etiqueta etiqueta--clara">Desde el taller</p>
           <h2 id="videos-h" class="h2">Videos que hemos hecho</h2>
         </div>
         <a class="enlace enlace--claro" href="https://www.instagram.com/motoroka_fixshop/" target="_blank" rel="noopener">Más en @motoroka_fixshop<svg aria-hidden="true"><use href="#flecha"/></svg></a>
       </div>
       <ul class="reels" data-reels>
-        <li><button class="reel" type="button" data-reel="assets/vid/reel-servicio.mp4" data-ig="https://www.instagram.com/reel/DfaICFVRm02/" aria-label="Reproducir: tu moto merece más que un cambio de aceite">
+        <li><button class="reel" type="button" data-reel="assets/vid/reel-servicio.mp4" data-ig="https://www.instagram.com/reel/DfaICFVRm02/">
           <video muted loop playsinline preload="none" poster="assets/img/poster-servicio.webp" data-vista="assets/vid/vista-servicio.mp4"></video>
-          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg>Más que un cambio de aceite</span></button></li>
-        <li><button class="reel" type="button" data-reel="assets/vid/reel-mantenimiento.mp4" data-ig="https://www.instagram.com/reel/DfQ5DmktSZk/" aria-label="Reproducir: el mantenimiento preventivo sale más barato">
+          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg><span class="sr">Reproducir: </span>Más que un cambio de aceite</span></button></li>
+        <li><button class="reel" type="button" data-reel="assets/vid/reel-mantenimiento.mp4" data-ig="https://www.instagram.com/reel/DfQ5DmktSZk/">
           <video muted loop playsinline preload="none" poster="assets/img/poster-mantenimiento.webp" data-vista="assets/vid/vista-mantenimiento.mp4"></video>
-          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg>Tu moto no avisa: falla</span></button></li>
-        <li><button class="reel" type="button" data-reel="assets/vid/reel-qj-motor.mp4" data-ig="https://www.instagram.com/reel/DVCFpvMEfPN/" aria-label="Reproducir: modelos QJ Motor en Moto Roka">
-          <video muted loop playsinline preload="none" poster="assets/img/poster-qj-motor.webp" data-vista="assets/vid/vista-qj-motor.mp4"></video>
-          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg>QJ Motor ya está aquí</span></button></li>
-        <li><button class="reel" type="button" data-reel="assets/vid/reel-warrior.mp4" data-ig="https://www.instagram.com/reel/DXaNGkJjOUl/" aria-label="Reproducir: casco Warrior negro mate">
+          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg><span class="sr">Reproducir: </span>Tu moto no avisa: falla</span></button></li>
+        <li><button class="reel" type="button" data-reel="assets/vid/reel-qj-llega.mp4" data-ig="https://www.instagram.com/reel/DU1X9cfEbE7/">
+          <video muted loop playsinline preload="none" poster="assets/img/poster-qj-llega.webp" data-vista="assets/vid/vista-qj-llega.mp4"></video>
+          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg><span class="sr">Reproducir: </span>QJ Motor ya está aquí</span></button></li>
+        <li><button class="reel" type="button" data-reel="assets/vid/reel-warrior.mp4" data-ig="https://www.instagram.com/reel/DXaNGkJjOUl/">
           <video muted loop playsinline preload="none" poster="assets/img/poster-warrior.webp" data-vista="assets/vid/vista-warrior.mp4"></video>
-          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg>Warrior en negro mate</span></button></li>
-        <li><button class="reel" type="button" data-reel="assets/vid/reel-la-rosa.mp4" data-ig="https://www.instagram.com/reel/DemYWbEozB8/" aria-label="Reproducir: la rosa de Moto Roka">
+          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg><span class="sr">Reproducir: </span>Warrior en negro mate</span></button></li>
+        <li><button class="reel" type="button" data-reel="assets/vid/reel-la-rosa.mp4" data-ig="https://www.instagram.com/reel/DemYWbEozB8/">
           <video muted loop playsinline preload="none" poster="assets/img/poster-la-rosa.webp" data-vista="assets/vid/vista-la-rosa.mp4"></video>
-          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg>La rosa de Moto Roka</span></button></li>
-        <li><button class="reel" type="button" data-reel="assets/vid/reel-el-dado.mp4" data-ig="https://www.instagram.com/reel/DesmrI9lGOU/" aria-label="Reproducir: le pidió un dado">
+          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg><span class="sr">Reproducir: </span>La rosa de Moto Roka</span></button></li>
+        <li><button class="reel" type="button" data-reel="assets/vid/reel-el-dado.mp4" data-ig="https://www.instagram.com/reel/DesmrI9lGOU/">
           <video muted loop playsinline preload="none" poster="assets/img/poster-el-dado.webp" data-vista="assets/vid/vista-el-dado.mp4"></video>
-          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg>Le pidió un dado</span></button></li>
+          <span class="reel__txt"><svg aria-hidden="true"><use href="#play"/></svg><span class="sr">Reproducir: </span>Le pidió un dado</span></button></li>
       </ul>
     </div>
   </section>
@@ -332,7 +325,6 @@
     <div class="ruta__fijo">
       <div class="envoltura ruta__grid">
         <div class="ruta__texto">
-          <p class="etiqueta">Comunidad</p>
           <h2 id="ruta-h" class="h2">Rodamos con Malinalco</h2>
           <ol class="ruta__caps">
             <li class="cap" data-cap="0"><span class="cap__n">01</span><h3>Mezcalazo Adventure 2026</h3><p>Fuimos patrocinador oficial de la rodada off-road por los caminos de Malinalco.</p></li>
@@ -354,8 +346,7 @@
   <!-- 8 · Visítanos -->
   <section class="seccion visita" id="visita" aria-labelledby="visita-h">
     <div class="envoltura">
-      <h2 id="visita-h" class="h2">Visítanos</h2>
-      <p class="momento-tipo"><a href="https://www.google.com/maps/search/?api=1&amp;query=Moto%20Roka%20Fix%20%26%20Shop%20Malinalco" target="_blank" rel="noopener">Malinalco, Estado de México</a></p>
+      <h2 id="visita-h" class="momento-tipo"><span class="sr">Visítanos en </span><a href="https://www.google.com/maps/search/?api=1&amp;query=Moto%20Roka%20Fix%20%26%20Shop%20Malinalco" target="_blank" rel="noopener">Malinalco, Estado de México</a></h2>
       <div class="visita__grid">
         <div class="visita__panel">
           <ul class="contacto">
