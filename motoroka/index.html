@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="assets/css/sitio.css">
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"MotorcycleRepair","name":"Moto Roka Fix & Shop","description":"Servicio, refaccionaria y boutique para motocicletas. Centro de Servicio Oficial Liqui Moly.","telephone":"+52 722 666 5997","address":{"@type":"PostalAddress","addressLocality":"Malinalco","addressRegion":"Estado de México","addressCountry":"MX"},"sameAs":["https://www.instagram.com/motoroka_fixshop/","https://linktr.ee/MotoRoka"]}
+{"@context":"https://schema.org","@type":"MotorcycleRepair","name":"Moto Roka Fix & Shop","description":"Servicio, refaccionaria y boutique para motocicletas. Centro de Servicio Oficial Liqui Moly.","telephone":"+52 722 666 5997","address":{"@type":"PostalAddress","addressLocality":"Malinalco","addressRegion":"Estado de México","addressCountry":"MX"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"19:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday","Sunday"],"opens":"09:00","closes":"17:00"}],"sameAs":["https://www.instagram.com/motoroka_fixshop/","https://linktr.ee/MotoRoka"]}
 </script>
 </head>
 <body>
@@ -349,13 +349,20 @@
       <h2 id="visita-h" class="momento-tipo"><span class="sr">Visítanos en </span><a href="https://www.google.com/maps/search/?api=1&amp;query=Moto%20Roka%20Fix%20%26%20Shop%20Malinalco" target="_blank" rel="noopener">Malinalco, Estado de México</a></h2>
       <div class="visita__grid">
         <div class="visita__panel">
+          <div class="horario">
+            <p class="horario__estado" data-abierto hidden></p>
+            <dl class="horario__lista">
+              <div data-dias="1-5"><dt>Lunes a viernes</dt><dd>9:00 a 19:30</dd></div>
+              <div data-dias="6-0"><dt>Sábado y domingo</dt><dd>9:00 a 17:00</dd></div>
+            </dl>
+          </div>
           <ul class="contacto">
             <li><span>Teléfono</span><a href="tel:+527226665997">722 666 5997</a></li>
             <li><span>WhatsApp</span><a href="https://wa.me/527226665997" target="_blank" rel="noopener">Escríbenos</a></li>
             <li><span>Instagram</span><a href="https://www.instagram.com/motoroka_fixshop/" target="_blank" rel="noopener">@motoroka_fixshop</a></li>
             <li><span>Todos los enlaces</span><a href="https://linktr.ee/MotoRoka" target="_blank" rel="noopener">linktr.ee/MotoRoka</a></li>
           </ul>
-          <p class="visita__nota">Agenda tu servicio por mensaje y te confirmamos el horario para que tu moto entre al taller en cuanto llegues.</p>
+          <p class="visita__nota">Agenda tu servicio por mensaje y tu moto entra al taller en cuanto llegues.</p>
           <a class="btn btn--tinta" href="https://www.google.com/maps/search/?api=1&amp;query=Moto%20Roka%20Fix%20%26%20Shop%20Malinalco" target="_blank" rel="noopener">Cómo llegar<svg aria-hidden="true"><use href="#flecha"/></svg></a>
         </div>
         <figure class="visita__foto">
@@ -376,7 +383,7 @@
       <nav class="pie__nav" aria-label="Secciones">
         <a href="#taller">Taller</a><a href="#motos">Motos</a><a href="#boutique">Cascos y boutique</a><a href="#videos">Videos</a><a href="#comunidad">Comunidad</a><a href="#visita">Visítanos</a>
       </nav>
-      <p class="pie__legal">© <span data-anio>2026</span> Moto Roka Fix &amp; Shop · Malinalco, Estado de México · Fotos y videos: Moto Roka y las marcas que distribuimos.</p>
+      <p class="pie__legal">© <span data-anio>2026</span> Moto Roka Fix &amp; Shop · Malinalco, Estado de México · Lunes a viernes 9:00 a 19:30, sábado y domingo 9:00 a 17:00 · Fotos y videos: Moto Roka y las marcas que distribuimos.</p>
     </div>
     <p class="pie__nombre" aria-hidden="true"><svg><use href="#logo"/></svg>Moto Roka</p>
   </div>

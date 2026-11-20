@@ -240,6 +240,30 @@
     montar();
   }
 
+  /* ---------- horario: abierto o cerrado según la hora de Malinalco ---------- */
+  const estado = $('[data-abierto]');
+  if (estado) {
+    const ahora = () => {
+      const partes = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Mexico_City', weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' })
+        .formatToParts(new Date()).map(p => [p.type, p.value]));
+      const dia = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(partes.weekday);
+      return { dia, min: +partes.hour * 60 + +partes.minute };
+    };
+    const pintarHorario = () => {
+      const { dia, min } = ahora();
+      const semana = dia >= 1 && dia <= 5;
+      const cierra = semana ? 19 * 60 + 30 : 17 * 60;
+      const abierto = min >= 9 * 60 && min < cierra;
+      estado.hidden = false;
+      estado.classList.toggle('cerrado', !abierto);
+      estado.textContent = abierto ? 'Abierto ahora · cerramos a las ' + (semana ? '19:30' : '17:00')
+        : (min < 9 * 60 ? 'Cerrado · abrimos hoy a las 9:00' : 'Cerrado · abrimos mañana a las 9:00');
+      $$('[data-dias]').forEach(d => d.classList.toggle('hoy', d.dataset.dias === (semana ? '1-5' : '6-0')));
+    };
+    pintarHorario();
+    setInterval(pintarHorario, 60000);
+  }
+
   const anio = $('[data-anio]');
   if (anio) anio.textContent = new Date().getFullYear();
 })();

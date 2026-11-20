@@ -358,6 +358,17 @@ ul, ol { padding: 0; list-style: none; }
 @media (hover: hover) and (pointer: fine) { .momento-tipo a:hover { background-size: 100% 4px; color: var(--azul); } }
 .visita__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-top: clamp(40px, 5vw, 64px); align-items: stretch; }
 .visita__panel { background: var(--papel-2); padding: clamp(28px, 4vw, 56px); display: flex; flex-direction: column; gap: 28px; }
+.horario { display: grid; gap: 14px; }
+.horario__estado { display: inline-flex; align-items: center; gap: 10px; font-weight: 650; }
+.horario__estado::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: #1f9d55; box-shadow: 0 0 0 4px rgba(31, 157, 85, .18); }
+.horario__estado.cerrado::before { background: var(--gris); box-shadow: 0 0 0 4px rgba(88, 93, 104, .16); }
+.horario__lista { margin: 0; display: grid; }
+.horario__lista div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--linea); }
+.horario__lista div:first-child { border-top: 1px solid var(--linea); }
+.horario__lista dt { color: var(--gris); }
+.horario__lista dd { margin: 0; font-weight: 650; font-variant-numeric: tabular-nums; }
+.horario__lista .hoy dt { color: var(--tinta); }
+.horario__lista .hoy dt::after { content: " · hoy"; color: var(--azul); font-weight: 600; }
 .contacto { display: grid; gap: 0; border-top: 1px solid var(--linea); }
 .contacto li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--linea); flex-wrap: wrap; }
 .contacto span { color: var(--gris); }
