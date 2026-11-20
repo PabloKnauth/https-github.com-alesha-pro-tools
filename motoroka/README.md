@@ -11,6 +11,15 @@ Sitio estático (HTML, CSS y JS sin dependencias). Se publica tal cual en Netlif
 ## Contenido
 Textos, precios y medios salen del Instagram @motoroka_fixshop. Datos confirmados por el cliente: horario, WhatsApp 722 666 5997, ubicación en Google Maps, logotipos, Matt 250 y frases.
 
+## Catálogo de motos
+- Los datos viven en `datos/motos.json`: modelo, marca, tipo, precio público, precio especial del mes, ficha técnica y enlace al PDF original.
+- Las fotos de cada modelo están en `assets/motos/<slug>/`: `00.webp`, `01.webp`… en orden de giro y `portada.webp` para la tarjeta.
+  `modo: "360"` gira al arrastrar; `modo: "fotos"` muestra una galería.
+- Para cambiar precios cada mes: edita `precio` y `especial` (o `null`) en `datos/motos.json`, actualiza `vigencia`
+  y corre `python3 herramientas/generar_catalogo.py` desde esta carpeta. Las tarjetas de `index.html` se regeneran solas.
+- Fuentes: carpetas de distribuidor de Kove, Treck, QJ Motor y Benda (fichas técnicas, fotos de estudio y listas de
+  precios al público del 1 de noviembre de 2026).
+
 ## Medios
 - `assets/vid/portada.mp4` (escritorio) y `portada-movil.mp4` (teléfono, vertical).
 - `assets/vid/reel-*.mp4` con sonido para el visor; `vista-*.mp4` son vistas previas mudas de 6 s.

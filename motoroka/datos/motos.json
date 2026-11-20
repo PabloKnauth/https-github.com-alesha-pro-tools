@@ -1,0 +1,4772 @@
+{
+ "vigencia": "Lista de precios al público de los distribuidores, actualización del 1 de noviembre de 2026. El precio especial aplica solo en noviembre de 2026.",
+ "motos": [
+  {
+   "slug": "kove-450-rally",
+   "marca": "Kove",
+   "modelo": "450 Rally",
+   "tipo": "Adventure",
+   "precio": 167100,
+   "especial": 149900,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Tipo",
+       "Monocilíndrico, 4 tiempos, 4 válvulas, DOHC"
+      ],
+      [
+       "Refrigeración",
+       "Refrigerado por líquido y aceite"
+      ],
+      [
+       "Cilindrada",
+       "449 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "41.5 hp a 9500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "40 N·m a 7000 rpm"
+      ],
+      [
+       "Sistema de Combustible",
+       "EFI"
+      ],
+      [
+       "Máx. Velocidad",
+       "170 km/h"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Tipo de Marco",
+       "Doble viga en acero de alta resistencia"
+      ],
+      [
+       "Suspensión Delantera",
+       "Amortiguación totalmente ajustable"
+      ],
+      [
+       "Suspensión Trasera",
+       "Amortiguación totalmente ajustable, airbag externo"
+      ],
+      [
+       "Neumático Delantero",
+       "90/90-21"
+      ],
+      [
+       "Neumático Trasero",
+       "140/80-18"
+      ],
+      [
+       "Freno Delantero",
+       "Disco flotante sencillo, pinza de 2 pistones"
+      ],
+      [
+       "Freno Trasero",
+       "Disco sencillo, pinza de 1 pistón"
+      ],
+      [
+       "Ángulo de Dirección",
+       "38.5°"
+      ],
+      [
+       "Rastrillo",
+       "28°"
+      ],
+      [
+       "Instrumentación",
+       "TFT"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "L × A × Al",
+       "2190 × 805 × 1390 mm"
+      ],
+      [
+       "Distancia entre Ejes",
+       "1475 mm"
+      ],
+      [
+       "Altura del Asiento",
+       "960 mm (frontal)"
+      ],
+      [
+       "Capacidad de Combustible",
+       "14 L + depósito auxiliar de 15 L (29 L en total)"
+      ],
+      [
+       "Peso en vacío",
+       "155 kg"
+      ],
+      [
+       "Distancia al suelo",
+       "257 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1FTgMjlhPTwC9W6KKBcapSsUvhZQyY5-r/view"
+  },
+  {
+   "slug": "kove-800x",
+   "marca": "Kove",
+   "modelo": "800X",
+   "tipo": "Adventure",
+   "precio": 179900,
+   "especial": null,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico DOHC, refrigeración líquida, 8 válvulas"
+      ],
+      [
+       "Cilindrada",
+       "799 cc"
+      ],
+      [
+       "Diámetro por Carrera",
+       "88 × 65.7 mm"
+      ],
+      [
+       "Potencia Máxima",
+       "96.5 hp a 9000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "80 N·m a 7500 rpm"
+      ],
+      [
+       "Máx. Velocidad",
+       "210 km/h"
+      ],
+      [
+       "Embrague",
+       "Multidisco en baño de aceite, 6 marchas, embrague deslizante"
+      ],
+      [
+       "Modos de Conducción",
+       "Eco, Sport, Rain"
+      ],
+      [
+       "Sistema de Combustible",
+       "Inyección electrónica (EFI Bosch) con lazo cerrado"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Tipo de Marco",
+       "Diamante, doble viga y chasis completamente integrado"
+      ],
+      [
+       "Manillar",
+       "Aleación de aluminio"
+      ],
+      [
+       "Suspensión Delantera",
+       "Horquilla invertida KYE multiajustable de 48 mm, recorrido 240 mm"
+      ],
+      [
+       "Suspensión Trasera",
+       "Monoamortiguador KYE multiajustable, recorrido 240 mm"
+      ],
+      [
+       "Neumático Delantero",
+       "Pirelli 90/90-21"
+      ],
+      [
+       "Neumático Trasero",
+       "Pirelli 150/70-18"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco wave 310 mm, pinza de cuatro pistones"
+      ],
+      [
+       "Freno Trasero",
+       "Disco wave 220 mm, pinza de un pistón"
+      ],
+      [
+       "ABS",
+       "Doble canal desconectable: ambas ruedas, solo delantera o ninguna"
+      ],
+      [
+       "Ángulo de Dirección",
+       "35°"
+      ],
+      [
+       "Rastrillo",
+       "26.15°"
+      ],
+      [
+       "Instrumentación",
+       "TFT horizontal de 7\""
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "L × A × Al",
+       "2238 × 880 × 1399 mm"
+      ],
+      [
+       "Distancia entre Ejes",
+       "1510 mm"
+      ],
+      [
+       "Altura del Asiento",
+       "875 mm"
+      ],
+      [
+       "Capacidad de Combustible",
+       "20 L"
+      ],
+      [
+       "Distancia al Suelo",
+       "275 mm"
+      ],
+      [
+       "Peso en Vacío",
+       "185 kg"
+      ],
+      [
+       "Peso Neto",
+       "169 kg"
+      ],
+      [
+       "Carga Máxima",
+       "150 kg"
+      ],
+      [
+       "Iluminación",
+       "Full LED"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1fjF1sbBTlDZSnv4cQD568yn0x58e31RF/view"
+  },
+  {
+   "slug": "qj-atr-150",
+   "marca": "QJ Motor",
+   "modelo": "ATR 150",
+   "tipo": "Scooter",
+   "precio": 61400,
+   "especial": 54900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T DOHC, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "150 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "15.8 hp @ 8,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "13.7 N·m @ 6,500 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "CVT automática"
+      ],
+      [
+       "Caja de Cambios",
+       "CVT, banda"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquillas telescópicas"
+      ],
+      [
+       "Suspensión Trasera",
+       "Doble amortiguador hidráulico"
+      ],
+      [
+       "Freno Delantero",
+       "Disco hidráulico (ABS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "100/80-14"
+      ],
+      [
+       "Llanta Trasera",
+       "130/70-13"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Tablero TFT con Bluetooth, navegación GPS integrada y espejo de smartphone"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "8L"
+      ],
+      [
+       "Peso en Vacío",
+       "140 kg"
+      ],
+      [
+       "Dimensiones",
+       "1975 x 770 x 1160 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1345 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "165 mm"
+      ],
+      [
+       "Altura del asiento",
+       "795 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1or4Kych4FNxk30d7j8ZcPQzUWiASiCld/view"
+  },
+  {
+   "slug": "qj-fort-350",
+   "marca": "QJ Motor",
+   "modelo": "FORT 350",
+   "tipo": "Scooter",
+   "precio": 134200,
+   "especial": 114900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T DOHC, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "350 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "32.7 hp @ 7,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "33.5 N·m @ 6,250 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "CVT automática"
+      ],
+      [
+       "Caja de Cambios",
+       "CVT, banda"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquillas telescópicas"
+      ],
+      [
+       "Suspensión Trasera",
+       "Muelle helicoidal telescópico humedecido con aceite"
+      ],
+      [
+       "Freno Delantero",
+       "Disco hidráulico (ABS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "120/70 ZR15"
+      ],
+      [
+       "Llanta Trasera",
+       "150/70 R14"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "14 L"
+      ],
+      [
+       "Peso en Vacío",
+       "213 kg"
+      ],
+      [
+       "Dimensiones",
+       "2220 x 780 x 1390 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1500 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "150 mm"
+      ],
+      [
+       "Altura del asiento",
+       "790 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1zz9bYhv8idi_8RMHfRvFmtssrwzesYAN/view"
+  },
+  {
+   "slug": "qj-srk-25r",
+   "marca": "QJ Motor",
+   "modelo": "SRK 25R",
+   "tipo": "Deportiva",
+   "precio": 71700,
+   "especial": 63900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T DOHC, 4 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "249 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "28 hp @ 9,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "22.5 N·m @ 7,250 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, multidisco húmedo"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Monoshock hidráulico (amortiguador de resorte hidráulico)"
+      ],
+      [
+       "Freno Delantero",
+       "Disco hidráulico Ø 300 mm (ABS doble canal Bosch)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 240 mm (ABS doble canal Bosch)"
+      ],
+      [
+       "Llanta Delantera",
+       "110/70 R17"
+      ],
+      [
+       "Llanta Trasera",
+       "140/60 R17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color con diferentes modos de visualización"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "12.5 L"
+      ],
+      [
+       "Peso en Vacío",
+       "162 kg"
+      ],
+      [
+       "Dimensiones",
+       "2010 x 770 x 1125 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1360 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "135 mm"
+      ],
+      [
+       "Altura del asiento",
+       "780 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1onMdr-cpCLqQ4NpyGJah5CmDDI6FN0YM/view"
+  },
+  {
+   "slug": "qj-srk-250-rs",
+   "marca": "QJ Motor",
+   "modelo": "SRK 250 RS ABS",
+   "tipo": "Deportiva",
+   "precio": 95200,
+   "especial": 82900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T DOHC, 4 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "249 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "27.9 hp @ 9,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "22.5 N·m @ 7,250 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo antirrebote"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida KYB"
+      ],
+      [
+       "Suspensión Trasera",
+       "Monoshock hidráulico con monobrazo y rin expuesto"
+      ],
+      [
+       "Freno Delantero",
+       "Disco hidráulico Ø 300 mm (ABS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 240 mm (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "110/70 R17"
+      ],
+      [
+       "Llanta Trasera",
+       "140/60 R17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED de alto rendimiento"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color con diferentes modos de visualización"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "12.5 L"
+      ],
+      [
+       "Peso en Vacío",
+       "162 kg"
+      ],
+      [
+       "Dimensiones",
+       "2010 x 770 x 1125 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1360 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "135 mm"
+      ],
+      [
+       "Altura del asiento",
+       "780 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1S1qscJTQnrZeiLQl5BEnXKsT9xiEeHi0/view"
+  },
+  {
+   "slug": "qj-srk-550-rs",
+   "marca": "QJ Motor",
+   "modelo": "SRK 550 RS",
+   "tipo": "Deportiva",
+   "precio": 143500,
+   "especial": 116900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico 4T DOHC, 8 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "554 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "56 hp @ 8,250 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "54 N·m @ 5,500 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo manual múltiple"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Muelle helicoidal telescópico humedecido con aceite"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco hidráulico Ø 320 mm (ABS de doble canal) - Brembo"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 260 mm (ABS) - Brembo"
+      ],
+      [
+       "Llanta Delantera",
+       "120/70 ZR17"
+      ],
+      [
+       "Llanta Trasera",
+       "160/60 ZR17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT con Bluetooth y navegación integrada"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "16.5 L"
+      ],
+      [
+       "Peso en Vacío",
+       "194 kg"
+      ],
+      [
+       "Dimensiones",
+       "2090 x 770 x 1155 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1420 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "140 mm"
+      ],
+      [
+       "Altura del asiento",
+       "870 / 790 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1zhd0zWmHb7AM6L8EgWn8ccaIIuvQQ-7B/view"
+  },
+  {
+   "slug": "qj-srk-600-rc",
+   "marca": "QJ Motor",
+   "modelo": "SRK 600 RC",
+   "tipo": "Deportiva",
+   "precio": 131900,
+   "especial": null,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Tetracilíndrico 4T DOHC, 16 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "600 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "80.5 hp @ 11,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "51 N·m @ 10,500 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo antirrebote"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Monoshock hidráulico ajustable"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco hidráulico Ø 320 mm (ABS de doble canal) - Brembo"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 260 mm (ABS) - Brembo"
+      ],
+      [
+       "Llanta Delantera",
+       "120/70 ZR17"
+      ],
+      [
+       "Llanta Trasera",
+       "180/55 ZR17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color con conectividad Bluetooth"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "16.4 L"
+      ],
+      [
+       "Peso en Vacío",
+       "225 kg"
+      ],
+      [
+       "Dimensiones",
+       "2140 x 750 x 1150 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1460 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "140 mm"
+      ],
+      [
+       "Altura del asiento",
+       "800 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1eFLh2N4OFw2acQWOwIroRETGfUExAc3n/view"
+  },
+  {
+   "slug": "qj-srk-800-rr",
+   "marca": "QJ Motor",
+   "modelo": "SRK 800 RR",
+   "tipo": "Superdeportiva",
+   "precio": 193700,
+   "especial": 163900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Tetracilíndrico 4T DOHC, 16 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "778 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "95 hp @ 10,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "75 N·m @ 8,500 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo manual múltiple"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Muelle helicoidal telescópico humedecido con aceite"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco hidráulico Ø 320 mm (ABS de doble canal) - Brembo"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 260 mm (ABS) - Brembo"
+      ],
+      [
+       "Llanta Delantera",
+       "120/70 ZR17"
+      ],
+      [
+       "Llanta Trasera",
+       "180/55 ZR17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED de alto rendimiento"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT con Bluetooth y navegación integrada"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "16 L"
+      ],
+      [
+       "Peso en Vacío",
+       "214 kg"
+      ],
+      [
+       "Dimensiones",
+       "2085 x 770 x 1130 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1450 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "130 mm"
+      ],
+      [
+       "Altura del asiento",
+       "815 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1qT6gYm71-7vHqqD8FsEUPNX-Gg2W2yFw/view"
+  },
+  {
+   "slug": "qj-srk-921-rr",
+   "marca": "QJ Motor",
+   "modelo": "SRK 921 RR",
+   "tipo": "Superdeportiva",
+   "precio": 282900,
+   "especial": 234900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Tetracilíndrico 4T DOHC, 16 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "921 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "125 hp @ 10,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "93 N·m @ 8,000 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo manual múltiple"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquilla invertida deportiva ajustable"
+      ],
+      [
+       "Suspensión Trasera",
+       "Amortiguador hidráulico ajustable (Monobrazo de aluminio)"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco hidráulico Ø 320 mm (Pinza radial Brembo)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 260 mm (ABS) - Brembo"
+      ],
+      [
+       "Llanta Delantera",
+       "120/70 ZR17"
+      ],
+      [
+       "Llanta Trasera",
+       "190/50 ZR17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla a color tecnología ScreenMirror"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "16 L"
+      ],
+      [
+       "Peso en Vacío",
+       "225 kg"
+      ],
+      [
+       "Dimensiones",
+       "2085 x 790 x 1130 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1425 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "135 mm"
+      ],
+      [
+       "Altura del asiento",
+       "835 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/16701ZKzl78esn22_XKlDuqMWYSbw3GZm/view"
+  },
+  {
+   "slug": "qj-srk-450-c",
+   "marca": "QJ Motor",
+   "modelo": "SRK 450 C",
+   "tipo": "Naked",
+   "precio": 112700,
+   "especial": 92900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico 4T DOHC, 8 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "449 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "47.6 hp @ 9,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "41 N·m @ 8,000 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo múltiple"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Muelle helicoidal telescópico humedecido con aceite"
+      ],
+      [
+       "Freno Delantero",
+       "Disco hidráulico Ø 320 mm (ABS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 260 mm (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "110/70 ZR17"
+      ],
+      [
+       "Llanta Trasera",
+       "150/60 ZR17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED con faro principal tipo proyector"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color con diferentes modos de visualización"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "14.8 L"
+      ],
+      [
+       "Peso en Vacío",
+       "173 kg"
+      ],
+      [
+       "Dimensiones",
+       "2030 x 750 x 1150 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1380 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "135 mm"
+      ],
+      [
+       "Altura del asiento",
+       "785 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1ElvWxDtFb3ihGKiPytbYMRbHE9qECqvS/view"
+  },
+  {
+   "slug": "qj-srk-550",
+   "marca": "QJ Motor",
+   "modelo": "SRK 550",
+   "tipo": "Naked",
+   "precio": 127700,
+   "especial": 110900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico 4T DOHC, 8 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "554 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "55.1 hp @ 8,250 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "54 N·m @ 5,500 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo múltiple"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida - Marzocchi"
+      ],
+      [
+       "Suspensión Trasera",
+       "Muelle helicoidal telescópico humedecido con aceite"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco hidráulico Ø 320 mm (ABS de doble canal)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 260 mm (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "120/70 ZR17"
+      ],
+      [
+       "Llanta Trasera",
+       "160/60 ZR17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED, Stop de alta visibilidad"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "15 L"
+      ],
+      [
+       "Peso en Vacío",
+       "190 kg"
+      ],
+      [
+       "Dimensiones",
+       "2100 x 865 x 1165 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1420 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "160 mm"
+      ],
+      [
+       "Altura del asiento",
+       "810 / 790 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1lrgV6egPL1VPlNoIBj1xYLpaSSV1KOsk/view"
+  },
+  {
+   "slug": "qj-srk-600",
+   "marca": "QJ Motor",
+   "modelo": "SRK 600",
+   "tipo": "Naked",
+   "precio": 147900,
+   "especial": null,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Tetracilíndrico 4T DOHC, 16 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "600 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "80.5 hp @ 11,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "51 N·m @ 10,500 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo antirrebote (ASC)"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Monoshock hidráulico"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco hidráulico Ø 320 mm - Brembo (ABS de doble canal)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 260 mm (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "120/70 ZR17"
+      ],
+      [
+       "Llanta Trasera",
+       "180/55 ZR17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED, Stop de alta visibilidad"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT con modos de manejo y navegación"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "15 L"
+      ],
+      [
+       "Peso en Vacío",
+       "229 kg"
+      ],
+      [
+       "Dimensiones",
+       "2140 x 790 x 1080 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1460 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "150 mm"
+      ],
+      [
+       "Altura del asiento",
+       "800 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1S3NjmxlLKkO0cnEq3uoZsNpc3knvCuIo/view"
+  },
+  {
+   "slug": "qj-srt-550-sx",
+   "marca": "QJ Motor",
+   "modelo": "SRT 550 SX",
+   "tipo": "Adventure",
+   "precio": 153700,
+   "especial": 129900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico 4T DOHC, 8 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "554 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "55.2 hp @ 8,250 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "54 N·m @ 5,500 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo múltiple"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Muelle helicoidal telescópico humedecido con aceite, amortiguador central ajustable Marzocchi multietapa"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco hidráulico Ø 320 mm"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 260 mm"
+      ],
+      [
+       "Llanta Delantera",
+       "110/80 R19 M/C - Rin de rayos (Spoke)"
+      ],
+      [
+       "Llanta Trasera",
+       "150/70 R17 M/C - Rin de rayos (Spoke)"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Doble faro"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT de 7 pulgadas a color con presión de neumáticos"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "20.5 L"
+      ],
+      [
+       "Peso en Vacío",
+       "220 kg"
+      ],
+      [
+       "Dimensiones",
+       "2200 x 900 x 1380 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1500 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "190 mm"
+      ],
+      [
+       "Altura del asiento",
+       "805 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1JprpuwIeL5-TyaBeql2sRzfAtAHEG7H0/view"
+  },
+  {
+   "slug": "qj-svt-650-x",
+   "marca": "QJ Motor",
+   "modelo": "SVT 650 X",
+   "tipo": "Adventure",
+   "precio": 186000,
+   "especial": 157900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico en V 4T DOHC, 8 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "645 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "75 hp @ 9,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "65 N·m @ 8,000 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo antirrebote"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Monoshock hidráulico ajustable"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco hidráulico Ø 320 mm (ABS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco hidráulico Ø 260 mm (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "110/80 R19"
+      ],
+      [
+       "Llanta Trasera",
+       "150/70 R17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "20 L"
+      ],
+      [
+       "Peso en Vacío",
+       "236 kg"
+      ],
+      [
+       "Dimensiones",
+       "2270 x 950 x 1405 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1505 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "170 mm"
+      ],
+      [
+       "Altura del asiento",
+       "795 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/10nU0nF5Rc7pzes33motoHrQ68arZHws1/view"
+  },
+  {
+   "slug": "qj-srt-700-x",
+   "marca": "QJ Motor",
+   "modelo": "SRT 700 X",
+   "tipo": "Adventure",
+   "precio": 172200,
+   "especial": 141900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico 4T DOHC, 8 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "698 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "72.5 hp @ 8,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "72.4 N·m @ 6,000 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo antirrebote"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquillas telescópicas invertidas - Marzocchi"
+      ],
+      [
+       "Suspensión Trasera",
+       "Monoshock hidráulico ajustable"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco Ø 320 mm (ABS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco Ø 260 mm (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "110/80 R19"
+      ],
+      [
+       "Llanta Trasera",
+       "150/70 R17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "19.5 L"
+      ],
+      [
+       "Peso en Vacío",
+       "240 kg"
+      ],
+      [
+       "Dimensiones",
+       "2220 x 925 x 1480 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1505 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "190 mm"
+      ],
+      [
+       "Altura del asiento",
+       "825 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/19Jjy3pp-fDuFwryBmRb-49g5p2RalCXC/view"
+  },
+  {
+   "slug": "qj-srt-800-sx",
+   "marca": "QJ Motor",
+   "modelo": "SRT 800 SX",
+   "tipo": "Adventure",
+   "precio": 193700,
+   "especial": 163900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico 4T DOHC, 8 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "799 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "91.2 hp @ 9,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "77 N·m @ 8,000 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Manual, húmedo antirrebote"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópicas invertidas - Marzocchi"
+      ],
+      [
+       "Suspensión Trasera",
+       "Monoshock hidráulico ajustable"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco Ø 320 mm (ABS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco Ø 260 mm (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "110/80-19"
+      ],
+      [
+       "Llanta Trasera",
+       "150/70-17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color con lectura de presión de neumáticos"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "24 L"
+      ],
+      [
+       "Peso en Vacío",
+       "263 kg"
+      ],
+      [
+       "Dimensiones",
+       "2260 x 950 x 1405 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1540 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "180 mm"
+      ],
+      [
+       "Altura del asiento",
+       "835 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1RZyuu-REZ7yZYLtCXVKW-Wv3LUK4grl8/view"
+  },
+  {
+   "slug": "qj-srv-200",
+   "marca": "QJ Motor",
+   "modelo": "SRV 200",
+   "tipo": "Cruiser",
+   "precio": 41600,
+   "especial": 35900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T OHV, 2 válvulas"
+      ],
+      [
+       "Cilindrada",
+       "197 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "12.7 hp @ 7,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "13.9 N·m @ 6,000 rpm"
+      ],
+      [
+       "Inyección",
+       "Carburador"
+      ],
+      [
+       "Embrague",
+       "Húmedo"
+      ],
+      [
+       "Caja de Cambios",
+       "5 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquillas telescópicas"
+      ],
+      [
+       "Suspensión Trasera",
+       "Doble amortiguador helicoidal hidráulico (Gas nitrógeno)"
+      ],
+      [
+       "Freno Delantero",
+       "Disco Ø 280 mm"
+      ],
+      [
+       "Freno Trasero",
+       "Disco Ø 240 mm"
+      ],
+      [
+       "Llanta Delantera",
+       "90/90-17"
+      ],
+      [
+       "Llanta Trasera",
+       "130/90-15"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación",
+     "filas": [
+      [
+       "Faros Principales",
+       "LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "14.7 L"
+      ],
+      [
+       "Peso en Vacío",
+       "152 kg"
+      ],
+      [
+       "Dimensiones",
+       "2120 x 825 x 1050 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1445 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "140 mm"
+      ],
+      [
+       "Altura del asiento",
+       "720 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1bT16iFospxmpFd_b6A2W5gUC3p69bovM/view"
+  },
+  {
+   "slug": "qj-srv-300",
+   "marca": "QJ Motor",
+   "modelo": "SRV 300",
+   "tipo": "Cruiser",
+   "precio": 102400,
+   "especial": 83900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico 4T SOHC, 8 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "296 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "30 hp @ 9,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "26.6 N·m @ 5,000 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Húmedo"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, cadena"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Doble amortiguador helicoidal hidráulico"
+      ],
+      [
+       "Freno Delantero",
+       "Disco Ø 280 mm (ABS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco Ø 240 mm (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "120/80 R16"
+      ],
+      [
+       "Llanta Trasera",
+       "150/80 R15"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "13.5 L"
+      ],
+      [
+       "Peso en Vacío",
+       "164 kg"
+      ],
+      [
+       "Dimensiones",
+       "2110 x 850 x 1100 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1400 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "160 mm"
+      ],
+      [
+       "Altura del asiento",
+       "700 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1FFCO63uE2bt1PRHY0uqoHw75wrUVhj4T/view"
+  },
+  {
+   "slug": "qj-srv-350-vs",
+   "marca": "QJ Motor",
+   "modelo": "SRV 350 VS",
+   "tipo": "Cruiser",
+   "precio": 118800,
+   "especial": 93900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico 4T DOHC, 8 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "343 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "31.5 hp @ 8,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "31 N·m @ 5,000 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Húmedo"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, banda"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Doble amortiguador helicoidal hidráulico"
+      ],
+      [
+       "Freno Delantero",
+       "Disco Ø 300 mm (ABS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco Ø 240 mm (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "130/90-16"
+      ],
+      [
+       "Llanta Trasera",
+       "150/80-16"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "16 L"
+      ],
+      [
+       "Peso en Vacío",
+       "182 kg"
+      ],
+      [
+       "Dimensiones",
+       "2210 x 830 x 1100 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1520 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "170 mm"
+      ],
+      [
+       "Altura del asiento",
+       "720 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1x7YhmvXP2vuzSB75DIMqhSN3bAY2CHaD/view"
+  },
+  {
+   "slug": "qj-srv-600-v",
+   "marca": "QJ Motor",
+   "modelo": "SRV 600 V",
+   "tipo": "Cruiser",
+   "precio": 160000,
+   "especial": 136900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Tetracilíndrico 4T DOHC, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "561 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "68 hp @ 10,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "54 N·m @ 8,000 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Húmedo múltiple"
+      ],
+      [
+       "Caja de Cambios",
+       "6 velocidades, banda"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Muelle helicoidal telescópico humedecido con aceite"
+      ],
+      [
+       "Freno Delantero",
+       "Doble disco Ø 300 mm (ABS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco Ø 260 mm (ABS)"
+      ],
+      [
+       "Llanta Delantera",
+       "130/90-16"
+      ],
+      [
+       "Llanta Trasera",
+       "180/65-16"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "16.5 L"
+      ],
+      [
+       "Peso en Vacío",
+       "219 kg"
+      ],
+      [
+       "Dimensiones",
+       "2280 x 830 x 1115 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1580 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "140 mm"
+      ],
+      [
+       "Altura del asiento",
+       "720 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1Jm39jxENECFwbdQ0lOM6fs7ySG7cmf66/view"
+  },
+  {
+   "slug": "qj-sfa-300b",
+   "marca": "QJ Motor",
+   "modelo": "SFA 300B",
+   "tipo": "Cuatrimoto",
+   "precio": 112500,
+   "especial": 94900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T SOHC, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "289 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "17.1 kW / 23 hp @ 7,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "27.2 N·m @ 5,500 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "CVT automática"
+      ],
+      [
+       "Caja de Cambios",
+       "Selector L-H-N-R (Baja-Alta-Neutral-Reversa)"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquilla telescópica con amortiguación hidráulica (4 etapas)"
+      ],
+      [
+       "Suspensión Trasera",
+       "Horquilla telescópica con amortiguación hidráulica (4 etapas)"
+      ],
+      [
+       "Freno Delantero",
+       "Disco Ø 170 mm"
+      ],
+      [
+       "Freno Trasero",
+       "Disco Ø 180 mm"
+      ],
+      [
+       "Llanta Delantera",
+       "AT 24 x 8-10"
+      ],
+      [
+       "Llanta Trasera",
+       "AT 24 x 10-10"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED, Luz baja 550 LM / luz alta 1160 LM (+50% visión nocturna)"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla LCD a color de 5 pulgadas"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "14 L"
+      ],
+      [
+       "Peso en Vacío",
+       "270 kg"
+      ],
+      [
+       "Dimensiones",
+       "1952 x 1110 x 1264 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1210 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "280 mm"
+      ],
+      [
+       "Altura del asiento",
+       "830 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1atrIbnb-LgduDqxnRvdEsxTwZgcFwXiM/view"
+  },
+  {
+   "slug": "qj-sfa-600",
+   "marca": "QJ Motor",
+   "modelo": "SFA 600",
+   "tipo": "Cuatrimoto",
+   "precio": 199400,
+   "especial": 162900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T SOHC, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "577.3 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "33 kW / 44.25 hp @ 7,250 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "55 N·m @ 5,500 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "CVT automática"
+      ],
+      [
+       "Caja de Cambios",
+       "CVT"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Independiente con amortiguación hidráulica de aire ajustable en multiples etapas"
+      ],
+      [
+       "Suspensión Trasera",
+       "Independiente con amortiguación hidráulica de aire ajustable en multiples etapas"
+      ],
+      [
+       "Freno Delantero",
+       "Disco Ø 210 mm"
+      ],
+      [
+       "Freno Trasero",
+       "Disco Ø 210 mm"
+      ],
+      [
+       "Llanta Delantera",
+       "25 x 8-12"
+      ],
+      [
+       "Llanta Trasera",
+       "25 x 10-12"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT de 7 pulgadas"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "25 L"
+      ],
+      [
+       "Peso en Vacío",
+       "450 kg"
+      ],
+      [
+       "Dimensiones",
+       "2330 x 1274 x 1440 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1480 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "273 mm"
+      ],
+      [
+       "Altura del asiento",
+       "577 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1IfS03iNf-PuiJ_sgARmB3MzZIV4Q5kxc/view"
+  },
+  {
+   "slug": "qj-sfa-1000",
+   "marca": "QJ Motor",
+   "modelo": "SFA 1000",
+   "tipo": "Cuatrimoto",
+   "precio": 258000,
+   "especial": 216900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "Bicilíndrico 4T SOHC, 8 válvulas refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "975.6 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "65 kW / 87.1 hp @ 7,250 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "93 N·m @ 6,250 rpm"
+      ],
+      [
+       "Inyección",
+       "Electrónica (EFI)"
+      ],
+      [
+       "Embrague",
+       "Multidisco húmedo CVT"
+      ],
+      [
+       "Caja de Cambios",
+       "CVT"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Amortiguador con bolsa de aire (neumático) 6 niveles de ajuste"
+      ],
+      [
+       "Suspensión Trasera",
+       "Amortiguación neumática ajustable"
+      ],
+      [
+       "Freno Delantero",
+       "Disco Ø 210 mm"
+      ],
+      [
+       "Freno Trasero",
+       "Disco Ø 210 mm"
+      ],
+      [
+       "Llanta Delantera",
+       "27 x 9-14"
+      ],
+      [
+       "Llanta Trasera",
+       "27 x 11-14"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT de 7 pulgadas"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "25 ± 2 L"
+      ],
+      [
+       "Peso en Vacío",
+       "491 kg"
+      ],
+      [
+       "Dimensiones",
+       "2330 x 1274 x 1460 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1480 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "285 mm"
+      ],
+      [
+       "Altura del asiento",
+       "577 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1_jFQhu9k5JMVdPlTbD-Vi18ZuRosGpuT/view"
+  },
+  {
+   "slug": "benda-napoleon-250",
+   "marca": "Benda",
+   "modelo": "Napoleon 250",
+   "tipo": "Bobber",
+   "precio": 125100,
+   "especial": 109900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "V-twin, 8 válvulas, refrigerado por líquido"
+      ],
+      [
+       "Cilindrada",
+       "249 cc"
+      ],
+      [
+       "Diámetro por carrera",
+       "53.5 x 55.4 mm"
+      ],
+      [
+       "Potencia",
+       "25.9HP/9000RPM"
+      ],
+      [
+       "Torque máximo",
+       "25NM/5500RPM"
+      ],
+      [
+       "Transmisión",
+       "Cadena"
+      ],
+      [
+       "Clutch",
+       "Antirrebote"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión delantera",
+       "Absorción multi enlace"
+      ],
+      [
+       "Suspensión trasera",
+       "Absorción de impactos de resorte trasero"
+      ],
+      [
+       "Freno delantero",
+       "Disco ABS"
+      ],
+      [
+       "Freno trasero",
+       "Disco ABS"
+      ],
+      [
+       "Neumática delantero",
+       "130/80 - 18"
+      ],
+      [
+       "Neumático trasero",
+       "160/70 - 18"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Dimensiones L*A*A",
+       "2333*838*1038 mm"
+      ],
+      [
+       "Capacidad del tanque",
+       "9.5L"
+      ],
+      [
+       "Peso en Seco",
+       "182 Kg"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1qgKx9lr-pKB0ntCbdHCo5tVHAMqIZ8a6/view"
+  },
+  {
+   "slug": "benda-napoleon-500",
+   "marca": "Benda",
+   "modelo": "Napoleon 500",
+   "tipo": "Bobber",
+   "precio": 167100,
+   "especial": 145900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "V-twin, 8 válvulas,"
+      ],
+      [
+       "Cilindrada",
+       "575.6 cc"
+      ],
+      [
+       "Diámetro por carrera",
+       "69 x 63.6 mm"
+      ],
+      [
+       "Potencia",
+       "46HP/8500RPM"
+      ],
+      [
+       "Torque máximo",
+       "42NM/6700RPM"
+      ],
+      [
+       "Transmisión",
+       "6 velocidades, Banda"
+      ],
+      [
+       "Clutch",
+       "Multidisco húmedo"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión delantera",
+       "Amortiguación"
+      ],
+      [
+       "Suspensión trasera",
+       "Amortiguación Hidráulica"
+      ],
+      [
+       "Freno delantero",
+       "Disco ABS y TCS"
+      ],
+      [
+       "Freno trasero",
+       "Disco ABS y TCS"
+      ],
+      [
+       "Neumática delantero",
+       "150/80R15"
+      ],
+      [
+       "Neumático trasero",
+       "180/65R16"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Dimensiones L*A*A",
+       "2285*810*1080 mm"
+      ],
+      [
+       "Capacidad del tanque",
+       "16 L"
+      ],
+      [
+       "Peso en Seco",
+       "215 Kg"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1t2rqEFYbzuYDK6CazIb-m4-DWjhEaYfg/view"
+  },
+  {
+   "slug": "benda-lfc-700-pro",
+   "marca": "Benda",
+   "modelo": "LFC 700 Pro",
+   "tipo": "Cruiser",
+   "precio": 251100,
+   "especial": 239900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "4 cilindros en línea, 16 válvulas"
+      ],
+      [
+       "Cilindrada",
+       "676 cc"
+      ],
+      [
+       "Potencia",
+       "77 hp @ 10,050 rpm"
+      ],
+      [
+       "Torque máximo",
+       "60 N·m @ 8,000 rpm"
+      ],
+      [
+       "Transmisión",
+       "Cadena, 6 velocidadades"
+      ],
+      [
+       "Velocidad Máxima",
+       "160 Km/h"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión delantera",
+       "Horquilla telescópica invertida KYB"
+      ],
+      [
+       "Suspensión trasera",
+       "Monoshock con amortiguador de gas de doble cámara"
+      ],
+      [
+       "Freno delantero",
+       "Doble disco Ø 320 mm - Brembo, ABS"
+      ],
+      [
+       "Freno trasero",
+       "Disco único Ø 260 mm - Brembo, ABS"
+      ],
+      [
+       "Neumática delantero",
+       "130/70-19"
+      ],
+      [
+       "Neumático trasero",
+       "300/35-18"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Dimensiones L*A*A",
+       "2430 x 880 x 1100 mm"
+      ],
+      [
+       "Capacidad del tanque",
+       "17 L"
+      ],
+      [
+       "Peso en Seco",
+       "287 Kg"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/16kjAXb-uu-ZwwcjmciJj7QSjfi3QQQvG/view"
+  },
+  {
+   "slug": "benda-chinchilla-300",
+   "marca": "Benda",
+   "modelo": "Chinchilla 300",
+   "tipo": "Cruiser",
+   "precio": 138900,
+   "especial": null,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "4 cilindros línea 16 V"
+      ],
+      [
+       "Cilindrada",
+       "676cc"
+      ],
+      [
+       "Potencia",
+       "77.7HP/10050RPM"
+      ],
+      [
+       "Torque máximo",
+       "60NM/8000RPM"
+      ],
+      [
+       "Transmisión",
+       "6 velocidades, Cadena"
+      ],
+      [
+       "Velocidad Máxima",
+       "160 Km/h"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión delantera",
+       "Telescópica invertida"
+      ],
+      [
+       "Suspensión trasera",
+       "Amortiguador trasero central"
+      ],
+      [
+       "Freno delantero",
+       "Disco ABS y TCS"
+      ],
+      [
+       "Freno trasero",
+       "Disco ABS y TCS"
+      ],
+      [
+       "Neumática delantero",
+       "130/70R19"
+      ],
+      [
+       "Neumático trasero",
+       "310/35R18"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Dimensiones L*A*A",
+       "2440*880*1100 mm"
+      ],
+      [
+       "Capacidad del tanque",
+       "17 L"
+      ],
+      [
+       "Peso en Seco",
+       "287 Kg"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/180FJaCtgD5BbaHGKRwLFs3w5Yh_Pu-ZA/view"
+  },
+  {
+   "slug": "benda-chinchilla-500",
+   "marca": "Benda",
+   "modelo": "Chinchilla 500",
+   "tipo": "Cruiser",
+   "precio": 154900,
+   "especial": null,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "2 cilindros en V (V-Twin)"
+      ],
+      [
+       "Cilindrada",
+       "575.6 cc"
+      ],
+      [
+       "Potencia",
+       "47 hp"
+      ],
+      [
+       "Torque máximo",
+       "42NM/6700RPM"
+      ],
+      [
+       "Transmisión",
+       "Banda a 6 velocidades"
+      ],
+      [
+       "Clutch",
+       "Multidisco húmedo"
+      ],
+      [
+       "Velocidad Máxima",
+       "145 Km/h"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión delantera",
+       "Horquilla telescópica invertida"
+      ],
+      [
+       "Suspensión trasera",
+       "Doble amortiguador de resorte"
+      ],
+      [
+       "Freno delantero",
+       "Doble disco 320mm / caliper 4 pistones"
+      ],
+      [
+       "Freno trasero",
+       "Disco único 260mm / caliper 2 pistones"
+      ],
+      [
+       "Neumática delantero",
+       "150/80-16"
+      ],
+      [
+       "Neumático trasero",
+       "180/65-16"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Dimensiones L*A*A",
+       "2220 x 890 x 1150 mm"
+      ],
+      [
+       "Capacidad del tanque",
+       "16 L"
+      ],
+      [
+       "Peso en Seco",
+       "215 Kg"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1PTl1jmB2Gwx4yECs2j5MPfaYMW0_AKYP/view"
+  },
+  {
+   "slug": "benda-darkflag-500",
+   "marca": "Benda",
+   "modelo": "Dark Flag 500",
+   "tipo": "Cruiser",
+   "precio": 158900,
+   "especial": null,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "V4, 16 válvulas"
+      ],
+      [
+       "Cilindrada",
+       "496.4 cc"
+      ],
+      [
+       "Potencia",
+       "47 hp"
+      ],
+      [
+       "Torque máximo",
+       "42 N·m a 7,300 RPM"
+      ],
+      [
+       "Transmisión",
+       "Banda a 6 velocidades"
+      ],
+      [
+       "Velocidad Máxima",
+       "145 Km/h"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión delantera",
+       "Horquilla telescópica invertida"
+      ],
+      [
+       "Suspensión trasera",
+       "Doble amortiguador hidráulico"
+      ],
+      [
+       "Freno delantero",
+       "Disco único 320mm"
+      ],
+      [
+       "Freno trasero",
+       "Disco único 260mm"
+      ],
+      [
+       "Neumática delantero",
+       "130/90-16"
+      ],
+      [
+       "Neumático trasero",
+       "150/80-16"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Dimensiones L*A*A",
+       "2330 x 800 x 1267 mm"
+      ],
+      [
+       "Capacidad del tanque",
+       "16 L"
+      ],
+      [
+       "Peso en Seco",
+       "260 Kg"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/199t6j6xcvsZLSELz16tOHHBKDBPqPmQR/view"
+  },
+  {
+   "slug": "benda-redstone-550",
+   "marca": "Benda",
+   "modelo": "Redstone 550 R2",
+   "tipo": "Cuatrimoto",
+   "precio": 193800,
+   "especial": 165900,
+   "ficha": [
+    {
+     "seccion": "Potencia",
+     "filas": [
+      [
+       "Motor",
+       "2 cilindros en V (V-Twin), 4T SOHC"
+      ],
+      [
+       "Cilindrada",
+       "500 cc"
+      ],
+      [
+       "Potencia",
+       "48 hp"
+      ],
+      [
+       "Torque máximo",
+       "46 N·m @ 5,000 rpm"
+      ],
+      [
+       "Transmisión",
+       "Transmisión por eje (CVT)"
+      ],
+      [
+       "Velocidad Máxima",
+       "150 Km/h"
+      ]
+     ]
+    },
+    {
+     "seccion": "Suspensión, Frenos Y Neumáticos",
+     "filas": [
+      [
+       "Suspensión delantera",
+       "Brazo en A doble, barra estabilizadora"
+      ],
+      [
+       "Suspensión trasera",
+       "Brazo arrastrado torsional independiente"
+      ],
+      [
+       "Freno delantero",
+       "Doble disco Ø 220 mm"
+      ],
+      [
+       "Freno trasero",
+       "Doble disco Ø 220 mm"
+      ],
+      [
+       "Neumática delantero",
+       "25 x 8 x 12 in y 26 x 9 x 14 in"
+      ],
+      [
+       "Neumático trasero",
+       "25 x 10 x 12 in y 26 x 11 x 14 in"
+      ]
+     ]
+    },
+    {
+     "seccion": "Iluminación E Instrumentación",
+     "filas": [
+      [
+       "Faros Principales",
+       "Full LED"
+      ],
+      [
+       "Direccionales y Calavera",
+       "LED"
+      ],
+      [
+       "Cuadro de Instrumentos",
+       "Pantalla TFT a color"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones Y Capacidades",
+     "filas": [
+      [
+       "Dimensiones L*A*A",
+       "2365 x 1245 x 1450 mm"
+      ],
+      [
+       "Capacidad del tanque",
+       "30 L"
+      ],
+      [
+       "Peso en Seco",
+       "425 Kg"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1YtDY9ol_KCz4c299sVYpa8FvkQq1BMTD/view"
+  },
+  {
+   "slug": "treck-acorazada-150",
+   "marca": "Treck",
+   "modelo": "Acorazada 150",
+   "tipo": "Urbana",
+   "precio": 29900,
+   "especial": 25900,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T"
+      ],
+      [
+       "Cilindrada",
+       "150 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "8.4 hp @ 7,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "9.2 N·m @ 6,000 rpm"
+      ],
+      [
+       "Velocidad Máxima",
+       "90 km/h"
+      ],
+      [
+       "Embrague",
+       "Automático (CVT)"
+      ],
+      [
+       "Caja de Cambios",
+       "CVT automático"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquilla telescópica"
+      ],
+      [
+       "Suspensión Trasera",
+       "Doble amortiguador"
+      ],
+      [
+       "Freno Delantero",
+       "Disco"
+      ],
+      [
+       "Freno Trasero",
+       "Tambor"
+      ],
+      [
+       "Llanta Delantera",
+       "120/70-12"
+      ],
+      [
+       "Llanta Trasera",
+       "120/70-12"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "4.8 L"
+      ],
+      [
+       "Peso en Vacío",
+       "115 kg"
+      ],
+      [
+       "Dimensiones",
+       "1935 x 745 x 1150 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1320 mm"
+      ],
+      [
+       "Altura del asiento",
+       "780 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/11oEW7fJjW3mjWYoviylDsLEXQDDGeQjm/view"
+  },
+  {
+   "slug": "treck-mt-125",
+   "marca": "Treck",
+   "modelo": "MT 125",
+   "tipo": "Urbana",
+   "precio": 19500,
+   "especial": 16900,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T"
+      ],
+      [
+       "Cilindrada",
+       "125 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "6.7 hp @ 7,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "7.5 N·m @ 5,500 rpm"
+      ],
+      [
+       "Velocidad Máxima",
+       "80 km/h"
+      ],
+      [
+       "Embrague",
+       "Semiautomático"
+      ],
+      [
+       "Caja de Cambios",
+       "4 velocidades"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquilla telescópica"
+      ],
+      [
+       "Suspensión Trasera",
+       "Doble amortiguador"
+      ],
+      [
+       "Freno Delantero",
+       "Disco"
+      ],
+      [
+       "Freno Trasero",
+       "Tambor"
+      ],
+      [
+       "Llanta Delantera",
+       "2.50/17"
+      ],
+      [
+       "Llanta Trasera",
+       "2.75/17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "3.12 L"
+      ],
+      [
+       "Peso en Vacío",
+       "85 kg"
+      ],
+      [
+       "Dimensiones",
+       "1920 x 700 x 1130 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1240 mm"
+      ],
+      [
+       "Altura del asiento",
+       "800 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1z0aYnU6zNswVO43uHzsrp8MJODd8BKQV/view"
+  },
+  {
+   "slug": "treck-tigercat-300",
+   "marca": "Treck",
+   "modelo": "Tigercat 300",
+   "tipo": "Doble propósito",
+   "precio": 40700,
+   "especial": 34900,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T"
+      ],
+      [
+       "Cilindrada",
+       "271 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "20.78 hp"
+      ],
+      [
+       "Torque Máximo",
+       "21 N·m @ 6,500 rpm"
+      ],
+      [
+       "Velocidad Máxima",
+       "115 km/h"
+      ],
+      [
+       "Tipo de Enfriamiento",
+       "Aire y aceite"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquilla telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Amortiguador monoshock"
+      ],
+      [
+       "Freno Delantero",
+       "Disco"
+      ],
+      [
+       "Freno Trasero",
+       "Disco"
+      ],
+      [
+       "Llanta Delantera",
+       "80/100-21"
+      ],
+      [
+       "Llanta Trasera",
+       "110/100-18"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "13 L"
+      ],
+      [
+       "Peso en vacío",
+       "134 kg"
+      ],
+      [
+       "Dimensiones",
+       "2130 x 950 x 1350 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1360 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "270 mm"
+      ],
+      [
+       "Altura del asiento",
+       "850 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1Dz_p59PtrUfFVekobdueZYLHjrogXRge/view"
+  },
+  {
+   "slug": "treck-raven-300",
+   "marca": "Treck",
+   "modelo": "Raven 300",
+   "tipo": "Doble propósito",
+   "precio": 39400,
+   "especial": 34900,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T"
+      ],
+      [
+       "Cilindrada",
+       "271 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "20.7 hp @ 8,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "21 N·m @ 6,500 rpm"
+      ],
+      [
+       "Velocidad Máxima",
+       "115 km/h"
+      ],
+      [
+       "Tipo de Enfriamiento",
+       "Aire y aceite"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquilla telescópica invertida"
+      ],
+      [
+       "Suspensión Trasera",
+       "Amortiguador monoshock"
+      ],
+      [
+       "Freno Delantero",
+       "Disco"
+      ],
+      [
+       "Freno Trasero",
+       "Disco"
+      ],
+      [
+       "Llanta Delantera",
+       "90/90-19"
+      ],
+      [
+       "Llanta Trasera",
+       "110/90-17"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "13 L"
+      ],
+      [
+       "Peso en vacío",
+       "139.1 kg"
+      ],
+      [
+       "Dimensiones",
+       "2130 x 950 x 1350 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1360 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "270 mm"
+      ],
+      [
+       "Altura del asiento",
+       "850 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1pHcJc1G6QZ4JvpykwpRwR9lHvM_K8QWQ/view"
+  },
+  {
+   "slug": "treck-matt-150",
+   "marca": "Treck",
+   "modelo": "Matt 150",
+   "tipo": "Doble propósito",
+   "precio": 26600,
+   "especial": 21900,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T"
+      ],
+      [
+       "Cilindrada",
+       "149.4 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "11 hp @ 8,500 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "10 N·m @ 7,500 rpm"
+      ],
+      [
+       "Alimentación",
+       "Carburador"
+      ],
+      [
+       "Caja de Cambios",
+       "5 velocidades"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquilla telescópica convencional"
+      ],
+      [
+       "Suspensión Trasera",
+       "Amortiguador monoshock"
+      ],
+      [
+       "Freno Delantero",
+       "Disco único"
+      ],
+      [
+       "Freno Trasero",
+       "Tambor"
+      ],
+      [
+       "Llanta Delantera",
+       "80/100-21"
+      ],
+      [
+       "Llanta Trasera",
+       "120/80-18"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "12.2 L"
+      ],
+      [
+       "Dimensiones",
+       "2090 x 890 x 1185 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1350 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "268 mm"
+      ],
+      [
+       "Altura del asiento",
+       "840 / 860 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1Ra2_vdrxem79p34AdoVhgOqtnMhTRosM/view"
+  },
+  {
+   "slug": "treck-matt-250",
+   "marca": "Treck",
+   "modelo": "Matt 250",
+   "tipo": "Doble propósito",
+   "precio": 30900,
+   "especial": 22900,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T"
+      ],
+      [
+       "Cilindrada",
+       "250 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "14 hp"
+      ],
+      [
+       "Torque Máximo",
+       "16.5 N·m @ 5,500 rpm"
+      ],
+      [
+       "Alimentación",
+       "Carburador"
+      ],
+      [
+       "Caja de Cambios",
+       "5 velocidades"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquilla telescópica convencional"
+      ],
+      [
+       "Suspensión Trasera",
+       "Amortiguador monoshock"
+      ],
+      [
+       "Freno Delantero",
+       "Disco"
+      ],
+      [
+       "Freno Trasero",
+       "Disco"
+      ],
+      [
+       "Llanta Delantera",
+       "80/100-21"
+      ],
+      [
+       "Llanta Trasera",
+       "110/100-18"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "11 L"
+      ],
+      [
+       "Peso en vacío",
+       "122 kg"
+      ],
+      [
+       "Dimensiones",
+       "2090 x 870 x 1021 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1300 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "270 mm"
+      ],
+      [
+       "Altura del asiento",
+       "870 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/173YAgUXfUByvQ71w67V_PI8oycfB02W1/view"
+  },
+  {
+   "slug": "treck-jin-150",
+   "marca": "Treck",
+   "modelo": "Jin 150",
+   "tipo": "Doble propósito",
+   "precio": 24600,
+   "especial": 21900,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T"
+      ],
+      [
+       "Cilindrada",
+       "150 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "11.2 hp"
+      ],
+      [
+       "Torque Máximo",
+       "11 +/- 0.2 N·m @ 6,000 rpm"
+      ],
+      [
+       "Velocidad Máxima",
+       "100 km/h"
+      ],
+      [
+       "Caja de Cambios",
+       "5 velocidades"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquilla telescópica convencional"
+      ],
+      [
+       "Suspensión Trasera",
+       "Doble amortiguador trasero"
+      ],
+      [
+       "Freno Delantero",
+       "Disco"
+      ],
+      [
+       "Freno Trasero",
+       "Tambor"
+      ],
+      [
+       "Llanta Delantera",
+       "2.75 R18"
+      ],
+      [
+       "Llanta Trasera",
+       "3.00 R18"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "10 L"
+      ],
+      [
+       "Peso en vacío",
+       "108.5 kg"
+      ],
+      [
+       "Dimensiones",
+       "1950 x 760 x 1060 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1300 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "150 mm"
+      ],
+      [
+       "Altura del asiento",
+       "840 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1f4XHuwksPo-135gymQfJC7Uv9rv1L5nK/view"
+  },
+  {
+   "slug": "treck-trapper-150",
+   "marca": "Treck",
+   "modelo": "Trapper 150",
+   "tipo": "Trabajo",
+   "precio": 15900,
+   "especial": null,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico 4T"
+      ],
+      [
+       "Cilindrada",
+       "150 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "11.4 hp"
+      ],
+      [
+       "Torque Máximo",
+       "11 +/- 0.2 N·m @ 6,000 rpm"
+      ],
+      [
+       "Velocidad Máxima",
+       "95 km/h"
+      ],
+      [
+       "Caja de Cambios",
+       "5 velocidades"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Horquilla telescópica convencional"
+      ],
+      [
+       "Suspensión Trasera",
+       "Doble amortiguador trasero"
+      ],
+      [
+       "Freno Delantero",
+       "Disco"
+      ],
+      [
+       "Freno Trasero",
+       "Tambor"
+      ],
+      [
+       "Llanta Delantera",
+       "2.75-18"
+      ],
+      [
+       "Llanta Trasera",
+       "3.00-18"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "11 L"
+      ],
+      [
+       "Peso en vacío",
+       "96 kg"
+      ],
+      [
+       "Dimensiones",
+       "1885 x 750 x 1005 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "1250 mm"
+      ],
+      [
+       "Distancia al suelo",
+       "300 mm"
+      ],
+      [
+       "Altura del asiento",
+       "720 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/18YKD8Mek_fOocswjNwQABXqRikEjMJTK/view"
+  },
+  {
+   "slug": "treck-warrior-200",
+   "marca": "Treck",
+   "modelo": "Warrior 200",
+   "tipo": "Cuatrimoto",
+   "precio": 44500,
+   "especial": 37900,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico, 4 tiempos"
+      ],
+      [
+       "Cilindrada",
+       "200 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "8.84 hp"
+      ],
+      [
+       "Torque Máximo",
+       "10.2 Nm a 6,500 rpm"
+      ],
+      [
+       "Velocidad Máxima",
+       "60 Km/hr"
+      ],
+      [
+       "Transmisión",
+       "Automática D-N-R"
+      ],
+      [
+       "Enfriamiento",
+       "Aire"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Doble amortiguador independiente"
+      ],
+      [
+       "Suspensión Trasera",
+       "Amortiguador independiente"
+      ],
+      [
+       "Freno Delantero",
+       "Disco"
+      ],
+      [
+       "Freno Trasero",
+       "Disco"
+      ],
+      [
+       "Neumático Delantero",
+       "23/7 - 10"
+      ],
+      [
+       "Neumático Trasero",
+       "23/10 - 10"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "5L"
+      ],
+      [
+       "Peso en Vacío",
+       "191 Kg"
+      ],
+      [
+       "Dimensiones",
+       "1,818 x 1,110 x 1,080 mm"
+      ],
+      [
+       "Distancia entre Ejes",
+       "1,220 mm"
+      ],
+      [
+       "Altura del Asiento",
+       "800 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/10CpWm1F68OPQQot6btieiH_EC8AlnVJd/view"
+  },
+  {
+   "slug": "treck-titan-300",
+   "marca": "Treck",
+   "modelo": "Titan 300",
+   "tipo": "Cuatrimoto",
+   "precio": 87900,
+   "especial": null,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico, 4 tiempos"
+      ],
+      [
+       "Cilindrada",
+       "300 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "22.7 hp a 7,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "24.5 Nm a 5,500 rpm"
+      ],
+      [
+       "Velocidad Máxima",
+       "95±3 km/hr"
+      ],
+      [
+       "Transmisión",
+       "Automático F/N/R con engrane manual"
+      ],
+      [
+       "Enfriamiento",
+       "Líquido"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Amortiguador hidráulico"
+      ],
+      [
+       "Suspensión Trasera",
+       "Amortiguador hidráulico"
+      ],
+      [
+       "Freno Delantero",
+       "Disco (CBS)"
+      ],
+      [
+       "Freno Trasero",
+       "Disco (CBS)"
+      ],
+      [
+       "Arranque",
+       "Électrico"
+      ],
+      [
+       "Llanta Delantera",
+       "24/8 - 12"
+      ],
+      [
+       "Llanta Trasera",
+       "24/10 - 12"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "16 L"
+      ],
+      [
+       "Peso en Vacío",
+       "374 Kg"
+      ],
+      [
+       "Dimensiones",
+       "1,945 × 1,090 × 1,225 mm"
+      ],
+      [
+       "Carga Máxima",
+       "800 Kg"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1aOzifYy_Dl7fLRzdxhgSJ-D2gvabRGnU/view"
+  },
+  {
+   "slug": "treck-scala-50",
+   "marca": "Treck",
+   "modelo": "Scala 50",
+   "tipo": "Infantil",
+   "precio": 12200,
+   "especial": 10900,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico, 2 tiempos"
+      ],
+      [
+       "Cilindrada",
+       "50 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "1.97 hp"
+      ],
+      [
+       "Torque Máximo",
+       "2.2 NM/5000RPM"
+      ],
+      [
+       "Velocidad Máxima",
+       "25/35 km por hora"
+      ],
+      [
+       "Transmisión",
+       "Por cadena, embrague automático"
+      ],
+      [
+       "Enfriamiento",
+       "Por aire"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Amortiguador de resorte"
+      ],
+      [
+       "Suspensión Trasera",
+       "Amortiguador de resorte"
+      ],
+      [
+       "Freno Delantero",
+       "Disco"
+      ],
+      [
+       "Freno Trasero",
+       "Disco"
+      ],
+      [
+       "Llanta Delantera",
+       "4.10/3.50-6"
+      ],
+      [
+       "Llanta Trasera",
+       "13*5.00-6"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "1.5 L"
+      ],
+      [
+       "Peso en Vacío",
+       "40 kilos"
+      ],
+      [
+       "Dimensiones",
+       "1020*5800*700mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "700 mm"
+      ],
+      [
+       "Altura del Asiento",
+       "470 mm"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/1DBbk1EP7fPWxCB9VS6rXZKy3xPhAF_4I/view"
+  },
+  {
+   "slug": "treck-rampante-250",
+   "marca": "Treck",
+   "modelo": "Rampante 250 P",
+   "tipo": "Vehículo comercial",
+   "precio": 67900,
+   "especial": null,
+   "ficha": [
+    {
+     "seccion": "Motor",
+     "filas": [
+      [
+       "Motor",
+       "Monocilíndrico, 4 tiempos"
+      ],
+      [
+       "Cilindrada",
+       "250 cc"
+      ],
+      [
+       "Potencia Máxima",
+       "15.4 hp a 7,000 rpm"
+      ],
+      [
+       "Torque Máximo",
+       "16 Nm a 5,500 rpm"
+      ],
+      [
+       "Velocidad Máxima",
+       "60 km/hr"
+      ],
+      [
+       "Transmisión",
+       "5 marchas por eje"
+      ],
+      [
+       "Tipo de Chasis",
+       "Placa de acero de 7 placas"
+      ]
+     ]
+    },
+    {
+     "seccion": "Chasis",
+     "filas": [
+      [
+       "Suspensión Delantera",
+       "Amortiguador"
+      ],
+      [
+       "Suspensión Trasera",
+       "Muelle"
+      ],
+      [
+       "Freno Delantero",
+       "Tambor"
+      ],
+      [
+       "Freno Trasero",
+       "Tambor"
+      ],
+      [
+       "Llanta Delantera",
+       "4.50 - 12"
+      ],
+      [
+       "Llanta Trasera",
+       "4.50 - 12"
+      ]
+     ]
+    },
+    {
+     "seccion": "Dimensiones",
+     "filas": [
+      [
+       "Capacidad de Combustible",
+       "16 L"
+      ],
+      [
+       "Peso en Vacío",
+       "374 kg"
+      ],
+      [
+       "Dimensiones",
+       "3,370 x 1,350 x 1,880 mm"
+      ],
+      [
+       "Distancia entre ejes",
+       "2,280 mm"
+      ],
+      [
+       "Carga Máxima",
+       "800 Kg"
+      ]
+     ]
+    }
+   ],
+   "pdf": "https://drive.google.com/file/d/13fATf6p6AZ8x_ArzVp5-oWbxa4FbFi3G/view"
+  }
+ ]
+}

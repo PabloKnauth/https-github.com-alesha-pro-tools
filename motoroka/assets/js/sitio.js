@@ -125,22 +125,124 @@
     pintar();
   }
 
-  /* ---------- catálogo: filtro por marca con transición ---------- */
+  /* ---------- catálogo: marca, tipo y orden (con transición) ---------- */
   const filtros = $('[data-filtros]');
+  const lista = $('[data-catalogo]');
   const motos = $$('[data-catalogo] .moto');
-  if (filtros) {
+  if (filtros && lista) {
+    const selTipo = $('[data-tipo]', filtros);
+    const selOrden = $('[data-orden]', filtros);
+    const resultado = $('[data-resultado]');
+    let marca = 'todas';
     motos.forEach((m, i) => { m.style.viewTransitionName = `moto-${i}`; });
+    const aplicar = () => {
+      const tipo = selTipo.value, orden = selOrden.value;
+      let n = 0;
+      motos.forEach(m => {
+        const ver = (marca === 'todas' || m.dataset.marca === marca) && (!tipo || m.dataset.tipo === tipo);
+        m.hidden = !ver; if (ver) n++;
+      });
+      const orden_ = [...motos].sort((x, y) => orden === 'asc' ? x.dataset.precio - y.dataset.precio
+        : orden === 'desc' ? y.dataset.precio - x.dataset.precio : x.dataset.i - y.dataset.i);
+      orden_.forEach(m => lista.append(m));
+      resultado.textContent = n === 1 ? '1 modelo' : n ? `${n} modelos` : 'Sin modelos con esos filtros';
+    };
+    const conTransicion = fn => (document.startViewTransition && !quieto.matches) ? document.startViewTransition(fn) : fn();
     filtros.addEventListener('click', e => {
-      const b = e.target.closest('button');
+      const b = e.target.closest('button[data-marca]');
       if (!b || b.getAttribute('aria-pressed') === 'true') return;
-      const marca = b.dataset.marca;
-      const aplicar = () => {
-        $$('button', filtros).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-        motos.forEach(m => { m.hidden = !(marca === 'todas' || m.dataset.marca === marca); });
-      };
-      if (document.startViewTransition && !quieto.matches) document.startViewTransition(aplicar);
-      else aplicar();
+      marca = b.dataset.marca;
+      conTransicion(() => { $$('button[data-marca]', filtros).forEach(x => x.setAttribute('aria-pressed', String(x === b))); aplicar(); });
     });
+    [selTipo, selOrden].forEach(sel => sel.addEventListener('change', () => conTransicion(aplicar)));
+  }
+
+  /* ---------- ficha técnica con visor 360 ---------- */
+  const dlg = $('[data-ficha-dialogo]');
+  if (dlg && motos.length) {
+    let datosMotos = null, origenFicha = null;
+    const cargar = () => datosMotos || (datosMotos = fetch('datos/motos.json').then(r => r.json()));
+    const peso = n => '$' + Number(n).toLocaleString('es-MX');
+    const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const escena = $('[data-giro-escena]', dlg), rango = $('[data-giro-rango]', dlg), giro = $('[data-giro]', dlg), ayuda = $('[data-giro-ayuda]', dlg);
+    let frames = [], actual = 0, autogiro = null, textoAyuda = '';
+    const mostrar = k => {
+      if (!frames.length) return;
+      actual = (k + frames.length) % frames.length;
+      frames.forEach((im, i) => im.classList.toggle('on', i === actual));
+      rango.value = actual;
+    };
+    const pararAuto = () => { clearInterval(autogiro); autogiro = null; };
+    const abrir = async i => {
+      const { motos: lista_ } = await cargar();
+      const m = lista_[i];
+      $('[data-ficha-marca]', dlg).textContent = `${m.marca} · ${m.tipo}`;
+      $('[data-ficha-nombre]', dlg).textContent = m.modelo;
+      $('[data-ficha-precio]', dlg).innerHTML = m.especial
+        ? `<b>${peso(m.especial)}</b><s>${peso(m.precio)}</s><small>Precio especial de noviembre 2026 · precio público ${peso(m.precio)}</small>`
+        : `<b>${peso(m.precio)}</b><small>Precio público 2026</small>`;
+      $('[data-ficha-wa]', dlg).href = 'https://wa.me/527226665997?text=' + encodeURIComponent(`Hola Moto Roka, me interesa la ${m.marca} ${m.modelo}.`);
+      const pdf = $('[data-ficha-pdf]', dlg); pdf.hidden = !m.pdf; if (m.pdf) pdf.href = m.pdf;
+      $('[data-ficha-specs]', dlg).innerHTML = m.ficha.map(sec => `<section><h3>${esc(sec.seccion)}</h3><dl>${sec.filas.map(([a, b]) => `<div><dt>${esc(a)}</dt><dd>${esc(b)}</dd></div>`).join('')}</dl></section>`).join('');
+      // visor: los ángulos van en orden de giro
+      escena.replaceChildren(); pararAuto();
+      const n = m.giro || 0;
+      const rutas = n ? Array.from({ length: n }, (_, k) => `assets/motos/${m.slug}/${String(k).padStart(2, '0')}.webp`) : [`assets/motos/${m.slug}/portada.webp`];
+      frames = rutas.map((src, k) => { const im = new Image(); im.alt = ''; im.decoding = 'async'; im.src = src; if (k === 0) im.classList.add('on'); escena.append(im); return im; });
+      frames[0].alt = `${m.marca} ${m.modelo}`;
+      const es360 = m.modo === '360';
+      giro.classList.toggle('sin-giro', n < 2);
+      rango.max = Math.max(0, n - 1); rango.value = 0; actual = 0;
+      textoAyuda = es360 ? 'Arrastra para girar 360°' : 'Desliza para ver más fotos';
+      ayuda.textContent = textoAyuda;
+      escena.setAttribute('aria-label', es360 ? 'Vista 360 de la moto; arrastra o usa las flechas para girarla' : 'Fotos de la moto; arrastra o usa las flechas para cambiar de foto');
+      origenFicha = document.activeElement;
+      dlg.showModal();
+      dlg.querySelector('.ficha__info').scrollTop = 0;
+      // un giro de presentación al abrir (no con movimiento reducido)
+      if (es360 && n > 2 && !quieto.matches) {
+        Promise.all(frames.map(im => im.decode().catch(() => {}))).then(() => {
+          if (!dlg.open) return;
+          let pasos = 0;
+          autogiro = setInterval(() => { mostrar(actual + 1); if (++pasos >= n) pararAuto(); }, 140);
+        });
+      }
+    };
+    motos.forEach(li => $('[data-ficha]', li).addEventListener('click', () => abrir(+li.dataset.i)));
+    $('[data-ficha-cerrar]', dlg).addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', () => { pararAuto(); origenFicha?.focus(); });
+    $('[data-giro-ant]', dlg).addEventListener('click', () => { pararAuto(); mostrar(actual - 1); });
+    $('[data-giro-sig]', dlg).addEventListener('click', () => { pararAuto(); mostrar(actual + 1); });
+    rango.addEventListener('input', () => { pararAuto(); mostrar(+rango.value); });
+    escena.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); pararAuto(); mostrar(actual - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); pararAuto(); mostrar(actual + 1); }
+    });
+    // arrastrar: cada ~6% del ancho cambia de ángulo; la inercia completa el gesto
+    let x0 = null, k0 = 0, vx = 0, tPrev = 0, xPrev = 0;
+    escena.addEventListener('pointerdown', e => {
+      if (frames.length < 2) return;
+      pararAuto(); x0 = xPrev = e.clientX; k0 = actual; tPrev = performance.now(); vx = 0;
+      escena.setPointerCapture(e.pointerId);
+    });
+    escena.addEventListener('pointermove', e => {
+      if (x0 === null) return;
+      const paso = Math.max(24, escena.clientWidth / (frames.length * 1.6));
+      mostrar(k0 - Math.round((e.clientX - x0) / paso));
+      const t = performance.now(); vx = (e.clientX - xPrev) / Math.max(1, t - tPrev); xPrev = e.clientX; tPrev = t;
+    });
+    const soltar = () => {
+      if (x0 === null) return; x0 = null; ayuda.textContent = textoAyuda;
+      let extra = Math.round(-vx * 6);
+      if (extra && !quieto.matches) {
+        const dir = Math.sign(extra); let resto = Math.min(Math.abs(extra), frames.length);
+        const tic = () => { if (resto-- <= 0) return; mostrar(actual + dir); setTimeout(tic, 60 + (frames.length - resto) * 6); };
+        tic();
+      }
+    };
+    escena.addEventListener('pointerup', soltar);
+    escena.addEventListener('pointercancel', soltar);
   }
 
   /* ---------- reels: una sola vista previa a la vez; visor con sonido al tocar ---------- */
