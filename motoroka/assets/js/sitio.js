@@ -92,7 +92,7 @@
   });
   $$('#menu a').forEach(a => a.addEventListener('click', cerrarMenu));
   addEventListener('keydown', e => { if (e.key === 'Escape' && barra.classList.contains('menu-abierto')) { cerrarMenu(); btnMenu.focus(); } });
-  matchMedia('(min-width: 961px)').addEventListener('change', e => { if (e.matches) cerrarMenu(); });
+  matchMedia('(min-width: 1121px)').addEventListener('change', e => { if (e.matches) cerrarMenu(); });
 
   /* ---------- declaración: las palabras se encienden al avanzar ---------- */
   const texto = $('[data-palabras]');
