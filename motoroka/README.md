@@ -10,7 +10,7 @@ Sitio estático (HTML, CSS y JS sin dependencias). Se publica tal cual en Netlif
 
 ## Contenido
 Textos, precios y medios salen del Instagram @motoroka_fixshop. Pendiente de confirmar con el cliente:
-dirección exacta, WhatsApp del 722 666 5997, logotipo en vector, modelo de la foto "Matt 250".
+la dirección exacta (calle o colonia) para el botón "Cómo llegar". Confirmados: horario, WhatsApp 722 666 5997, logotipos, Matt 250 y frases.
 
 ## Medios
 - `assets/vid/portada.mp4` (escritorio) y `portada-movil.mp4` (teléfono, vertical).

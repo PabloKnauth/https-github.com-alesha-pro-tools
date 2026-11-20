@@ -120,10 +120,8 @@ ul, ol { padding: 0; list-style: none; }
 .barra.se-oculta { transform: translateY(-100%); }
 .barra__in { height: 100%; display: flex; align-items: center; gap: 28px; width: min(100% - 2 * var(--margen), var(--ancho)); margin-inline: auto; }
 .marca { display: flex; align-items: center; gap: 12px; text-decoration: none; min-height: 44px; }
-.marca__icono { width: 38px; height: 38px; color: #fff; }
-.marca__txt { display: grid; line-height: 1; }
-.marca__txt b { font-size: 18px; font-weight: 800; font-stretch: 118%; letter-spacing: .02em; text-transform: uppercase; }
-.marca__txt small { margin-top: 4px; font-size: 10.5px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--gris-claro); }
+.marca__icono { width: 42px; height: 42px; }
+.marca__txt { width: auto; height: 30px; }
 .menu { display: flex; gap: 4px; margin-left: auto; }
 .menu a {
   position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px;
@@ -247,7 +245,7 @@ ul, ol { padding: 0; list-style: none; }
 /* declaración */
 .declaracion { background: var(--tinta); color: #fff; padding-block: clamp(88px, 12vw, 176px); }
 .declaracion .envoltura { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); gap: 24px clamp(40px, 6vw, 96px); align-items: end; }
-.declaracion .etiqueta { grid-column: 1 / -1; }
+.declaracion__lm { grid-column: 1 / -1; width: clamp(96px, 9vw, 132px); height: auto; margin-bottom: 8px; }
 .declaracion__txt { font-size: clamp(28px, 1rem + 2.7vw, 60px); line-height: 1.1; font-weight: 700; font-stretch: 108%; letter-spacing: -.02em; text-wrap: pretty; }
 .declaracion__txt strong { font-weight: 800; color: var(--azul-claro); }
 .js .declaracion__txt .pal { color: rgba(255, 255, 255, .4); transition: color .35s linear; }
@@ -393,7 +391,7 @@ ul, ol { padding: 0; list-style: none; }
   font-size: min(10.4vw, 160px); line-height: 1; font-weight: 850; font-stretch: 118%; letter-spacing: -.04em; text-transform: uppercase;
   color: var(--tinta-3);
 }
-.pie__nombre svg { width: .8em; height: .8em; flex: none; color: var(--azul); }
+.pie__nombre img { width: .78em; height: .78em; flex: none; }
 
 /* barra de acción en el teléfono */
 .accion { display: none; }
