@@ -22,6 +22,7 @@
   const video = $('[data-portada]');
   const btnPausa = $('[data-pausa-video]');
   let pausadoPorUsuario = false;
+  if (video && matchMedia('(max-width: 760px)').matches) video.poster = 'assets/img/portada-movil-poster.webp';
   if (video && btnPausa) {
     if (quieto.matches) { pausadoPorUsuario = true; icono(btnPausa, true, 'Pausar video', 'Reproducir video'); }
     else video.play().catch(() => icono(btnPausa, true, 'Pausar video', 'Reproducir video'));
@@ -125,6 +126,22 @@
     pintar();
   }
 
+  /* ---------- listas largas: en el teléfono se muestran las primeras y un botón para ver todas ---------- */
+  const recortar = ul => {
+    if (!ul) return;
+    const n = +ul.dataset.corto || 8;
+    [...ul.children].filter(li => !li.hidden).forEach((li, i) => li.classList.toggle('fuera', ul.classList.contains('lista-corta') && i >= n));
+    const btn = $(`[data-ver-mas="${ul.matches('[data-lms]') ? 'lms' : 'catalogo'}"]`);
+    if (btn) btn.hidden = !ul.classList.contains('lista-corta') || ![...ul.children].some(li => li.classList.contains('fuera'));
+  };
+  $$('[data-ver-mas]').forEach(btn => btn.addEventListener('click', () => {
+    const ul = btn.dataset.verMas === 'lms' ? $('[data-lms]') : $('[data-catalogo]');
+    const primeroOculto = [...ul.children].find(li => li.classList.contains('fuera'));
+    ul.classList.remove('lista-corta'); [...ul.children].forEach(li => li.classList.remove('fuera'));
+    btn.hidden = true;
+    primeroOculto?.querySelector('a, button')?.focus({ preventScroll: true });
+  }));
+
   /* ---------- catálogo: marca, tipo y orden (con transición) ---------- */
   const filtros = $('[data-filtros]');
   const lista = $('[data-catalogo]');
@@ -146,6 +163,8 @@
         : orden === 'desc' ? y.dataset.precio - x.dataset.precio : x.dataset.i - y.dataset.i);
       orden_.forEach(m => lista.append(m));
       resultado.textContent = n === 1 ? '1 modelo' : n ? `${n} modelos` : 'Sin modelos con esos filtros';
+      $('[data-vacio]').hidden = n > 0;
+      recortar(lista);
     };
     const conTransicion = fn => {
       if (!document.startViewTransition || quieto.matches) return fn();
@@ -159,12 +178,19 @@
       conTransicion(() => { $$('button[data-marca]', filtros).forEach(x => x.setAttribute('aria-pressed', String(x === b))); aplicar(); });
     });
     [selTipo, selOrden].forEach(sel => sel.addEventListener('change', () => conTransicion(aplicar)));
+    $('[data-quitar-filtros]').addEventListener('click', () => {
+      marca = 'todas'; selTipo.value = ''; selOrden.value = '';
+      $$('button[data-marca]', filtros).forEach(x => x.setAttribute('aria-pressed', String(x.dataset.marca === 'todas')));
+      conTransicion(aplicar);
+    });
+    recortar(lista);
   }
 
   /* ---------- Liqui Moly: filtro por tipo de producto ---------- */
   const filtrosLm = $('[data-filtros-lm]');
   if (filtrosLm) {
     const prods = $$('[data-lms] .lm');
+    recortar($('[data-lms]'));
     prods.forEach((li, i) => { li.style.viewTransitionName = 'lm-' + i; });
     filtrosLm.addEventListener('click', e => {
       const b = e.target.closest('button[data-cat]');
@@ -172,6 +198,9 @@
       const aplicar = () => {
         $$('button[data-cat]', filtrosLm).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
         prods.forEach(li => { li.hidden = !(b.dataset.cat === 'todos' || li.dataset.cat === b.dataset.cat); });
+        const n = prods.filter(li => !li.hidden).length;
+        $('[data-resultado-lm]').textContent = n === 1 ? '1 producto' : `${n} productos`;
+        recortar($('[data-lms]'));
       };
       if (!document.startViewTransition || quieto.matches) return aplicar();
       const tr = document.startViewTransition(aplicar);
@@ -193,10 +222,13 @@
       actual = (k + frames.length) % frames.length;
       frames.forEach((im, i) => im.classList.toggle('on', i === actual));
       rango.value = actual;
+      rango.setAttribute('aria-valuetext', (giro.classList.contains('es-galeria') ? 'Foto ' : 'Ángulo ') + (actual + 1) + ' de ' + frames.length);
     };
     const pararAuto = () => { clearInterval(autogiro); autogiro = null; };
-    const abrir = async i => {
-      const { motos: lista_ } = await cargar();
+    const abrir = async (i, boton) => {
+      origenFicha = boton;
+      let lista_;
+      try { ({ motos: lista_ } = await cargar()); } catch { datosMotos = null; window.open('https://wa.me/527226665997', '_blank', 'noopener'); return; }
       const m = lista_[i];
       $('[data-ficha-marca]', dlg).textContent = `${m.marca} · ${m.tipo}`;
       $('[data-ficha-nombre]', dlg).textContent = m.modelo;
@@ -214,11 +246,12 @@
       frames[0].alt = `${m.marca} ${m.modelo}`;
       const es360 = m.modo === '360';
       giro.classList.toggle('sin-giro', n < 2);
+      giro.classList.toggle('es-galeria', !es360);
       rango.max = Math.max(0, n - 1); rango.value = 0; actual = 0;
       textoAyuda = es360 ? 'Arrastra para girar 360°' : 'Desliza para ver más fotos';
       ayuda.textContent = textoAyuda;
-      escena.setAttribute('aria-label', es360 ? 'Vista 360 de la moto; arrastra o usa las flechas para girarla' : 'Fotos de la moto; arrastra o usa las flechas para cambiar de foto');
-      origenFicha = document.activeElement;
+      escena.setAttribute('aria-label', es360 ? `Vista 360 de la ${m.marca} ${m.modelo}; arrastra o usa las flechas para girarla` : `Fotos de la ${m.marca} ${m.modelo}; arrastra o usa las flechas para cambiar de foto`);
+      mostrar(0);
       dlg.showModal();
       dlg.querySelector('.ficha__info').scrollTop = 0;
       // un giro de presentación al abrir (no con movimiento reducido)
@@ -230,7 +263,7 @@
         });
       }
     };
-    motos.forEach(li => $('[data-ficha]', li).addEventListener('click', () => abrir(+li.dataset.i)));
+    motos.forEach(li => { const b = $('[data-ficha]', li); b.addEventListener('click', () => abrir(+li.dataset.i, b)); });
     $('[data-ficha-cerrar]', dlg).addEventListener('click', () => dlg.close());
     dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
     dlg.addEventListener('close', () => { pararAuto(); origenFicha?.focus(); });

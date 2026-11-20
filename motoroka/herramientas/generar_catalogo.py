@@ -6,7 +6,7 @@ Para actualizar precios o agregar un modelo, edita datos/motos.json y vuelve a c
 Las fotos de cada modelo viven en assets/motos/<slug>/ (NN.webp = ángulos en orden de giro,
 portada.webp = foto de la tarjeta). Las fichas técnicas se cargan desde datos/motos.json al abrir la ventana.
 """
-import html, json, os, re
+import html, json, os, re, unicodedata
 from urllib.parse import quote
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,6 +29,8 @@ def corto(v, patron):
     return m.group(0) if m else None
 
 MARCAS = ['QJ Motor', 'Treck', 'Benda', 'Kove']
+# grados de viscosidad y modelos sin partirse en dos renglones (guion no separable)
+sin_corte = lambda t: re.sub(r'(\w)-(\w)', '\\1\u2011\\2', t)
 TIPOS = ['Deportiva', 'Superdeportiva', 'Naked', 'Adventure', 'Cruiser', 'Bobber', 'Scooter', 'Urbana', 'Doble propósito', 'Trabajo', 'Cuatrimoto', 'Infantil', 'Vehículo comercial']
 clave_marca = lambda s: s.lower().replace(' ', '')
 
@@ -47,7 +49,7 @@ for i, m in enumerate(motos):
           <button class="moto__abrir" type="button" data-ficha="{i}" aria-haspopup="dialog">
             <span class="moto__foto"><img src="assets/motos/{m['slug']}/portada.webp" width="800" height="600" alt="{e(m['marca'])} {e(m['modelo'])}" loading="lazy" decoding="async"></span>
             <span class="moto__marca">{e(m['marca'])} · {e(m['tipo'])}</span>
-            <span class="moto__nombre">{e(m['modelo'])}</span>
+            <span class="moto__nombre">{e(sin_corte(m['modelo']))}</span>
             <ul class="moto__specs" aria-label="Datos principales">{specs}</ul>
             <span class="moto__pie"><span class="moto__precio">{precio}</span><span class="moto__cta">{'Ficha y 360°' if gira else 'Ficha técnica'}<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
           </button>
@@ -60,7 +62,7 @@ seccion = f'''  <section class="seccion motos" id="motos" aria-labelledby="motos
     <div class="envoltura">
       <div class="cabeza">
         <h2 id="motos-h" class="h2">{len(motos)} modelos, cuatro marcas</h2>
-        <p class="cabeza__lado">Precio al público, ficha técnica completa y vista 360°. Pregunta por disponibilidad en piso y planes de financiamiento.</p>
+        <p class="cabeza__lado">Precio al público, ficha técnica completa, fotos y vista 360°. Pregunta por disponibilidad en piso y planes de financiamiento.</p>
       </div>
       <div class="filtros" data-filtros>
         <div class="filtros__marcas" role="group" aria-label="Filtrar por marca">
@@ -82,9 +84,11 @@ seccion = f'''  <section class="seccion motos" id="motos" aria-labelledby="motos
         </label>
       </div>
       <p class="filtros__resultado" data-resultado aria-live="polite">{len(motos)} modelos</p>
-      <ul class="catalogo" data-catalogo>
+      <p class="filtros__vacio" data-vacio hidden>No hay modelos con esos filtros. <button class="enlace" type="button" data-quitar-filtros>Quitar filtros</button></p>
+      <ul class="catalogo lista-corta" data-catalogo data-corto="8">
 {chr(10).join(tarjetas)}
       </ul>
+      <button class="btn btn--linea ver-mas" type="button" data-ver-mas="catalogo">Ver los {len(motos)} modelos</button>
       <div class="catalogo__pie">
         <p class="nota">{e(datos['vigencia'])} Sujetos a cambio sin previo aviso; confirma precio y disponibilidad por WhatsApp.</p>
         <a class="enlace" href="https://drive.google.com/file/d/1ViwTy-XhxOiL_FX8LOjT93GlyQnREPIM/view" target="_blank" rel="noopener">Catálogo Benda 2025 (PDF)<svg aria-hidden="true"><use href="#flecha"/></svg></a>
@@ -119,7 +123,7 @@ CATS = []
 for x in lm:
     if x['categoria'] not in CATS:
         CATS.append(x['categoria'])
-clave_cat = lambda c: re.sub(r'[^a-z0-9]+', '-', c.lower()).strip('-')
+clave_cat = lambda c: re.sub(r'[^a-z0-9]+', '-', unicodedata.normalize('NFKD', c).encode('ascii', 'ignore').decode().lower()).strip('-')
 prods = []
 for x in lm:
     msg = quote(f'Hola Moto Roka, ¿tienen {x["nombre"]} de Liqui Moly?')
@@ -127,9 +131,9 @@ for x in lm:
         f'        <li class="lm" data-cat="{clave_cat(x["categoria"])}">\n'
         f'          <span class="lm__foto"><img src="assets/liquimoly/{x["imagen"]}.webp" alt="{e(x["nombre"])}" loading="lazy" decoding="async"></span>\n'
         f'          <span class="lm__cat">{e(x["categoria"])}</span>\n'
-        f'          <h3 class="lm__nombre">{e(x["nombre"].replace("Motorbike ", ""))}</h3>\n'
+        f'          <h3 class="lm__nombre">{e(sin_corte(x["nombre"].replace("Motorbike ", "")))}</h3>\n'
         f'          <p class="lm__texto">{e(resumen(x["texto"]))}</p>\n'
-        f'          <a class="lm__cta" href="{WA}{msg}" target="_blank" rel="noopener">Preguntar existencia<svg aria-hidden="true"><use href="#flecha"/></svg></a>\n'
+        f'          <a class="lm__cta" href="{WA}{msg}" target="_blank" rel="noopener" aria-label="Preguntar existencia de {e(x["nombre"])}">Preguntar<span class="lm__cta-mas"> existencia</span><svg aria-hidden="true"><use href="#flecha"/></svg></a>\n'
         f'        </li>')
 botones = '\n'.join(
     f'          <button type="button" aria-pressed="false" data-cat="{clave_cat(c)}">{e(c)} <span>{sum(1 for x in lm if x["categoria"] == c)}</span></button>'
@@ -147,9 +151,11 @@ seccion_lm = (
     f'{botones}\n'
     '        </div>\n'
     '      </div>\n'
-    '      <ul class="lms" data-lms>\n'
+    f'      <p class="filtros__resultado" data-resultado-lm aria-live="polite">{len(lm)} productos</p>\n'
+    '      <ul class="lms lista-corta" data-lms data-corto="6">\n'
     + '\n'.join(prods) + '\n'
     '      </ul>\n'
+    f'      <button class="btn btn--linea ver-mas" type="button" data-ver-mas="lms">Ver los {len(lm)} productos</button>\n'
     '      <p class="nota">Descripciones e imágenes oficiales de Liqui Moly. Pregunta por presentaciones y existencia en tienda.</p>\n'
     '    </div>\n'
     '  </section>')
