@@ -131,6 +131,485 @@
 
   <!-- 4 · Motos: generado por herramientas/generar_catalogo.py a partir de datos/motos.json -->
   <!-- CATALOGO:INICIO -->
+  <section class="seccion motos" id="motos" aria-labelledby="motos-h">
+    <div class="envoltura">
+      <div class="cabeza">
+        <h2 id="motos-h" class="h2">43 modelos, cuatro marcas</h2>
+        <p class="cabeza__lado">Precio al público, ficha técnica completa y vista 360°. Pregunta por disponibilidad en piso y planes de financiamiento.</p>
+      </div>
+      <div class="filtros" data-filtros>
+        <div class="filtros__marcas" role="group" aria-label="Filtrar por marca">
+          <button type="button" aria-pressed="true" data-marca="todas">Todas <span>43</span></button>
+          <button type="button" aria-pressed="false" data-marca="qjmotor">QJ Motor <span>22</span></button>
+          <button type="button" aria-pressed="false" data-marca="treck">Treck <span>12</span></button>
+          <button type="button" aria-pressed="false" data-marca="benda">Benda <span>7</span></button>
+          <button type="button" aria-pressed="false" data-marca="kove">Kove <span>2</span></button>
+        </div>
+        <label class="filtros__tipo"><span class="sr">Tipo de moto</span>
+          <select data-tipo>
+            <option value="">Todos los tipos</option>
+            <option>Deportiva</option>
+            <option>Superdeportiva</option>
+            <option>Naked</option>
+            <option>Adventure</option>
+            <option>Cruiser</option>
+            <option>Bobber</option>
+            <option>Scooter</option>
+            <option>Urbana</option>
+            <option>Doble propósito</option>
+            <option>Trabajo</option>
+            <option>Cuatrimoto</option>
+            <option>Infantil</option>
+            <option>Vehículo comercial</option>
+          </select>
+        </label>
+        <label class="filtros__orden"><span class="sr">Ordenar</span>
+          <select data-orden>
+            <option value="">Orden: destacadas</option>
+            <option value="asc">Precio: menor a mayor</option>
+            <option value="desc">Precio: mayor a menor</option>
+          </select>
+        </label>
+      </div>
+      <p class="filtros__resultado" data-resultado aria-live="polite">43 modelos</p>
+      <ul class="catalogo" data-catalogo>
+        <li class="moto" data-marca="kove" data-tipo="Adventure" data-precio="149900" data-i="0">
+          <button class="moto__abrir" type="button" data-ficha="0" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/kove-450-rally/portada.webp" width="800" height="600" alt="Kove 450 Rally" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Kove · Adventure</span>
+            <span class="moto__nombre">450 Rally</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>449 cc</li><li>41.5 hp</li><li>155 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$149,900</span><s class="moto__lista" aria-label="Precio de lista $167,100">$167,100</s></span><span class="moto__cta">Ficha técnica<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Kove%20450%20Rally." target="_blank" rel="noopener" aria-label="Preguntar por la 450 Rally por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="kove" data-tipo="Adventure" data-precio="179900" data-i="1">
+          <button class="moto__abrir" type="button" data-ficha="1" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/kove-800x/portada.webp" width="800" height="600" alt="Kove 800X" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Kove · Adventure</span>
+            <span class="moto__nombre">800X</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>799 cc</li><li>96.5 hp</li><li>185 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$179,900</span></span><span class="moto__cta">Ficha técnica<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Kove%20800X." target="_blank" rel="noopener" aria-label="Preguntar por la 800X por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Scooter" data-precio="54900" data-i="2">
+          <button class="moto__abrir" type="button" data-ficha="2" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-atr-150/portada.webp" width="800" height="600" alt="QJ Motor ATR 150" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Scooter</span>
+            <span class="moto__nombre">ATR 150</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>150 cc</li><li>15.8 hp</li><li>140 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$54,900</span><s class="moto__lista" aria-label="Precio de lista $61,400">$61,400</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20ATR%20150." target="_blank" rel="noopener" aria-label="Preguntar por la ATR 150 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Scooter" data-precio="114900" data-i="3">
+          <button class="moto__abrir" type="button" data-ficha="3" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-fort-350/portada.webp" width="800" height="600" alt="QJ Motor FORT 350" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Scooter</span>
+            <span class="moto__nombre">FORT 350</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>350 cc</li><li>32.7 hp</li><li>213 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$114,900</span><s class="moto__lista" aria-label="Precio de lista $134,200">$134,200</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20FORT%20350." target="_blank" rel="noopener" aria-label="Preguntar por la FORT 350 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Deportiva" data-precio="63900" data-i="4">
+          <button class="moto__abrir" type="button" data-ficha="4" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srk-25r/portada.webp" width="800" height="600" alt="QJ Motor SRK 25R" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Deportiva</span>
+            <span class="moto__nombre">SRK 25R</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>249 cc</li><li>28 hp</li><li>162 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$63,900</span><s class="moto__lista" aria-label="Precio de lista $71,700">$71,700</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRK%2025R." target="_blank" rel="noopener" aria-label="Preguntar por la SRK 25R por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Deportiva" data-precio="82900" data-i="5">
+          <button class="moto__abrir" type="button" data-ficha="5" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srk-250-rs/portada.webp" width="800" height="600" alt="QJ Motor SRK 250 RS ABS" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Deportiva</span>
+            <span class="moto__nombre">SRK 250 RS ABS</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>249 cc</li><li>27.9 hp</li><li>162 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$82,900</span><s class="moto__lista" aria-label="Precio de lista $95,200">$95,200</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRK%20250%20RS%20ABS." target="_blank" rel="noopener" aria-label="Preguntar por la SRK 250 RS ABS por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Deportiva" data-precio="116900" data-i="6">
+          <button class="moto__abrir" type="button" data-ficha="6" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srk-550-rs/portada.webp" width="800" height="600" alt="QJ Motor SRK 550 RS" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Deportiva</span>
+            <span class="moto__nombre">SRK 550 RS</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>554 cc</li><li>56 hp</li><li>194 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$116,900</span><s class="moto__lista" aria-label="Precio de lista $143,500">$143,500</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRK%20550%20RS." target="_blank" rel="noopener" aria-label="Preguntar por la SRK 550 RS por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Deportiva" data-precio="131900" data-i="7">
+          <button class="moto__abrir" type="button" data-ficha="7" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srk-600-rc/portada.webp" width="800" height="600" alt="QJ Motor SRK 600 RC" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Deportiva</span>
+            <span class="moto__nombre">SRK 600 RC</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>600 cc</li><li>80.5 hp</li><li>225 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$131,900</span></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRK%20600%20RC." target="_blank" rel="noopener" aria-label="Preguntar por la SRK 600 RC por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Superdeportiva" data-precio="163900" data-i="8">
+          <button class="moto__abrir" type="button" data-ficha="8" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srk-800-rr/portada.webp" width="800" height="600" alt="QJ Motor SRK 800 RR" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Superdeportiva</span>
+            <span class="moto__nombre">SRK 800 RR</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>778 cc</li><li>95 hp</li><li>214 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$163,900</span><s class="moto__lista" aria-label="Precio de lista $193,700">$193,700</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRK%20800%20RR." target="_blank" rel="noopener" aria-label="Preguntar por la SRK 800 RR por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Superdeportiva" data-precio="234900" data-i="9">
+          <button class="moto__abrir" type="button" data-ficha="9" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srk-921-rr/portada.webp" width="800" height="600" alt="QJ Motor SRK 921 RR" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Superdeportiva</span>
+            <span class="moto__nombre">SRK 921 RR</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>921 cc</li><li>125 hp</li><li>225 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$234,900</span><s class="moto__lista" aria-label="Precio de lista $282,900">$282,900</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRK%20921%20RR." target="_blank" rel="noopener" aria-label="Preguntar por la SRK 921 RR por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Naked" data-precio="92900" data-i="10">
+          <button class="moto__abrir" type="button" data-ficha="10" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srk-450-c/portada.webp" width="800" height="600" alt="QJ Motor SRK 450 C" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Naked</span>
+            <span class="moto__nombre">SRK 450 C</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>449 cc</li><li>47.6 hp</li><li>173 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$92,900</span><s class="moto__lista" aria-label="Precio de lista $112,700">$112,700</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRK%20450%20C." target="_blank" rel="noopener" aria-label="Preguntar por la SRK 450 C por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Naked" data-precio="110900" data-i="11">
+          <button class="moto__abrir" type="button" data-ficha="11" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srk-550/portada.webp" width="800" height="600" alt="QJ Motor SRK 550" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Naked</span>
+            <span class="moto__nombre">SRK 550</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>554 cc</li><li>55.1 hp</li><li>190 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$110,900</span><s class="moto__lista" aria-label="Precio de lista $127,700">$127,700</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRK%20550." target="_blank" rel="noopener" aria-label="Preguntar por la SRK 550 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Naked" data-precio="147900" data-i="12">
+          <button class="moto__abrir" type="button" data-ficha="12" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srk-600/portada.webp" width="800" height="600" alt="QJ Motor SRK 600" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Naked</span>
+            <span class="moto__nombre">SRK 600</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>600 cc</li><li>80.5 hp</li><li>229 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$147,900</span></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRK%20600." target="_blank" rel="noopener" aria-label="Preguntar por la SRK 600 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Adventure" data-precio="129900" data-i="13">
+          <button class="moto__abrir" type="button" data-ficha="13" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srt-550-sx/portada.webp" width="800" height="600" alt="QJ Motor SRT 550 SX" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Adventure</span>
+            <span class="moto__nombre">SRT 550 SX</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>554 cc</li><li>55.2 hp</li><li>220 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$129,900</span><s class="moto__lista" aria-label="Precio de lista $153,700">$153,700</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRT%20550%20SX." target="_blank" rel="noopener" aria-label="Preguntar por la SRT 550 SX por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Adventure" data-precio="157900" data-i="14">
+          <button class="moto__abrir" type="button" data-ficha="14" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-svt-650-x/portada.webp" width="800" height="600" alt="QJ Motor SVT 650 X" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Adventure</span>
+            <span class="moto__nombre">SVT 650 X</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>645 cc</li><li>75 hp</li><li>236 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$157,900</span><s class="moto__lista" aria-label="Precio de lista $186,000">$186,000</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SVT%20650%20X." target="_blank" rel="noopener" aria-label="Preguntar por la SVT 650 X por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Adventure" data-precio="141900" data-i="15">
+          <button class="moto__abrir" type="button" data-ficha="15" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srt-700-x/portada.webp" width="800" height="600" alt="QJ Motor SRT 700 X" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Adventure</span>
+            <span class="moto__nombre">SRT 700 X</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>698 cc</li><li>72.5 hp</li><li>240 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$141,900</span><s class="moto__lista" aria-label="Precio de lista $172,200">$172,200</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRT%20700%20X." target="_blank" rel="noopener" aria-label="Preguntar por la SRT 700 X por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Adventure" data-precio="163900" data-i="16">
+          <button class="moto__abrir" type="button" data-ficha="16" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srt-800-sx/portada.webp" width="800" height="600" alt="QJ Motor SRT 800 SX" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Adventure</span>
+            <span class="moto__nombre">SRT 800 SX</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>799 cc</li><li>91.2 hp</li><li>263 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$163,900</span><s class="moto__lista" aria-label="Precio de lista $193,700">$193,700</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRT%20800%20SX." target="_blank" rel="noopener" aria-label="Preguntar por la SRT 800 SX por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Cruiser" data-precio="35900" data-i="17">
+          <button class="moto__abrir" type="button" data-ficha="17" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srv-200/portada.webp" width="800" height="600" alt="QJ Motor SRV 200" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Cruiser</span>
+            <span class="moto__nombre">SRV 200</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>197 cc</li><li>12.7 hp</li><li>152 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$35,900</span><s class="moto__lista" aria-label="Precio de lista $41,600">$41,600</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRV%20200." target="_blank" rel="noopener" aria-label="Preguntar por la SRV 200 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Cruiser" data-precio="83900" data-i="18">
+          <button class="moto__abrir" type="button" data-ficha="18" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srv-300/portada.webp" width="800" height="600" alt="QJ Motor SRV 300" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Cruiser</span>
+            <span class="moto__nombre">SRV 300</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>296 cc</li><li>30 hp</li><li>164 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$83,900</span><s class="moto__lista" aria-label="Precio de lista $102,400">$102,400</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRV%20300." target="_blank" rel="noopener" aria-label="Preguntar por la SRV 300 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Cruiser" data-precio="93900" data-i="19">
+          <button class="moto__abrir" type="button" data-ficha="19" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srv-350-vs/portada.webp" width="800" height="600" alt="QJ Motor SRV 350 VS" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Cruiser</span>
+            <span class="moto__nombre">SRV 350 VS</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>343 cc</li><li>31.5 hp</li><li>182 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$93,900</span><s class="moto__lista" aria-label="Precio de lista $118,800">$118,800</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRV%20350%20VS." target="_blank" rel="noopener" aria-label="Preguntar por la SRV 350 VS por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Cruiser" data-precio="136900" data-i="20">
+          <button class="moto__abrir" type="button" data-ficha="20" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-srv-600-v/portada.webp" width="800" height="600" alt="QJ Motor SRV 600 V" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Cruiser</span>
+            <span class="moto__nombre">SRV 600 V</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>561 cc</li><li>68 hp</li><li>219 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$136,900</span><s class="moto__lista" aria-label="Precio de lista $160,000">$160,000</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SRV%20600%20V." target="_blank" rel="noopener" aria-label="Preguntar por la SRV 600 V por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Cuatrimoto" data-precio="94900" data-i="21">
+          <button class="moto__abrir" type="button" data-ficha="21" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-sfa-300b/portada.webp" width="800" height="600" alt="QJ Motor SFA 300B" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Cuatrimoto</span>
+            <span class="moto__nombre">SFA 300B</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>289 cc</li><li>23 hp</li><li>270 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$94,900</span><s class="moto__lista" aria-label="Precio de lista $112,500">$112,500</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SFA%20300B." target="_blank" rel="noopener" aria-label="Preguntar por la SFA 300B por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Cuatrimoto" data-precio="162900" data-i="22">
+          <button class="moto__abrir" type="button" data-ficha="22" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-sfa-600/portada.webp" width="800" height="600" alt="QJ Motor SFA 600" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Cuatrimoto</span>
+            <span class="moto__nombre">SFA 600</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>577.3 cc</li><li>44.25 hp</li><li>450 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$162,900</span><s class="moto__lista" aria-label="Precio de lista $199,400">$199,400</s></span><span class="moto__cta">Ficha técnica<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SFA%20600." target="_blank" rel="noopener" aria-label="Preguntar por la SFA 600 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="qjmotor" data-tipo="Cuatrimoto" data-precio="216900" data-i="23">
+          <button class="moto__abrir" type="button" data-ficha="23" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/qj-sfa-1000/portada.webp" width="800" height="600" alt="QJ Motor SFA 1000" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">QJ Motor · Cuatrimoto</span>
+            <span class="moto__nombre">SFA 1000</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>975.6 cc</li><li>87.1 hp</li><li>491 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$216,900</span><s class="moto__lista" aria-label="Precio de lista $258,000">$258,000</s></span><span class="moto__cta">Ficha técnica<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20QJ%20Motor%20SFA%201000." target="_blank" rel="noopener" aria-label="Preguntar por la SFA 1000 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="benda" data-tipo="Bobber" data-precio="109900" data-i="24">
+          <button class="moto__abrir" type="button" data-ficha="24" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/benda-napoleon-250/portada.webp" width="800" height="600" alt="Benda Napoleon 250" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Benda · Bobber</span>
+            <span class="moto__nombre">Napoleon 250</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>249 cc</li><li>25.9HP</li><li>182 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$109,900</span><s class="moto__lista" aria-label="Precio de lista $125,100">$125,100</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Benda%20Napoleon%20250." target="_blank" rel="noopener" aria-label="Preguntar por la Napoleon 250 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="benda" data-tipo="Bobber" data-precio="145900" data-i="25">
+          <button class="moto__abrir" type="button" data-ficha="25" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/benda-napoleon-500/portada.webp" width="800" height="600" alt="Benda Napoleon 500" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Benda · Bobber</span>
+            <span class="moto__nombre">Napoleon 500</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>575.6 cc</li><li>46HP</li><li>215 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$145,900</span><s class="moto__lista" aria-label="Precio de lista $167,100">$167,100</s></span><span class="moto__cta">Ficha técnica<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Benda%20Napoleon%20500." target="_blank" rel="noopener" aria-label="Preguntar por la Napoleon 500 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="benda" data-tipo="Cruiser" data-precio="239900" data-i="26">
+          <button class="moto__abrir" type="button" data-ficha="26" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/benda-lfc-700-pro/portada.webp" width="800" height="600" alt="Benda LFC 700 Pro" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Benda · Cruiser</span>
+            <span class="moto__nombre">LFC 700 Pro</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>676 cc</li><li>77 hp</li><li>287 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$239,900</span><s class="moto__lista" aria-label="Precio de lista $251,100">$251,100</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Benda%20LFC%20700%20Pro." target="_blank" rel="noopener" aria-label="Preguntar por la LFC 700 Pro por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="benda" data-tipo="Cruiser" data-precio="138900" data-i="27">
+          <button class="moto__abrir" type="button" data-ficha="27" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/benda-chinchilla-300/portada.webp" width="800" height="600" alt="Benda Chinchilla 300" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Benda · Cruiser</span>
+            <span class="moto__nombre">Chinchilla 300</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>676cc</li><li>77.7HP</li><li>287 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$138,900</span></span><span class="moto__cta">Ficha técnica<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Benda%20Chinchilla%20300." target="_blank" rel="noopener" aria-label="Preguntar por la Chinchilla 300 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="benda" data-tipo="Cruiser" data-precio="154900" data-i="28">
+          <button class="moto__abrir" type="button" data-ficha="28" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/benda-chinchilla-500/portada.webp" width="800" height="600" alt="Benda Chinchilla 500" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Benda · Cruiser</span>
+            <span class="moto__nombre">Chinchilla 500</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>575.6 cc</li><li>47 hp</li><li>215 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$154,900</span></span><span class="moto__cta">Ficha técnica<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Benda%20Chinchilla%20500." target="_blank" rel="noopener" aria-label="Preguntar por la Chinchilla 500 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="benda" data-tipo="Cruiser" data-precio="158900" data-i="29">
+          <button class="moto__abrir" type="button" data-ficha="29" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/benda-darkflag-500/portada.webp" width="800" height="600" alt="Benda Dark Flag 500" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Benda · Cruiser</span>
+            <span class="moto__nombre">Dark Flag 500</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>496.4 cc</li><li>47 hp</li><li>260 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$158,900</span></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Benda%20Dark%20Flag%20500." target="_blank" rel="noopener" aria-label="Preguntar por la Dark Flag 500 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="benda" data-tipo="Cuatrimoto" data-precio="165900" data-i="30">
+          <button class="moto__abrir" type="button" data-ficha="30" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/benda-redstone-550/portada.webp" width="800" height="600" alt="Benda Redstone 550 R2" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Benda · Cuatrimoto</span>
+            <span class="moto__nombre">Redstone 550 R2</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>500 cc</li><li>48 hp</li><li>425 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$165,900</span><s class="moto__lista" aria-label="Precio de lista $193,800">$193,800</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Benda%20Redstone%20550%20R2." target="_blank" rel="noopener" aria-label="Preguntar por la Redstone 550 R2 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Urbana" data-precio="25900" data-i="31">
+          <button class="moto__abrir" type="button" data-ficha="31" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-acorazada-150/portada.webp" width="800" height="600" alt="Treck Acorazada 150" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Urbana</span>
+            <span class="moto__nombre">Acorazada 150</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>150 cc</li><li>8.4 hp</li><li>115 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$25,900</span><s class="moto__lista" aria-label="Precio de lista $29,900">$29,900</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Acorazada%20150." target="_blank" rel="noopener" aria-label="Preguntar por la Acorazada 150 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Urbana" data-precio="16900" data-i="32">
+          <button class="moto__abrir" type="button" data-ficha="32" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-mt-125/portada.webp" width="800" height="600" alt="Treck MT 125" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Urbana</span>
+            <span class="moto__nombre">MT 125</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>125 cc</li><li>6.7 hp</li><li>85 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$16,900</span><s class="moto__lista" aria-label="Precio de lista $19,500">$19,500</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20MT%20125." target="_blank" rel="noopener" aria-label="Preguntar por la MT 125 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Doble propósito" data-precio="34900" data-i="33">
+          <button class="moto__abrir" type="button" data-ficha="33" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-tigercat-300/portada.webp" width="800" height="600" alt="Treck Tigercat 300" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Doble propósito</span>
+            <span class="moto__nombre">Tigercat 300</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>271 cc</li><li>20.78 hp</li><li>134 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$34,900</span><s class="moto__lista" aria-label="Precio de lista $40,700">$40,700</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Tigercat%20300." target="_blank" rel="noopener" aria-label="Preguntar por la Tigercat 300 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Doble propósito" data-precio="34900" data-i="34">
+          <button class="moto__abrir" type="button" data-ficha="34" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-raven-300/portada.webp" width="800" height="600" alt="Treck Raven 300" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Doble propósito</span>
+            <span class="moto__nombre">Raven 300</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>271 cc</li><li>20.7 hp</li><li>139.1 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$34,900</span><s class="moto__lista" aria-label="Precio de lista $39,400">$39,400</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Raven%20300." target="_blank" rel="noopener" aria-label="Preguntar por la Raven 300 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Doble propósito" data-precio="21900" data-i="35">
+          <button class="moto__abrir" type="button" data-ficha="35" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-matt-150/portada.webp" width="800" height="600" alt="Treck Matt 150" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Doble propósito</span>
+            <span class="moto__nombre">Matt 150</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>149.4 cc</li><li>11 hp</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$21,900</span><s class="moto__lista" aria-label="Precio de lista $26,600">$26,600</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Matt%20150." target="_blank" rel="noopener" aria-label="Preguntar por la Matt 150 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Doble propósito" data-precio="22900" data-i="36">
+          <button class="moto__abrir" type="button" data-ficha="36" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-matt-250/portada.webp" width="800" height="600" alt="Treck Matt 250" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Doble propósito</span>
+            <span class="moto__nombre">Matt 250</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>250 cc</li><li>14 hp</li><li>122 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$22,900</span><s class="moto__lista" aria-label="Precio de lista $30,900">$30,900</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Matt%20250." target="_blank" rel="noopener" aria-label="Preguntar por la Matt 250 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Doble propósito" data-precio="21900" data-i="37">
+          <button class="moto__abrir" type="button" data-ficha="37" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-jin-150/portada.webp" width="800" height="600" alt="Treck Jin 150" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Doble propósito</span>
+            <span class="moto__nombre">Jin 150</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>150 cc</li><li>11.2 hp</li><li>108.5 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$21,900</span><s class="moto__lista" aria-label="Precio de lista $24,600">$24,600</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Jin%20150." target="_blank" rel="noopener" aria-label="Preguntar por la Jin 150 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Trabajo" data-precio="15900" data-i="38">
+          <button class="moto__abrir" type="button" data-ficha="38" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-trapper-150/portada.webp" width="800" height="600" alt="Treck Trapper 150" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Trabajo</span>
+            <span class="moto__nombre">Trapper 150</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>150 cc</li><li>11.4 hp</li><li>96 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$15,900</span></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Trapper%20150." target="_blank" rel="noopener" aria-label="Preguntar por la Trapper 150 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Cuatrimoto" data-precio="37900" data-i="39">
+          <button class="moto__abrir" type="button" data-ficha="39" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-warrior-200/portada.webp" width="800" height="600" alt="Treck Warrior 200" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Cuatrimoto</span>
+            <span class="moto__nombre">Warrior 200</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>200 cc</li><li>8.84 hp</li><li>191 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$37,900</span><s class="moto__lista" aria-label="Precio de lista $44,500">$44,500</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Warrior%20200." target="_blank" rel="noopener" aria-label="Preguntar por la Warrior 200 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Cuatrimoto" data-precio="87900" data-i="40">
+          <button class="moto__abrir" type="button" data-ficha="40" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-titan-300/portada.webp" width="800" height="600" alt="Treck Titan 300" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Cuatrimoto</span>
+            <span class="moto__nombre">Titan 300</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>300 cc</li><li>22.7 hp</li><li>374 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$87,900</span></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Titan%20300." target="_blank" rel="noopener" aria-label="Preguntar por la Titan 300 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Infantil" data-precio="10900" data-i="41">
+          <button class="moto__abrir" type="button" data-ficha="41" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-scala-50/portada.webp" width="800" height="600" alt="Treck Scala 50" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Infantil</span>
+            <span class="moto__nombre">Scala 50</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>50 cc</li><li>1.97 hp</li><li>40 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$10,900</span><s class="moto__lista" aria-label="Precio de lista $12,200">$12,200</s></span><span class="moto__cta">Ficha y 360°<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Scala%2050." target="_blank" rel="noopener" aria-label="Preguntar por la Scala 50 por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+        <li class="moto" data-marca="treck" data-tipo="Vehículo comercial" data-precio="67900" data-i="42">
+          <button class="moto__abrir" type="button" data-ficha="42" aria-haspopup="dialog">
+            <span class="moto__foto"><img src="assets/motos/treck-rampante-250/portada.webp" width="800" height="600" alt="Treck Rampante 250 P" loading="lazy" decoding="async"></span>
+            <span class="moto__marca">Treck · Vehículo comercial</span>
+            <span class="moto__nombre">Rampante 250 P</span>
+            <ul class="moto__specs" aria-label="Datos principales"><li>250 cc</li><li>15.4 hp</li><li>374 kg</li></ul>
+            <span class="moto__pie"><span class="moto__precio"><span class="moto__especial">$67,900</span></span><span class="moto__cta">Ficha técnica<svg aria-hidden="true"><use href="#flecha"/></svg></span></span>
+          </button>
+          <a class="moto__wa" href="https://wa.me/527226665997?text=Hola%20Moto%20Roka%2C%20me%20interesa%20la%20Treck%20Rampante%20250%20P." target="_blank" rel="noopener" aria-label="Preguntar por la Rampante 250 P por WhatsApp"><svg aria-hidden="true"><use href="#wa"/></svg></a>
+        </li>
+      </ul>
+      <div class="catalogo__pie">
+        <p class="nota">Lista de precios al público de los distribuidores, actualización del 1 de noviembre de 2026. El precio especial aplica solo en noviembre de 2026. Sujetos a cambio sin previo aviso; confirma precio y disponibilidad por WhatsApp.</p>
+        <a class="enlace" href="https://drive.google.com/file/d/1ViwTy-XhxOiL_FX8LOjT93GlyQnREPIM/view" target="_blank" rel="noopener">Catálogo Benda 2025 (PDF)<svg aria-hidden="true"><use href="#flecha"/></svg></a>
+      </div>
+    </div>
+  </section>
   <!-- CATALOGO:FIN -->
 
   <!-- 5 · Cascos y boutique -->

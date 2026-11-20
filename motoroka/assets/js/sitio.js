@@ -147,7 +147,11 @@
       orden_.forEach(m => lista.append(m));
       resultado.textContent = n === 1 ? '1 modelo' : n ? `${n} modelos` : 'Sin modelos con esos filtros';
     };
-    const conTransicion = fn => (document.startViewTransition && !quieto.matches) ? document.startViewTransition(fn) : fn();
+    const conTransicion = fn => {
+      if (!document.startViewTransition || quieto.matches) return fn();
+      const t = document.startViewTransition(fn);
+      [t.ready, t.finished, t.updateCallbackDone].forEach(p => p.catch(() => {})); // una transición interrumpida no es un error
+    };
     filtros.addEventListener('click', e => {
       const b = e.target.closest('button[data-marca]');
       if (!b || b.getAttribute('aria-pressed') === 'true') return;
@@ -234,7 +238,7 @@
     });
     const soltar = () => {
       if (x0 === null) return; x0 = null; ayuda.textContent = textoAyuda;
-      let extra = Math.round(-vx * 6);
+      let extra = Math.abs(vx) > .35 ? Math.max(-2, Math.min(2, Math.round(-vx * 3))) : 0;
       if (extra && !quieto.matches) {
         const dir = Math.sign(extra); let resto = Math.min(Math.abs(extra), frames.length);
         const tic = () => { if (resto-- <= 0) return; mostrar(actual + dir); setTimeout(tic, 60 + (frames.length - resto) * 6); };

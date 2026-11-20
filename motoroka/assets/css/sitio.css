@@ -314,12 +314,12 @@ ul, ol { padding: 0; list-style: none; }
 .ficha::backdrop { background: rgba(11, 13, 18, .72); }
 .ficha[open] { animation: ficha-entra .45s var(--ease); }
 @keyframes ficha-entra { from { opacity: 0; transform: translateY(18px) scale(.98); } }
-.ficha__caja { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); max-height: calc(100svh - 32px); }
+.ficha__caja { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); height: min(780px, calc(100svh - 32px)); }
 .ficha__cerrar { position: absolute; top: 14px; right: 14px; z-index: 3; display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #fff; color: var(--tinta); cursor: pointer; box-shadow: 0 0 0 1px var(--linea); transition: transform .2s var(--ease); }
 .ficha__cerrar svg { width: 20px; height: 20px; }
 @media (hover: hover) and (pointer: fine) { .ficha__cerrar:hover { transform: rotate(90deg); } }
-.giro { display: grid; grid-template-rows: 1fr auto auto; background: radial-gradient(120% 90% at 50% 55%, #fff 0%, #eceef2 100%); padding: 28px 28px 20px; min-height: 0; }
-.giro__escena { position: relative; min-height: 300px; aspect-ratio: 4 / 3; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 6px; border-radius: 14px; }
+.giro { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto; overflow: hidden; background: radial-gradient(120% 90% at 50% 55%, #fff 0%, #eceef2 100%); padding: 28px 28px 20px; min-height: 0; }
+.giro__escena { position: relative; width: 100%; height: 100%; min-height: 0; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline-offset: 6px; border-radius: 14px; }
 .giro__escena:active { cursor: grabbing; }
 .giro__escena img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity .16s linear; pointer-events: none; -webkit-user-drag: none; }
 .giro__escena img.on { opacity: 1; }
@@ -349,9 +349,11 @@ ul, ol { padding: 0; list-style: none; }
 .ficha__nota { margin-top: 18px; font-size: 13px; color: var(--gris); }
 @media (max-width: 860px) {
   .ficha { width: 100%; max-height: 100svh; height: 100svh; border-radius: 0; }
-  .ficha__caja { grid-template-columns: minmax(0, 1fr); max-height: 100svh; height: 100%; overflow-y: auto; }
+  .ficha__caja { grid-template-columns: minmax(0, 1fr); height: 100%; overflow-y: auto; }
   .giro { padding: 56px 16px 12px; }
-  .giro__escena { min-height: 0; }
+  .giro__escena { height: min(74vw, 48svh); }
+  .giro { grid-template-rows: auto auto auto; overflow: visible; }
+  .ficha__caja { display: block; }
   .ficha__info { overflow: visible; padding: 22px 16px 40px; }
   .ficha__specs dl div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
 }

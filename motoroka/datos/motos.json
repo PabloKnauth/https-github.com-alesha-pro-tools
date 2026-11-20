@@ -117,7 +117,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1FTgMjlhPTwC9W6KKBcapSsUvhZQyY5-r/view"
+   "pdf": "https://drive.google.com/file/d/1FTgMjlhPTwC9W6KKBcapSsUvhZQyY5-r/view",
+   "giro": 4,
+   "modo": "fotos"
   },
   {
    "slug": "kove-800x",
@@ -263,7 +265,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1fjF1sbBTlDZSnv4cQD568yn0x58e31RF/view"
+   "pdf": "https://drive.google.com/file/d/1fjF1sbBTlDZSnv4cQD568yn0x58e31RF/view",
+   "giro": 4,
+   "modo": "fotos"
   },
   {
    "slug": "qj-atr-150",
@@ -382,7 +386,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1or4Kych4FNxk30d7j8ZcPQzUWiASiCld/view"
+   "pdf": "https://drive.google.com/file/d/1or4Kych4FNxk30d7j8ZcPQzUWiASiCld/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "qj-fort-350",
@@ -497,7 +503,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1zz9bYhv8idi_8RMHfRvFmtssrwzesYAN/view"
+   "pdf": "https://drive.google.com/file/d/1zz9bYhv8idi_8RMHfRvFmtssrwzesYAN/view",
+   "giro": 8,
+   "modo": "360"
   },
   {
    "slug": "qj-srk-25r",
@@ -616,7 +624,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1onMdr-cpCLqQ4NpyGJah5CmDDI6FN0YM/view"
+   "pdf": "https://drive.google.com/file/d/1onMdr-cpCLqQ4NpyGJah5CmDDI6FN0YM/view",
+   "giro": 8,
+   "modo": "360"
   },
   {
    "slug": "qj-srk-250-rs",
@@ -735,7 +745,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1S1qscJTQnrZeiLQl5BEnXKsT9xiEeHi0/view"
+   "pdf": "https://drive.google.com/file/d/1S1qscJTQnrZeiLQl5BEnXKsT9xiEeHi0/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "qj-srk-550-rs",
@@ -854,7 +866,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1zhd0zWmHb7AM6L8EgWn8ccaIIuvQQ-7B/view"
+   "pdf": "https://drive.google.com/file/d/1zhd0zWmHb7AM6L8EgWn8ccaIIuvQQ-7B/view",
+   "giro": 8,
+   "modo": "360"
   },
   {
    "slug": "qj-srk-600-rc",
@@ -973,7 +987,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1eFLh2N4OFw2acQWOwIroRETGfUExAc3n/view"
+   "pdf": "https://drive.google.com/file/d/1eFLh2N4OFw2acQWOwIroRETGfUExAc3n/view",
+   "giro": 8,
+   "modo": "360"
   },
   {
    "slug": "qj-srk-800-rr",
@@ -1092,7 +1108,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1qT6gYm71-7vHqqD8FsEUPNX-Gg2W2yFw/view"
+   "pdf": "https://drive.google.com/file/d/1qT6gYm71-7vHqqD8FsEUPNX-Gg2W2yFw/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "qj-srk-921-rr",
@@ -1211,7 +1229,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/16701ZKzl78esn22_XKlDuqMWYSbw3GZm/view"
+   "pdf": "https://drive.google.com/file/d/16701ZKzl78esn22_XKlDuqMWYSbw3GZm/view",
+   "giro": 8,
+   "modo": "360"
   },
   {
    "slug": "qj-srk-450-c",
@@ -1330,7 +1350,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1ElvWxDtFb3ihGKiPytbYMRbHE9qECqvS/view"
+   "pdf": "https://drive.google.com/file/d/1ElvWxDtFb3ihGKiPytbYMRbHE9qECqvS/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "qj-srk-550",
@@ -1449,7 +1471,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1lrgV6egPL1VPlNoIBj1xYLpaSSV1KOsk/view"
+   "pdf": "https://drive.google.com/file/d/1lrgV6egPL1VPlNoIBj1xYLpaSSV1KOsk/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "qj-srk-600",
@@ -1568,7 +1592,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1S3NjmxlLKkO0cnEq3uoZsNpc3knvCuIo/view"
+   "pdf": "https://drive.google.com/file/d/1S3NjmxlLKkO0cnEq3uoZsNpc3knvCuIo/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "qj-srt-550-sx",
@@ -1687,7 +1713,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1JprpuwIeL5-TyaBeql2sRzfAtAHEG7H0/view"
+   "pdf": "https://drive.google.com/file/d/1JprpuwIeL5-TyaBeql2sRzfAtAHEG7H0/view",
+   "giro": 7,
+   "modo": "360"
   },
   {
    "slug": "qj-svt-650-x",
@@ -1802,7 +1830,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/10nU0nF5Rc7pzes33motoHrQ68arZHws1/view"
+   "pdf": "https://drive.google.com/file/d/10nU0nF5Rc7pzes33motoHrQ68arZHws1/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "qj-srt-700-x",
@@ -1921,7 +1951,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/19Jjy3pp-fDuFwryBmRb-49g5p2RalCXC/view"
+   "pdf": "https://drive.google.com/file/d/19Jjy3pp-fDuFwryBmRb-49g5p2RalCXC/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "qj-srt-800-sx",
@@ -2040,7 +2072,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1RZyuu-REZ7yZYLtCXVKW-Wv3LUK4grl8/view"
+   "pdf": "https://drive.google.com/file/d/1RZyuu-REZ7yZYLtCXVKW-Wv3LUK4grl8/view",
+   "giro": 8,
+   "modo": "360"
   },
   {
    "slug": "qj-srv-200",
@@ -2155,7 +2189,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1bT16iFospxmpFd_b6A2W5gUC3p69bovM/view"
+   "pdf": "https://drive.google.com/file/d/1bT16iFospxmpFd_b6A2W5gUC3p69bovM/view",
+   "giro": 7,
+   "modo": "360"
   },
   {
    "slug": "qj-srv-300",
@@ -2274,7 +2310,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1FFCO63uE2bt1PRHY0uqoHw75wrUVhj4T/view"
+   "pdf": "https://drive.google.com/file/d/1FFCO63uE2bt1PRHY0uqoHw75wrUVhj4T/view",
+   "giro": 8,
+   "modo": "360"
   },
   {
    "slug": "qj-srv-350-vs",
@@ -2389,7 +2427,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1x7YhmvXP2vuzSB75DIMqhSN3bAY2CHaD/view"
+   "pdf": "https://drive.google.com/file/d/1x7YhmvXP2vuzSB75DIMqhSN3bAY2CHaD/view",
+   "giro": 7,
+   "modo": "360"
   },
   {
    "slug": "qj-srv-600-v",
@@ -2504,7 +2544,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1Jm39jxENECFwbdQ0lOM6fs7ySG7cmf66/view"
+   "pdf": "https://drive.google.com/file/d/1Jm39jxENECFwbdQ0lOM6fs7ySG7cmf66/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "qj-sfa-300b",
@@ -2623,7 +2665,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1atrIbnb-LgduDqxnRvdEsxTwZgcFwXiM/view"
+   "pdf": "https://drive.google.com/file/d/1atrIbnb-LgduDqxnRvdEsxTwZgcFwXiM/view",
+   "giro": 8,
+   "modo": "360"
   },
   {
    "slug": "qj-sfa-600",
@@ -2742,7 +2786,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1IfS03iNf-PuiJ_sgARmB3MzZIV4Q5kxc/view"
+   "pdf": "https://drive.google.com/file/d/1IfS03iNf-PuiJ_sgARmB3MzZIV4Q5kxc/view",
+   "giro": 5,
+   "modo": "fotos"
   },
   {
    "slug": "qj-sfa-1000",
@@ -2861,7 +2907,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1_jFQhu9k5JMVdPlTbD-Vi18ZuRosGpuT/view"
+   "pdf": "https://drive.google.com/file/d/1_jFQhu9k5JMVdPlTbD-Vi18ZuRosGpuT/view",
+   "giro": 5,
+   "modo": "fotos"
   },
   {
    "slug": "benda-napoleon-250",
@@ -2968,7 +3016,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1qgKx9lr-pKB0ntCbdHCo5tVHAMqIZ8a6/view"
+   "pdf": "https://drive.google.com/file/d/1qgKx9lr-pKB0ntCbdHCo5tVHAMqIZ8a6/view",
+   "giro": 5,
+   "modo": "360"
   },
   {
    "slug": "benda-napoleon-500",
@@ -3075,7 +3125,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1t2rqEFYbzuYDK6CazIb-m4-DWjhEaYfg/view"
+   "pdf": "https://drive.google.com/file/d/1t2rqEFYbzuYDK6CazIb-m4-DWjhEaYfg/view",
+   "giro": 4,
+   "modo": "fotos"
   },
   {
    "slug": "benda-lfc-700-pro",
@@ -3178,7 +3230,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/16kjAXb-uu-ZwwcjmciJj7QSjfi3QQQvG/view"
+   "pdf": "https://drive.google.com/file/d/16kjAXb-uu-ZwwcjmciJj7QSjfi3QQQvG/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "benda-chinchilla-300",
@@ -3281,7 +3335,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/180FJaCtgD5BbaHGKRwLFs3w5Yh_Pu-ZA/view"
+   "pdf": "https://drive.google.com/file/d/180FJaCtgD5BbaHGKRwLFs3w5Yh_Pu-ZA/view",
+   "giro": 3,
+   "modo": "fotos"
   },
   {
    "slug": "benda-chinchilla-500",
@@ -3388,7 +3444,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1PTl1jmB2Gwx4yECs2j5MPfaYMW0_AKYP/view"
+   "pdf": "https://drive.google.com/file/d/1PTl1jmB2Gwx4yECs2j5MPfaYMW0_AKYP/view",
+   "giro": 4,
+   "modo": "fotos"
   },
   {
    "slug": "benda-darkflag-500",
@@ -3491,7 +3549,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/199t6j6xcvsZLSELz16tOHHBKDBPqPmQR/view"
+   "pdf": "https://drive.google.com/file/d/199t6j6xcvsZLSELz16tOHHBKDBPqPmQR/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "benda-redstone-550",
@@ -3594,7 +3654,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1YtDY9ol_KCz4c299sVYpa8FvkQq1BMTD/view"
+   "pdf": "https://drive.google.com/file/d/1YtDY9ol_KCz4c299sVYpa8FvkQq1BMTD/view",
+   "giro": 8,
+   "modo": "360"
   },
   {
    "slug": "treck-acorazada-150",
@@ -3692,7 +3754,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/11oEW7fJjW3mjWYoviylDsLEXQDDGeQjm/view"
+   "pdf": "https://drive.google.com/file/d/11oEW7fJjW3mjWYoviylDsLEXQDDGeQjm/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-mt-125",
@@ -3790,7 +3854,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1z0aYnU6zNswVO43uHzsrp8MJODd8BKQV/view"
+   "pdf": "https://drive.google.com/file/d/1z0aYnU6zNswVO43uHzsrp8MJODd8BKQV/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-tigercat-300",
@@ -3888,7 +3954,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1Dz_p59PtrUfFVekobdueZYLHjrogXRge/view"
+   "pdf": "https://drive.google.com/file/d/1Dz_p59PtrUfFVekobdueZYLHjrogXRge/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-raven-300",
@@ -3986,7 +4054,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1pHcJc1G6QZ4JvpykwpRwR9lHvM_K8QWQ/view"
+   "pdf": "https://drive.google.com/file/d/1pHcJc1G6QZ4JvpykwpRwR9lHvM_K8QWQ/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-matt-150",
@@ -4080,7 +4150,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1Ra2_vdrxem79p34AdoVhgOqtnMhTRosM/view"
+   "pdf": "https://drive.google.com/file/d/1Ra2_vdrxem79p34AdoVhgOqtnMhTRosM/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-matt-250",
@@ -4178,7 +4250,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/173YAgUXfUByvQ71w67V_PI8oycfB02W1/view"
+   "pdf": "https://drive.google.com/file/d/173YAgUXfUByvQ71w67V_PI8oycfB02W1/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-jin-150",
@@ -4276,7 +4350,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1f4XHuwksPo-135gymQfJC7Uv9rv1L5nK/view"
+   "pdf": "https://drive.google.com/file/d/1f4XHuwksPo-135gymQfJC7Uv9rv1L5nK/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-trapper-150",
@@ -4374,7 +4450,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/18YKD8Mek_fOocswjNwQABXqRikEjMJTK/view"
+   "pdf": "https://drive.google.com/file/d/18YKD8Mek_fOocswjNwQABXqRikEjMJTK/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-warrior-200",
@@ -4472,7 +4550,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/10CpWm1F68OPQQot6btieiH_EC8AlnVJd/view"
+   "pdf": "https://drive.google.com/file/d/10CpWm1F68OPQQot6btieiH_EC8AlnVJd/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-titan-300",
@@ -4570,7 +4650,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1aOzifYy_Dl7fLRzdxhgSJ-D2gvabRGnU/view"
+   "pdf": "https://drive.google.com/file/d/1aOzifYy_Dl7fLRzdxhgSJ-D2gvabRGnU/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-scala-50",
@@ -4668,7 +4750,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/1DBbk1EP7fPWxCB9VS6rXZKy3xPhAF_4I/view"
+   "pdf": "https://drive.google.com/file/d/1DBbk1EP7fPWxCB9VS6rXZKy3xPhAF_4I/view",
+   "giro": 6,
+   "modo": "360"
   },
   {
    "slug": "treck-rampante-250",
@@ -4766,7 +4850,9 @@
      ]
     }
    ],
-   "pdf": "https://drive.google.com/file/d/13fATf6p6AZ8x_ArzVp5-oWbxa4FbFi3G/view"
+   "pdf": "https://drive.google.com/file/d/13fATf6p6AZ8x_ArzVp5-oWbxa4FbFi3G/view",
+   "giro": 2,
+   "modo": "fotos"
   }
  ]
 }
