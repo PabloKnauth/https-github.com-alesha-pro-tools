@@ -99,3 +99,63 @@ assert ini in s and fin in s, 'faltan las marcas del catálogo en index.html'
 s = s[:s.index(ini) + len(ini)] + '\n' + seccion + '\n  ' + s[s.index(fin):]
 open(p, 'w', encoding='utf-8').write(s)
 print(f'{len(motos)} tarjetas generadas')
+
+
+# ---------- Liqui Moly: productos para moto (datos/liquimoly.json) ----------
+lm = json.load(open(os.path.join(RAIZ, 'datos', 'liquimoly.json'), encoding='utf-8'))
+
+
+def resumen(t, limite=190):
+    frases = re.split(r'(?<=[.!])\s+', t)
+    out = ''
+    for f in frases:
+        if len(out) + len(f) > limite and out:
+            break
+        out = (out + ' ' + f).strip()
+    return out
+
+
+CATS = []
+for x in lm:
+    if x['categoria'] not in CATS:
+        CATS.append(x['categoria'])
+clave_cat = lambda c: re.sub(r'[^a-z0-9]+', '-', c.lower()).strip('-')
+prods = []
+for x in lm:
+    msg = quote(f'Hola Moto Roka, ¿tienen {x["nombre"]} de Liqui Moly?')
+    prods.append(
+        f'        <li class="lm" data-cat="{clave_cat(x["categoria"])}">\n'
+        f'          <span class="lm__foto"><img src="assets/liquimoly/{x["imagen"]}.webp" alt="{e(x["nombre"])}" loading="lazy" decoding="async"></span>\n'
+        f'          <span class="lm__cat">{e(x["categoria"])}</span>\n'
+        f'          <h3 class="lm__nombre">{e(x["nombre"].replace("Motorbike ", ""))}</h3>\n'
+        f'          <p class="lm__texto">{e(resumen(x["texto"]))}</p>\n'
+        f'          <a class="lm__cta" href="{WA}{msg}" target="_blank" rel="noopener">Preguntar existencia<svg aria-hidden="true"><use href="#flecha"/></svg></a>\n'
+        f'        </li>')
+botones = '\n'.join(
+    f'          <button type="button" aria-pressed="false" data-cat="{clave_cat(c)}">{e(c)} <span>{sum(1 for x in lm if x["categoria"] == c)}</span></button>'
+    for c in CATS)
+seccion_lm = (
+    '  <section class="seccion liquimoly" id="liquimoly" aria-labelledby="lm-h">\n'
+    '    <div class="envoltura">\n'
+    '      <div class="cabeza">\n'
+    '        <h2 id="lm-h" class="h2">Liqui Moly para tu moto</h2>\n'
+    '        <p class="cabeza__lado">Somos distribuidores autorizados: aceites, aditivos y productos de cuidado originales, hechos en Alemania. Los usamos en cada servicio y los vendemos en tienda.</p>\n'
+    '      </div>\n'
+    '      <div class="filtros" data-filtros-lm>\n'
+    '        <div class="filtros__marcas" role="group" aria-label="Filtrar productos por tipo">\n'
+    f'          <button type="button" aria-pressed="true" data-cat="todos">Todos <span>{len(lm)}</span></button>\n'
+    f'{botones}\n'
+    '        </div>\n'
+    '      </div>\n'
+    '      <ul class="lms" data-lms>\n'
+    + '\n'.join(prods) + '\n'
+    '      </ul>\n'
+    '      <p class="nota">Descripciones e imágenes oficiales de Liqui Moly. Pregunta por presentaciones y existencia en tienda.</p>\n'
+    '    </div>\n'
+    '  </section>')
+s2 = open(p, encoding='utf-8').read()
+a2, b2 = '<!-- LIQUIMOLY:INICIO -->', '<!-- LIQUIMOLY:FIN -->'
+assert a2 in s2 and b2 in s2, 'faltan las marcas de Liqui Moly en index.html'
+s2 = s2[:s2.index(a2) + len(a2)] + '\n' + seccion_lm + '\n  ' + s2[s2.index(b2):]
+open(p, 'w', encoding='utf-8').write(s2)
+print(f'{len(lm)} productos Liqui Moly generados')

@@ -161,6 +161,24 @@
     [selTipo, selOrden].forEach(sel => sel.addEventListener('change', () => conTransicion(aplicar)));
   }
 
+  /* ---------- Liqui Moly: filtro por tipo de producto ---------- */
+  const filtrosLm = $('[data-filtros-lm]');
+  if (filtrosLm) {
+    const prods = $$('[data-lms] .lm');
+    prods.forEach((li, i) => { li.style.viewTransitionName = 'lm-' + i; });
+    filtrosLm.addEventListener('click', e => {
+      const b = e.target.closest('button[data-cat]');
+      if (!b || b.getAttribute('aria-pressed') === 'true') return;
+      const aplicar = () => {
+        $$('button[data-cat]', filtrosLm).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        prods.forEach(li => { li.hidden = !(b.dataset.cat === 'todos' || li.dataset.cat === b.dataset.cat); });
+      };
+      if (!document.startViewTransition || quieto.matches) return aplicar();
+      const tr = document.startViewTransition(aplicar);
+      [tr.ready, tr.finished, tr.updateCallbackDone].forEach(pr => pr.catch(() => {}));
+    });
+  }
+
   /* ---------- ficha técnica con visor 360 ---------- */
   const dlg = $('[data-ficha-dialogo]');
   if (dlg && motos.length) {

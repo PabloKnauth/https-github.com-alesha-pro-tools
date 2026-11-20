@@ -242,6 +242,54 @@ ul, ol { padding: 0; list-style: none; }
   }
 }
 
+/* servicios y precios */
+.servicios { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: clamp(56px, 7vw, 96px); }
+.servicio {
+  position: relative; display: flex; flex-direction: column; gap: 10px; padding: 28px 26px 26px; border-radius: 20px; background: #fff;
+  box-shadow: 0 0 0 1px var(--linea); overflow: hidden; transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.servicio::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--tinta); }
+.servicio--top { background: var(--tinta); color: #fff; box-shadow: none; }
+.servicio--top::before { background: var(--azul); }
+.servicio__prod { position: absolute; top: 18px; right: 18px; width: 64px; height: 80px; object-fit: contain; }
+.servicio__prod--icono { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--papel); color: var(--azul); }
+.servicio__prod--icono svg { width: 28px; height: 28px; }
+.servicio__nombre { padding-right: 76px; font-size: clamp(24px, 1.1rem + .8vw, 32px); line-height: 1; font-weight: 850; font-stretch: 116%; letter-spacing: -.02em; text-transform: uppercase; }
+.servicio__lema { padding-right: 76px; color: var(--gris); min-height: 3.2em; }
+.servicio--top .servicio__lema { color: var(--gris-claro); }
+.servicio__precios { margin: 6px 0 14px; border-top: 1px solid var(--linea); }
+.servicio--top .servicio__precios { border-color: var(--linea-clara); }
+.servicio__precios div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--linea); }
+.servicio--top .servicio__precios div { border-color: var(--linea-clara); }
+.servicio__precios dt { color: var(--gris); font-variant-numeric: tabular-nums; }
+.servicio--top .servicio__precios dt { color: var(--gris-claro); }
+.servicio__precios dd { margin: 0; font-size: 30px; font-weight: 850; font-stretch: 110%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.servicio--top .servicio__precios dd { color: #fff; }
+.servicio .btn { margin-top: auto; align-self: flex-start; }
+@media (hover: hover) and (pointer: fine) {
+  .servicio:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px var(--linea), 0 22px 40px -26px rgba(11, 13, 18, .45); }
+  .servicio--top:hover { box-shadow: 0 22px 40px -22px rgba(47, 69, 224, .55); }
+}
+.servicios__nota { margin-top: 18px; }
+
+/* Liqui Moly */
+.liquimoly { background: #fff; }
+.lms { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 28px; }
+.lm { display: flex; flex-direction: column; padding: 18px 18px 16px; border-radius: 18px; background: var(--papel); transition: transform .3s var(--ease), background-color .3s; }
+.lm[hidden] { display: none; }
+.lm__foto { display: block; height: 190px; padding: 10px; border-radius: 12px; background: #fff; overflow: hidden; }
+.lm__foto img { width: 100%; height: 100%; min-height: 0; object-fit: contain; transition: transform .5s var(--ease); }
+.lm__cat { margin-top: 14px; font-size: 12px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: #b80d29; }
+.lm__nombre { margin-top: 4px; font-size: 18px; line-height: 1.2; font-weight: 750; }
+.lm__texto { margin-top: 8px; font-size: 14.5px; line-height: 1.5; color: var(--gris); display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+.lm__cta { margin-top: auto; padding-top: 12px; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 650; font-size: 15px; color: var(--azul); text-decoration: none; }
+.lm__cta svg { width: 15px; height: 15px; transition: transform .25s var(--ease); }
+@media (hover: hover) and (pointer: fine) {
+  .lm:hover { transform: translateY(-3px); background: var(--papel-2); }
+  .lm:hover .lm__foto img { transform: scale(1.05) rotate(-2deg); }
+  .lm__cta:hover svg { transform: translateX(3px); }
+}
+
 /* declaración */
 .declaracion { background: var(--tinta); color: #fff; padding-block: clamp(88px, 12vw, 176px); }
 .declaracion .envoltura { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); gap: 24px clamp(40px, 6vw, 96px); align-items: end; }
@@ -481,6 +529,8 @@ ul, ol { padding: 0; list-style: none; }
 @media (max-width: 1100px) {
   .reels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .catalogo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lms { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .servicios { grid-template-columns: minmax(0, 1fr); max-width: 560px; }
   .filtros__marcas { width: 100%; margin-right: 0; }
 }
 @media (max-width: 960px) {
@@ -527,6 +577,14 @@ ul, ol { padding: 0; list-style: none; }
   .portada__acc .btn { width: 100%; }
   .filas li { grid-template-columns: minmax(0, 1fr); }
   .catalogo { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  [data-filtros-lm] .filtros__marcas { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * var(--margen)); padding-inline: var(--margen); width: auto; }
+  [data-filtros-lm] button { flex: none; }
+  .lms { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .lm { padding: 12px 12px 10px; }
+  .lm__foto { height: 140px; }
+  .lm__nombre { font-size: 16px; }
+  .lm__texto { font-size: 14px; -webkit-line-clamp: 4; }
+  .lm__cta { font-size: 14px; }
   .reels { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; margin-inline: calc(-1 * var(--margen)); padding-inline: var(--margen); scrollbar-width: none; }
   .reels li { flex: 0 0 62%; scroll-snap-align: start; }
   .mosaico { grid-template-columns: repeat(2, minmax(0, 1fr)); }
