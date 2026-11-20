@@ -2,7 +2,12 @@
 
 Sitio estático (HTML, CSS y JS sin dependencias). Se publica tal cual en Netlify.
 
-## Publicar en Netlify
+## Publicar en Cloudflare Pages
+- Workers & Pages → Create → Pages → Connect to Git → este repositorio.
+- **Production branch:** `sitio-marca-personal` · **Framework preset:** None · **Build command:** (vacío) · **Build output directory:** `motoroka`.
+- Las cabeceras de caché están en `_headers`.
+
+## Publicar en Netlify (alternativa)
 - Nuevo sitio desde Git → este repositorio, rama `sitio-marca-personal`.
 - **Base directory:** `motoroka` · **Build command:** (vacío) · **Publish directory:** `motoroka`.
 - O bien arrastrar la carpeta `motoroka/` a https://app.netlify.com/drop.
