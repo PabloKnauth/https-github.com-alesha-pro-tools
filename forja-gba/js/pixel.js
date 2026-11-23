@@ -20,12 +20,14 @@
   F.svgIcon = svgIcon;
 
   const cur = () => F.find('sprites', S.spriteId);
+  /** Paleta que se edita: en tilesets con varias paletas, la elegida en el panel. */
+  const pal = (s = cur()) => (s.kind === 'tileset' ? F.palAt(s, S.palIdx || 0) : s.palette);
   const px = () => { const s = cur(); return s && s.frames[S.frame]; };
 
   /* ---------- deshacer ---------- */
-  const snapshot = () => { const s = cur(); return { id: s.id, frames: s.frames.map((f) => f.slice()), palette: s.palette.slice(), frame: S.frame }; };
+  const snapshot = () => { const s = cur(); return { id: s.id, frames: s.frames.map((f) => f.slice()), palette: s.palette.slice(), extra: s.extraPalettes ? s.extraPalettes.map((p) => p.slice()) : null, blockPal: s.blockPal ? { ...s.blockPal } : null, h: s.h, frame: S.frame }; };
   const pushUndo = () => { if (!cur()) return; S.undo.push(snapshot()); if (S.undo.length > 80) S.undo.shift(); S.redo = []; };
-  const restore = (snap) => { const s = F.find('sprites', snap.id); if (!s) return; s.frames = snap.frames; s.palette = snap.palette; S.spriteId = s.id; S.frame = Math.min(snap.frame, s.frames.length - 1); };
+  const restore = (snap) => { const s = F.find('sprites', snap.id); if (!s) return; s.frames = snap.frames; s.palette = snap.palette; if (snap.extra) s.extraPalettes = snap.extra; if (snap.blockPal) s.blockPal = snap.blockPal; if (snap.h) s.h = snap.h; S.spriteId = s.id; S.frame = Math.min(snap.frame, s.frames.length - 1); };
   S.doUndo = () => { const u = S.undo.pop(); if (!u) return; S.redo.push(snapshot()); restore(u); changed(true); };
   S.doRedo = () => { const r = S.redo.pop(); if (!r) return; S.undo.push(snapshot()); restore(r); changed(true); };
 
@@ -109,8 +111,8 @@
     checker(ctx, 0, 0, canvas.width, canvas.height, Math.max(4, z));
     if (S.onion && S.frame > 0) { ctx.globalAlpha = 0.28; F.drawFrame(ctx, s, S.frame - 1, 0, 0, z); ctx.globalAlpha = 1; }
     const data = overlay || s.frames[S.frame];
-    const pal = s.palette;
-    for (let y = 0; y < s.h; y++) for (let x = 0; x < s.w; x++) { const v = data[y * s.w + x]; if (!v) continue; ctx.fillStyle = pal[v]; ctx.fillRect(x * z, y * z, z, z); }
+    const multi = s.kind === 'tileset' && s.extraPalettes && s.extraPalettes.length;
+    for (let y = 0; y < s.h; y++) for (let x = 0; x < s.w; x++) { const v = data[y * s.w + x]; if (!v) continue; ctx.fillStyle = (multi ? F.palForPixel(s, x, y) : s.palette)[v]; ctx.fillRect(x * z, y * z, z, z); }
     if (S.grid && z >= 6) {
       ctx.strokeStyle = 'rgba(30,25,50,.13)'; ctx.lineWidth = 1; ctx.beginPath();
       for (let x = 1; x < s.w; x++) { ctx.moveTo(x * z + 0.5, 0); ctx.lineTo(x * z + 0.5, canvas.height); }
@@ -133,6 +135,7 @@
   const onDown = (e) => {
     const s = cur(); if (!s) return; e.preventDefault(); canvas.setPointerCapture(e.pointerId);
     const [x, y] = cell(e), alt = e.button === 2;
+    if (s.kind === 'tileset' && x >= 0 && y >= 0 && x < s.w && y < s.h) { const b = Math.floor(y / 16) * (s.w / 16) + Math.floor(x / 16), pi = F.blockPalIndex(s, b); S.lastBlock = b; S.palIdx = pi; renderPalette(); const ub = $('#px-useblock'); if (ub) { ub.disabled = false; ub.textContent = 'Usar en el bloque ' + b; } }
     const v = S.tool === 'eraser' ? 0 : alt ? S.color2 : S.color;
     if (S.tool === 'picker') { const got = px()[y * s.w + x]; if (got != null) { if (alt) S.color2 = got; else S.color = got; renderPalette(); } return; }
     pushUndo();
@@ -165,15 +168,17 @@
   /* ---------- paneles ---------- */
   const renderPalette = () => {
     const box = $('#px-palette'); const s = cur(); if (!box || !s) return;
-    box.replaceChildren(...s.palette.map((c, i) => h('button', {
+    if ((S.palIdx || 0) >= F.palCount(s)) S.palIdx = 0;
+    box.replaceChildren(...pal(s).map((c, i) => h('button', {
       class: 'swatch' + (i === S.color ? ' sel' : '') + (i === S.color2 ? ' sel2' : '') + (i === 0 ? ' transparent' : ''),
       style: { '--c': c }, title: (i === 0 ? 'Transparente (color de fondo ' + c + ')' : 'Color ' + i + ' · ' + c) + ' — clic: principal, clic derecho: secundario',
       'aria-label': i === 0 ? 'Transparente' : 'Color ' + i, onclick: () => { S.color = i; renderPalette(); },
       oncontextmenu: (e) => { e.preventDefault(); S.color2 = i; renderPalette(); },
     }, h('span', {}, i === 0 ? '∅' : i))));
     const inp = $('#px-color-input'), info = $('#px-color-info');
-    inp.value = s.palette[S.color];
-    info.textContent = S.color === 0 ? 'Índice 0: siempre transparente en el juego.' : `Color ${S.color} · ${s.palette[S.color]} · GBA 0x${F.rgb555(s.palette[S.color]).toString(16).padStart(4, '0').toUpperCase()}`;
+    const P = pal(s); inp.value = P[S.color];
+    info.textContent = S.color === 0 ? 'Índice 0: siempre transparente en el juego.' : `Color ${S.color} · ${P[S.color]} · GBA 0x${F.rgb555(P[S.color]).toString(16).padStart(4, '0').toUpperCase()}`;
+    const ps = $('#px-palsel'); if (ps) ps.value = String(S.palIdx || 0);
     const used = new Set(); s.frames.forEach((f) => f.forEach((v) => used.add(v)));
     $('#px-used').textContent = `${[...used].filter((v) => v).length} de 15 colores en uso`;
   };
@@ -233,7 +238,8 @@
     const fileIn = h('input', { type: 'file', accept: 'image/*', hidden: true, id: 'px-import', onchange: async (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) { const sp = await F.importFlow(f); if (sp) { S.spriteId = sp.id; S.frame = 0; S.zoom = 0; render(); } } } });
     const left = h('aside', { class: 'side' },
       h('div', { class: 'side-head' }, h('h2', {}, 'Sprites'), h('span', { class: 'count' }, p.sprites.length)),
-      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', onclick: async () => { if (await F.newSpriteDialog()) render(); } }, '+ Nuevo'), h('button', { class: 'btn', onclick: () => fileIn.click() }, 'Importar PNG'), fileIn),
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', onclick: async () => { if (await F.newSpriteDialog()) render(); } }, '+ Nuevo'), h('button', { class: 'btn', onclick: () => fileIn.click() }, 'Importar PNG'), fileIn,
+        h('button', { class: 'btn', onclick: async () => { const sp = await F.characterGenFlow(); if (sp) { S.spriteId = sp.id; S.frame = 0; S.zoom = 0; render(); } } }, 'Generar personaje')),
       h('div', { id: 'px-list', class: 'asset-list' }));
     if (!s) {
       root.replaceChildren(h('div', { class: 'split' }, left, h('section', { class: 'empty' }, h('h2', {}, 'Todavía no hay sprites'), h('p', {}, 'Crea uno desde una plantilla con el tamaño correcto para la GBA, o importa un PNG: lo ajusto a 16 colores y a la medida del juego.'))));
@@ -272,7 +278,7 @@
       h('div', { class: 'frame-title' }, h('b', {}, F.frameName(s, S.frame)), h('span', { class: 'muted' }, ` · cuadro ${S.frame + 1} de ${s.frames.length} · ${s.w}×${s.h} px`)),
       frameBar);
 
-    const colorIn = h('input', { type: 'color', id: 'px-color-input', oninput: (e) => { const sn = F.snapHex(e.target.value); if (S.color === 0 && false) return; s.palette[S.color] = sn; draw(); renderPalette(); }, onchange: () => { changed(true); } });
+    const colorIn = h('input', { type: 'color', id: 'px-color-input', oninput: (e) => { const sn = F.snapHex(e.target.value); if (S.color === 0 && false) return; pal(s)[S.color] = sn; draw(); renderPalette(); }, onchange: () => { changed(true); } });
     colorIn.addEventListener('focus', pushUndo, { once: false });
     const otherPal = h('select', { id: 'px-pal-copy', onchange: (e) => { const o = F.find('sprites', e.target.value); e.target.value = ''; if (!o) return; pushUndo(); s.palette = o.palette.slice(); changed(true); F.toast('Paleta copiada de ' + o.name); } },
       h('option', { value: '' }, 'Usar la paleta de…'), ...p.sprites.filter((o) => o.id !== s.id).map((o) => h('option', { value: o.id }, o.name)));
@@ -280,10 +286,14 @@
     const isOW = s.kind.startsWith('overworld');
     const right = h('aside', { class: 'side right' },
       h('section', { class: 'panel' }, h('h3', {}, 'Paleta GBA'), h('p', { class: 'hint' }, 'Máximo 16 colores. El primero es el transparente.'),
+        s.kind === 'tileset' ? h('div', { class: 'row tight' },
+          h('select', { id: 'px-palsel', 'aria-label': 'Paleta', onchange: (e) => { S.palIdx = +e.target.value; renderPalette(); } }, ...[...Array(F.palCount(s)).keys()].map((i) => h('option', { value: i, selected: i === (S.palIdx || 0) }, 'Paleta ' + i))),
+          h('button', { class: 'btn xs', disabled: F.palCount(s) >= 6, title: 'La GBA permite hasta 6 paletas en un tileset secundario', onclick: () => { pushUndo(); s.extraPalettes = s.extraPalettes || []; s.extraPalettes.push(s.palette.slice()); S.palIdx = s.extraPalettes.length; changed(true); } }, '+ Paleta'),
+          h('button', { class: 'btn xs', id: 'px-useblock', disabled: S.lastBlock == null, title: 'Los píxeles del último bloque tocado usarán esta paleta', onclick: () => { pushUndo(); s.blockPal = s.blockPal || {}; if (S.palIdx) s.blockPal[S.lastBlock] = S.palIdx; else delete s.blockPal[S.lastBlock]; changed(true); } }, 'Usar en el bloque ' + (S.lastBlock ?? '—'))) : null,
         h('div', { id: 'px-palette', class: 'palette' }),
         h('div', { class: 'row' }, colorIn, h('span', { id: 'px-color-info', class: 'mono small' })),
         h('div', { class: 'btn-row' },
-          h('button', { class: 'btn sm', disabled: S.color === 0, title: 'Crea 4 tonos (sombra → luz) a partir del color elegido, con el giro de tono que usan los artistas de pixel art', onclick: () => { pushUndo(); const r = F.ramp(s.palette[S.color], 4); r.forEach((c, k) => { if (S.color + k < 16) s.palette[S.color + k] = c; }); changed(true); } }, 'Rampa de sombras'),
+          h('button', { class: 'btn sm', disabled: S.color === 0, title: 'Crea 4 tonos (sombra → luz) a partir del color elegido, con el giro de tono que usan los artistas de pixel art', onclick: () => { pushUndo(); const P = pal(s), r = F.ramp(P[S.color], 4); r.forEach((c, k) => { if (S.color + k < 16) P[S.color + k] = c; }); changed(true); } }, 'Rampa de sombras'),
           h('button', { class: 'btn sm', onclick: () => { [S.color, S.color2] = [S.color2, S.color]; renderPalette(); } }, 'Intercambiar (X)')),
         otherPal, h('small', { id: 'px-used', class: 'muted' })),
       h('section', { class: 'panel' }, h('h3', {}, 'Vista previa'), preview,

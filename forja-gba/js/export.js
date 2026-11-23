@@ -100,7 +100,7 @@ ${issues.length ? '\n## Revisar\n\n' + [...new Set(issues)].map((i) => '- ' + i)
     p.maps.forEach((m) => files.push({ name: `mapas/${F.fileName(m.name)}.txt`, data: mapGuide(m, ids) }));
     p.sprites.forEach((s) => {
       const f = F.fileName(s.name);
-      if (s.kind === 'tileset') files.push({ name: `graficos/tilesets/${f}.bmp`, data: bmp(s, [0]) }, { name: `graficos/tilesets/${f}.pal`, data: F.jascPal(s.palette) });
+      if (s.kind === 'tileset') { files.push({ name: `graficos/tilesets/${f}.bmp`, data: bmp(s, [0]) }); for (let i = 0; i < F.palCount(s); i++) files.push({ name: `graficos/tilesets/${f}${F.palCount(s) > 1 ? '_paleta' + i : ''}.pal`, data: F.jascPal(F.palAt(s, i)) }); if (F.palCount(s) > 1) note(`${s.name} usa ${F.palCount(s)} paletas: en el editor de bloques asigna a cada bloque su paleta (la guía del mapa no lo hace por ti).`); }
       else if (s.kind.startsWith('overworld')) files.push({ name: `graficos/personajes/${f}.bmp`, data: bmp(s, all(s).slice(0, 9)) }, { name: `graficos/personajes/${f}.pal`, data: F.jascPal(s.palette) });
       else if (s.kind === 'trainer') files.push({ name: `graficos/entrenadores/${f}.bmp`, data: bmp(s, [0]) }, { name: `graficos/entrenadores/${f}.pal`, data: F.jascPal(s.palette) });
     });
@@ -112,6 +112,7 @@ ${issues.length ? '\n## Revisar\n\n' + [...new Set(issues)].map((i) => '- ' + i)
       if (!m.romSlot) note(`${m.name}: elige qué especie reemplaza en la ROM (Fakemon → “Ocupa el lugar de”).`);
       if (!front) note(`${m.name} no tiene sprite de frente.`);
     });
+    if (F.creditsText()) files.push({ name: 'CREDITOS.txt', data: F.creditsText() });
     files.push({ name: 'REGISTRO_FLAGS_Y_VARIABLES.txt', data: registry(ids) }, { name: 'proyecto.forja.json', data: F.serialize() });
     files.unshift({ name: 'LEEME.md', data: readmeRom() });
     return files;
@@ -252,7 +253,7 @@ ${issues.length ? '\n## Revisar antes de compilar\n\n' + [...new Set(issues)].ma
       const f = F.fileName(s.name);
       if (s.kind.startsWith('overworld')) { files.push({ name: `graphics/object_events/pics/people/${f}.png`, data: png(s, all(s).slice(0, 9)) }, { name: `graphics/object_events/palettes/${f}.pal`, data: F.jascPal(s.palette) }); if (s.frames.length !== 9) note(`${s.name}: un personaje del mapa necesita 9 cuadros (tiene ${s.frames.length}).`); }
       if (s.kind === 'trainer') files.push({ name: `graphics/trainers/front_pics/${f}.png`, data: png(s, [0]) }, { name: `graphics/trainers/palettes/${f}.pal`, data: F.jascPal(s.palette) });
-      if (s.kind === 'tileset') files.push({ name: `data/tilesets/secondary/${f}/tiles.png`, data: png(s, [0]) }, { name: `data/tilesets/secondary/${f}/palettes/00.pal`, data: F.jascPal(s.palette) });
+      if (s.kind === 'tileset') { files.push({ name: `data/tilesets/secondary/${f}/tiles.png`, data: png(s, [0]) }); for (let i = 0; i < F.palCount(s); i++) files.push({ name: `data/tilesets/secondary/${f}/palettes/${String(i).padStart(2, '0')}.pal`, data: F.jascPal(F.palAt(s, i)) }); if (F.palCount(s) > 1) note(`${s.name}: tiene ${F.palCount(s)} paletas; en Porymap asigna la paleta de cada bloque al armar los metatiles.`); }
     });
     p.maps.forEach((m) => {
       const C = F.camel(m.name), used = usedScripts(m);
@@ -265,6 +266,7 @@ ${issues.length ? '\n## Revisar antes de compilar\n\n' + [...new Set(issues)].ma
     if (p.maps.some((m) => m.wild.list.length)) files.push({ name: 'src/data/wild_encounters_forja.json', data: wildJson(p.maps) });
     if (p.scripts.length) files.push({ name: 'data/scripts/forja.pory', data: p.scripts.map((s) => F.toPory(s)).join('\n\n') + '\n' });
     const party = trainersParty(); if (party) files.push({ name: 'src/data/trainers_forja.party', data: party });
+    if (F.creditsText()) files.push({ name: 'CREDITOS.txt', data: F.creditsText() });
     files.push({ name: 'proyecto.forja.json', data: F.serialize() });
     files.unshift({ name: 'LEEME.md', data: readmeDecomp(p) });
     return files;
@@ -339,11 +341,12 @@ ${issues.length ? '\n## Revisar\n\n' + [...new Set(issues)].map((i) => '- ' + i)
       const f = F.fileName(s.name);
       if (s.kind.startsWith('overworld') && s.frames.length >= 9) files.push({ name: `Graphics/Characters/${f}.png`, data: png(s, [0, 3, 0, 4, 2, 7, 2, 8, { f: 2, flip: true }, { f: 7, flip: true }, { f: 2, flip: true }, { f: 8, flip: true }, 1, 5, 1, 6], { cols: 4 }, 2) });
       if (s.kind === 'trainer') files.push({ name: v16 ? `Graphics/Characters/trainer_${F.constName(s.name)}.png` : `Graphics/Trainers/${F.constName(s.name)}.png`, data: png(s, [0], 'h', 2, { w: 80, h: 80 }) });
-      if (s.kind === 'tileset') files.push({ name: `Graphics/Tilesets/${f}.png`, data: png(s, [0], 'h', 2) });
+      if (s.kind === 'tileset') { if (F.palCount(s) > 1) { const r = F.spriteRGBA(s, 0, 2); files.push({ name: `Graphics/Tilesets/${f}.png`, data: F.encodePNGRGBA(r.data, r.w, r.h) }); } else files.push({ name: `Graphics/Tilesets/${f}.png`, data: png(s, [0], 'h', 2) }); }
     });
     const ids = F.essIds();
     p.scripts.forEach((sc) => files.push({ name: `eventos/${F.fileName(sc.name)}.txt`, data: F.toEssentials(sc, { ids }).replace(/\n/g, '\r\n') + '\r\n' }));
     if (ids.switches.size || ids.vars.size) files.push({ name: 'eventos/INTERRUPTORES_Y_VARIABLES.txt', data: ['INTERRUPTORES', ...[...ids.switches].map(([k, v]) => `  ${String(v).padStart(4, '0')}  ${k}`), '', 'VARIABLES', ...[...ids.vars].map(([k, v]) => `  ${String(v).padStart(4, '0')}  ${k}`)].join('\r\n') + '\r\n' });
+    if (F.creditsText()) files.push({ name: 'CREDITOS.txt', data: F.creditsText() });
     files.push({ name: 'proyecto.forja.json', data: F.serialize() });
     files.unshift({ name: 'LEEME.md', data: readmeEss(v16) });
     return files;

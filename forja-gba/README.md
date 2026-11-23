@@ -12,7 +12,9 @@ y el proyecto se guarda solo en ese navegador (descárgalo con **Guardar** para 
 |---|---|
 | **Pixel** | Editor de píxeles con paleta GBA real (16 colores, 15 bits, índice 0 transparente). Lápiz, cubeta, línea, rectángulo, óvalo, cuentagotas, mover, simetría, papel cebolla, rejilla de tiles 8×8, deshacer. Plantillas con medidas exactas: personaje del mapa 32×32 (9 cuadros), Fakemon 64×64, ícono 32×32, entrenador 64×64, tileset 128×128. |
 | **Animación** | Vista previa con el ritmo del juego (7.5 fps), las 4 direcciones y caminata. Ayudantes que dejan un borrador consistente: caminata desde los 3 cuadros quietos, cuadro de entrada del Fakemon, salto del ícono. |
-| **Importar** | Detecta imágenes ampliadas (×2, ×3… aunque estén desfasadas 1 px), reduce a 15 colores y convierte hojas 4×4 de RPG Maker / Essentials al orden de 9 cuadros de la GBA. |
+| **Importar** | Detecta imágenes ampliadas (×2 a ×12, desfasadas o con escala no entera como ×3.4), reduce a 15 colores y convierte hojas 4×4 de RPG Maker / Essentials al orden de 9 cuadros de la GBA. Un personaje de un solo cuadro se acomoda como personaje del mapa. |
+| **Generadores** | Personajes del mapa originales (11 predeterminados: entrenadores, profesora, científico, niño, abuelo, excursionista, marinera, deportista, pescador) con piel, peinado, sombrero, ropa, rayas y mochila. Edificios (9 predeterminados: casas, cabaña, dos pisos, tienda, centro de curación, laboratorio, gimnasio) con tejado, muros, pisos, ancho y letrero; y objetos (pino, árbol, arbusto, roca, flores, valla, cartel, buzón, farol). |
+| **Estructuras** | Una casa o un árbol se guarda como estructura del tileset y se coloca con un clic (con vista previa). Se crean desde los generadores, arrastrando sobre el tileset o con el **recortador de hojas**: detecta el fondo (liso, cuadriculado de transparencia, pasto con textura, JPG), separa cada objeto, permite recortes a mano, estima la escala, compone el suelo debajo y guarda los créditos del autor (CREDITOS.txt). La puerta crea su warp. |
 | **Fakemon** | Tipos, estadísticas con radar y guía de balance por total, habilidades y movimientos en español (se traducen a constantes `MOVE_*` / `ABILITY_*`), crianza, evolución y vista de combate. |
 | **Mapas** | Bloques de 16×16, capa de suelo y capa de encima, colisiones automáticas y comportamientos de bloque (sólido, hierba alta, agua). Eventos: NPC (con flag para ocultarlos), carteles, objetos, puertas, **gatillos** con variable y valor, inicio del jugador y evento al entrar al mapa. Tabla de Pokémon salvajes. |
 | **Eventos** | Mecánicas con bloques: mensajes, preguntas sí/no, **elegir entre 2-4 opciones** (p. ej. el Pokémon inicial), banderas, contadores (variables), regalos, combates, curar, mover, ocultar y mostrar personajes, teletransportar. Avisa de los caracteres que la GBA no tiene. Genera **XSE**, **Poryscript** y la lista de comandos de **Essentials** en vivo. |
@@ -40,9 +42,11 @@ y produce la ROM. Para distribuir un hack se comparte un parche (`.bps`/`.ups`),
 - `js/compilers.js` traduce los eventos a Poryscript, XSE y Essentials.
 - `tools/build_artifact.py` produce `dist/` para publicarlo como página web.
 
-## Límites conocidos (versión 0.2)
+## Límites conocidos (versión 0.3)
 
-- Una paleta por tileset (la GBA permite hasta 13 en los mapas). Los bloques no se componen de tiles 8×8 con volteo.
+- Hasta 6 paletas por tileset (como un tileset secundario de la GBA); cada bloque de 16×16 usa una. Los bloques no se componen de tiles 8×8 con volteo.
+- Reducir pixel art con escala no entera (×3.4) puede deformar algún píxel: revisa la estructura en Pixel.
+- Si las piezas de una hoja se tocan, el recortador las ve como un solo objeto: márcalas a mano arrastrando.
 - La capa “Encima” se usa en la vista previa; en Porymap se configura con bloques de capa superior.
 - Los combates se simulan con mensajes en **Probar**; el combate real lo hace el motor del juego.
 - En GBA (XSE y Poryscript), “Elegir entre opciones” se convierte en preguntas sí/no una tras otra: los menús propios de

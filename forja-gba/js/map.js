@@ -20,7 +20,7 @@
   /* caché de bloques como canvas para dibujar rápido */
   const tileCache = new Map();
   const tileCanvas = (ts) => {
-    const key = ts.palette.join('') + ':' + hashPx(ts.frames[0]);
+    const key = ts.palette.join('') + JSON.stringify(ts.extraPalettes || []) + JSON.stringify(ts.blockPal || {}) + ts.h + ':' + hashPx(ts.frames[0]);
     if (tileCache.get(ts.id)?.key === key) return tileCache.get(ts.id).cv;
     const cv = F.frameCanvas(ts, 0); tileCache.set(ts.id, { key, cv }); return cv;
   };
@@ -64,6 +64,8 @@
       ctx.strokeStyle = info.color; ctx.lineWidth = ev.id === S.selEvent ? 3 : 1.5; ctx.strokeRect(px + 1.5, py + 1.5, T * z - 3, T * z - 3); ctx.lineWidth = 1;
       if (!(sp && ev.type === 'npc')) { ctx.fillStyle = info.color; ctx.font = `bold ${8 * z}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText({ npc: '☺', sign: '▤', item: '●', warp: '⇲', start: '★', trigger: '⌖' }[ev.type], px + T * z / 2, py + T * z / 2); }
     }
+    const st = curStamp();
+    if (st && S.hover && S.layer !== 'events' && S.layer !== 'coll') { ctx.globalAlpha = 0.65; ctx.drawImage(F.stampCanvas(tilesetOf(m), st, z), S.hover[0] * T * z, S.hover[1] * T * z); ctx.globalAlpha = 1; ctx.strokeStyle = '#ffb547'; ctx.lineWidth = 2; ctx.strokeRect(S.hover[0] * T * z, S.hover[1] * T * z, st.w * T * z, st.h * T * z); ctx.lineWidth = 1; }
     if (drag && drag.rect) { const r = drag.rect; ctx.strokeStyle = '#ffb547'; ctx.lineWidth = 2; ctx.strokeRect(Math.min(r[0], r[2]) * T * z, Math.min(r[1], r[3]) * T * z, (Math.abs(r[2] - r[0]) + 1) * T * z, (Math.abs(r[3] - r[1]) + 1) * T * z); ctx.lineWidth = 1; }
   };
   const cell = (e) => { const r = canvas.getBoundingClientRect(), z = S.zoom; return [Math.floor((e.clientX - r.left) / (T * z)), Math.floor((e.clientY - r.top) / (T * z))]; };
@@ -78,6 +80,8 @@
       else S.selEvent = null;
       changed(); renderSide(); return;
     }
+    const st = curStamp();
+    if (st && S.layer !== 'coll' && e.button !== 2) { pushUndo(); F.placeStamp(m, st, x, y); changed(); return; }
     if (S.tool === 'picker') { const v = layerArr(m)[y * m.w + x]; if (S.layer !== 'coll' && v >= 0) { S.tile = v; renderSide(); } return; }
     pushUndo(); const arr = layerArr(m), v = paintVal(erase);
     if (S.tool === 'fill') { flood(arr, m, x, y, v); changed(); return; }
@@ -87,6 +91,7 @@
   const onMove = (e) => {
     const m = cur(); if (!m) return; const [x, y] = cell(e);
     const pos = $('#map-pos'); if (pos) pos.textContent = inside(m, x, y) ? `x ${x} · y ${y}` : '';
+    if (curStamp() && (!S.hover || S.hover[0] !== x || S.hover[1] !== y)) { S.hover = [x, y]; draw(); }
     if (!drag || !inside(m, x, y)) return;
     if (drag.moveEv) { if (drag.moveEv.x !== x || drag.moveEv.y !== y) { if (!drag.pushed) { pushUndo(); drag.pushed = true; } drag.moveEv.x = x; drag.moveEv.y = y; draw(); } return; }
     if (drag.rect) { drag.rect[2] = x; drag.rect[3] = y; draw(); return; }
@@ -98,6 +103,7 @@
     const wasMove = drag.moveEv; drag = null; changed(); if (wasMove) renderSide();
   };
   const changed = () => { draw(); F.state.dirty = true; F.scheduleAutosave(); };
+  const curStamp = () => { const m = cur(), ts = m && tilesetOf(m); return ts && S.stamp ? (ts.stamps || []).find((x) => x.id === S.stamp) : null; };
 
   const newEvent = (type, x, y) => ({ id: F.uid('ev'), type: type || 'npc', x, y, name: (F.EVENT_TYPES[type || 'npc'].label) + ' ' + (cur().events.length + 1), sprite: '', facing: 'down', movement: 'quieto', script: '', item: 'Poción', toMap: '', toX: 0, toY: 0, hideFlag: '', var: 'PROGRESO', value: 0 });
 
@@ -129,18 +135,26 @@
         if (behav[i]) { c.fillStyle = F.BEHAVIORS[behav[i]][1]; c.fillRect(x + 2, y + 2, 7, 7); }
       }
       const sx = (S.tile % (ts.w / T)) * T * z, sy = Math.floor(S.tile / (ts.w / T)) * T * z; c.strokeStyle = '#ffb547'; c.lineWidth = 3; c.strokeRect(sx + 1.5, sy + 1.5, T * z - 3, T * z - 3);
-      cv.addEventListener('click', (e) => {
-        const r = cv.getBoundingClientRect(), i = Math.floor((e.clientY - r.top) / (T * z)) * (ts.w / T) + Math.floor((e.clientX - r.left) / (T * z));
+      const at = (e) => { const r = cv.getBoundingClientRect(); return [Math.floor(((e.clientX - r.left) / r.width) * (ts.w / T)), Math.floor(((e.clientY - r.top) / r.height) * (ts.h / T))]; };
+      let pick = null;
+      cv.addEventListener('pointerdown', (e) => { pick = at(e); });
+      cv.addEventListener('pointerup', async (e) => {
+        const a = pick, b2 = at(e); pick = null; if (!a) return;
+        if ((a[0] !== b2[0] || a[1] !== b2[1]) && !e.shiftKey && !S.markMode) {
+          const st = F.stampFromBlocks(ts, a[0], a[1], b2[0], b2[1], 'Selección ' + ((ts.stamps || []).length + 1));
+          S.stamp = st.id; F.toast(`Estructura de ${st.w}×${st.h} bloques creada. Haz clic en el mapa para colocarla.`); render(); return;
+        }
+        const i = a[1] * (ts.w / T) + a[0];
         if (e.shiftKey || S.markMode) {
           const mode = S.markMode || 'solid';
           if (mode === 'solid') { const set = new Set(ts.solid || []); set.has(i) ? set.delete(i) : set.add(i); ts.solid = [...set]; }
           else { ts.behav = ts.behav || {}; if (ts.behav[i] === mode) delete ts.behav[i]; else ts.behav[i] = mode; }
           F.scheduleAutosave();
-        } else { S.tile = i; if (S.layer === 'coll' || S.layer === 'events') S.layer = 'bottom'; }
+        } else { S.tile = i; S.stamp = null; if (S.layer === 'coll' || S.layer === 'events') S.layer = 'bottom'; }
         render();
       });
       const markSel = h('select', { id: 'map-mark', onchange: (e) => { S.markMode = e.target.value; } }, h('option', { value: '' }, 'Clic elige bloque para pintar'), ...Object.entries(F.BEHAVIORS).map(([k, [l]]) => h('option', { value: k, selected: S.markMode === k }, 'Clic marca: ' + l)));
-      picker = h('div', { class: 'stack' }, cv, markSel, h('p', { class: 'hint' }, 'Marca qué bloques son sólidos (rojo), hierba alta (verde) o agua (azul). Con eso se calculan las colisiones y los encuentros salvajes. Atajo: Mayús + clic marca sólido.'),
+      picker = h('div', { class: 'stack' }, cv, markSel, h('p', { class: 'hint' }, 'Clic: elegir un bloque. Arrastrar: crear una estructura con varios bloques. Marca qué bloques son sólidos (rojo), hierba alta (verde) o agua (azul) para calcular colisiones y encuentros. Atajo: Mayús + clic marca sólido.'),
         h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', onclick: () => F.pixel.open(ts.id) }, 'Editar tileset'), h('button', { class: 'btn sm', onclick: () => autoColl(m) }, 'Calcular colisiones')));
     }
     const ev = m.events.find((v) => v.id === S.selEvent);
@@ -164,10 +178,25 @@
           h('label', { class: 'field' }, h('span', {}, 'Banco (A-Map)'), h('input', { id: 'map-bank', type: 'number', min: 0, max: 42, value: m.bank, class: 'num', onchange: (e) => { m.bank = +e.target.value; changed(); } })),
           h('label', { class: 'field' }, h('span', {}, 'Mapa (A-Map)'), h('input', { id: 'map-num', type: 'number', min: 0, max: 255, value: m.num, class: 'num', onchange: (e) => { m.num = +e.target.value; changed(); } }))),
         h('small', { class: 'muted' }, 'Banco y número del mapa que reemplazas en tu ROM. Se usan en los teletransportes de XSE.')),
-      S.layer === 'events' ? evPanel : h('section', { class: 'panel' }, h('h3', {}, 'Bloques'), picker),
+      S.layer === 'events' ? evPanel : structPanel(m, ts),
+      S.layer === 'events' ? null : h('section', { class: 'panel' }, h('h3', {}, 'Bloques'), picker),
       wildPanel(m));
   };
 
+  /* Estructuras: casas, árboles y objetos de varios bloques que se colocan con un clic. */
+  const structPanel = (m, ts) => {
+    const fileIn = h('input', { type: 'file', accept: 'image/*', hidden: true, id: 'map-sheet', onchange: async (e) => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; const t = await F.sliceSheetFlow(f, ts ? ts.id : '__new', S.tile); if (t && !m.tileset) m.tileset = t.id; render(); } });
+    const list = ts ? (ts.stamps || []) : [];
+    return h('section', { class: 'panel' }, h('h3', {}, 'Estructuras'),
+      list.length ? h('div', { class: 'stamp-grid' }, ...list.map((st) => h('button', { class: 'stamp' + (st.id === S.stamp ? ' sel' : ''), title: st.name + (st.credit ? ' · créditos: ' + st.credit : ''), onclick: () => { S.stamp = S.stamp === st.id ? null : st.id; if (S.layer === 'coll' || S.layer === 'events') S.layer = 'bottom'; render(); } },
+        F.stampCanvas(ts, st, 1), h('span', {}, st.name),
+        h('span', { class: 'stamp-x', role: 'button', tabindex: 0, 'aria-label': 'Quitar estructura', onclick: (e) => { e.stopPropagation(); ts.stamps = ts.stamps.filter((x) => x.id !== st.id); if (S.stamp === st.id) S.stamp = null; F.scheduleAutosave(); render(); } }, '×'))))
+        : h('p', { class: 'hint' }, 'Todavía no hay estructuras en este tileset.'),
+      S.stamp ? h('p', { class: 'hint' }, 'Haz clic en el mapa para colocarla (esquina superior izquierda). Esc o clic de nuevo en ella para soltarla.') : null,
+      h('div', { class: 'btn-row' },
+        h('button', { class: 'btn sm primary', onclick: async () => { const st = await F.structureGenFlow(ts ? ts.id : '__new', S.tile); if (st) { if (!m.tileset) m.tileset = F.state.project.sprites.find((x) => (x.stamps || []).includes(st))?.id || m.tileset; S.stamp = st.id; } render(); } }, '+ Predeterminadas'),
+        h('button', { class: 'btn sm', onclick: () => fileIn.click() }, 'Recortar de una imagen'), fileIn));
+  };
   /* Pokémon salvajes de la hierba alta del mapa. */
   const wildPanel = (m) => {
     const p = F.state.project, w = m.wild, total = w.list.reduce((a, x) => a + (+x.pct || 0), 0);
@@ -243,5 +272,6 @@
   const miniMap = (m) => { const cv = h('canvas', { class: 'thumb', width: m.w * 2, height: m.h * 2 }); const c = cv.getContext('2d'); try { const big = document.createElement('canvas'); big.width = m.w * T; big.height = m.h * T; F.drawMap(big.getContext('2d'), m, 1); c.imageSmoothingEnabled = true; c.drawImage(big, 0, 0, cv.width, cv.height); } catch (e) { /* sin tileset */ } return cv; };
   S.render = render;
   S.redraw = draw;
+  document.addEventListener('keydown', (e) => { if (F.state.view === 'mapas' && e.key === 'Escape' && S.stamp) { S.stamp = null; render(); } });
   document.addEventListener('keydown', (e) => { if (F.state.view === 'mapas' && (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && !/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); undo(); } });
 })();

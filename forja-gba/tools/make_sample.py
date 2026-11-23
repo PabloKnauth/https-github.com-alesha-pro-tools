@@ -379,7 +379,14 @@ def main():
     project = {
         'format': 'forja-gba', 'version': 2, 'name': 'Pueblo Brisa (ejemplo)',
         'sprites': [
-            {'id': 'spr_ts', 'name': 'Tileset Pueblo', 'kind': 'tileset', 'w': 128, 'h': 128, 'fps': 4, 'palette': [snap(c) for c in TS_PAL], 'frames': [ts.hex()], 'solid': solid, 'behav': {'2': 'grass', '5': 'water', '6': 'water'}},
+            {'id': 'spr_ts', 'name': 'Tileset Pueblo', 'kind': 'tileset', 'w': 128, 'h': 128, 'fps': 4, 'palette': [snap(c) for c in TS_PAL], 'frames': [ts.hex()], 'solid': solid, 'behav': {'2': 'grass', '5': 'water', '6': 'water'},
+             'stamps': [
+                 {'id': 'est_arbol', 'name': 'Árbol', 'w': 2, 'h': 2, 'credit': '', 'cells': [{'b': -1, 't': 8, 'c': 0}, {'b': -1, 't': 9, 'c': 0}, {'b': 10, 't': -1, 'c': 1}, {'b': 11, 't': -1, 'c': 1}]},
+                 {'id': 'est_casa', 'name': 'Casa', 'w': 3, 'h': 3, 'credit': '', 'door': {'x': 1, 'y': 2}, 'cells': [{'b': b, 't': -1, 'c': 0 if b == 21 else 1} for b in (16, 17, 18, 22, 23, 24, 19, 21, 20)]},
+                 {'id': 'est_valla', 'name': 'Valla ×3', 'w': 3, 'h': 1, 'credit': '', 'cells': [{'b': 12, 't': -1, 'c': 1}] * 3},
+                 {'id': 'est_estanque', 'name': 'Estanque', 'w': 3, 'h': 3, 'credit': '', 'cells': [{'b': 6, 't': -1, 'c': 1}] * 3 + [{'b': 5, 't': -1, 'c': 1}] * 6},
+                 {'id': 'est_flores', 'name': 'Flores', 'w': 1, 'h': 1, 'credit': '', 'cells': [{'b': 3, 't': -1, 'c': 0}]},
+             ]},
             {'id': 'spr_hero', 'name': 'Protagonista', 'kind': 'overworld', 'w': 32, 'h': 32, 'fps': 7.5, 'palette': [snap(c) for c in CHAR_PAL], 'frames': character_frames(), 'player': True},
             {'id': 'spr_npc', 'name': 'Vecina', 'kind': 'overworld', 'w': 32, 'h': 32, 'fps': 7.5, 'palette': [snap(c) for c in NPC_PAL], 'frames': character_frames()},
             {'id': 'spr_front', 'name': 'Brasín · frente', 'kind': 'front', 'w': 64, 'h': 64, 'fps': 4, 'palette': [snap(c) for c in MON_PAL], 'frames': [front.hex(), stretch_up(front).hex()]},

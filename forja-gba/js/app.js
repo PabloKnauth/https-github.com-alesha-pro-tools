@@ -34,9 +34,9 @@
   function renderHome() {
     const p = F.state.project, root = $('#view');
     const steps = [
-      ['pixel', 'Dibuja', `${p.sprites.length} sprites`, 'Personajes, Fakemon y bloques con la paleta real de 16 colores de la GBA. Importa tus PNG y se ajustan solos.'],
+      ['pixel', 'Dibuja', `${p.sprites.length} sprites`, 'Personajes, Fakemon y bloques con la paleta real de la GBA. Generador de personajes con 11 predeterminados. Importa tus PNG y se ajustan solos.'],
       ['fakemon', 'Crea Fakemon', `${p.fakemons.length} criaturas`, 'Tipos, estadísticas con guía de balance, habilidades, movimientos y evolución.'],
-      ['mapas', 'Arma mapas', `${p.maps.length} mapas`, 'Suelo, capa de encima, colisiones y eventos: personajes, carteles, objetos y puertas.'],
+      ['mapas', 'Arma mapas', `${p.maps.length} mapas`, 'Casas, árboles y objetos como estructuras de un clic: predeterminadas o recortadas de tus hojas de recursos. Colisiones y eventos.'],
       ['eventos', 'Programa eventos', `${p.scripts.length} eventos`, 'Diálogos, elecciones, banderas, contadores, regalos y combates con bloques. Genera XSE, Poryscript y comandos de Essentials.'],
       ['probar', 'Pruébalo', 'en el navegador', 'Camina por tu mapa en una pantalla de 240×160 y habla con los personajes.'],
       ['exportar', 'Exporta', 'ROM, decomp o Essentials', 'Scripts de XSE y guía para Advance Map, proyecto decomp o archivos de Essentials, con un LEEME paso a paso.'],
@@ -56,7 +56,7 @@
         h('span', { class: 'step-n' }, i + 1), h('b', {}, t), h('small', { class: 'count-tag' }, count), h('span', {}, txt))))),
       h('div', { class: 'home-grid' },
         h('section', { class: 'card drop', id: 'dropzone', onclick: () => fileIn.click(), tabindex: 0, role: 'button', onkeydown: (e) => { if (e.key === 'Enter' || e.key === ' ') fileIn.click(); } },
-          h('h3', {}, 'Trae tus imágenes'), h('p', {}, 'Arrastra aquí PNG de personajes, Pokémon o tilesets (también hojas 4×4 de RPG Maker/Essentials). Detecto si están ampliadas, las reduzco a 15 colores y las acomodo al formato GBA.'), h('span', { class: 'btn' }, 'Elegir archivos'), fileIn),
+          h('h3', {}, 'Trae tus imágenes'), h('p', {}, 'Arrastra aquí PNG, JPG o WebP de personajes, Pokémon u hojas de casas y árboles (también hojas 4×4 de Essentials). Detecto el fondo y si están ampliadas, aunque sea ×3.4, y las acomodo al formato GBA.'), h('span', { class: 'btn' }, 'Elegir archivos'), fileIn),
         h('section', { class: 'card' }, h('h3', {}, 'La GBA en 30 segundos'),
           h('dl', { class: 'facts' },
             h('dt', {}, '240 × 160'), h('dd', {}, 'Píxeles de pantalla: caben 15 × 10 bloques del mapa.'),

@@ -20,7 +20,7 @@
     const { width: w, height: h, data } = img;
     let opaque = 0; for (let i = 3; i < data.length; i += 4) if (data[i] >= 128) opaque++;
     const tol = Math.max(4, Math.round(opaque * 0.003));
-    for (const k of [6, 5, 4, 3, 2]) {
+    for (const k of [12, 10, 8, 6, 5, 4, 3, 2]) {
       if (w < k * 8 || h < k * 8) continue;
       for (let oy = 0; oy < k; oy++) for (let ox = 0; ox < k; ox++) {
         let bad = 0;
@@ -132,6 +132,7 @@
   /** Formatos que se reconocen automáticamente. */
   F.guessImport = (w, h, k) => {
     const W = w / k, H = h / k;
+    if (W <= 32 && H <= 32 && k >= 3) return 'ow_single';
     if (W === 32 && H === 64) return 'icon';
     if (W === 64 && H === 128) return 'front';
     if (W === 64 && H === 64) return 'front';
@@ -139,11 +140,14 @@
     if ((k >= 2 && w === h && W % 4 === 0 && W >= 64 && W <= 192) || (w === 128 && h === 192)) return 'charset';
     if (W === 128 && H % 16 === 0) return 'tileset';
     if (W < 48 && H < 48) return 'free';
+    if ((w > 256 || h > 256) && W > 96) return 'estructuras';
     if (W <= 96 && H <= 96) return 'trainer';
     return 'free';
   };
   F.IMPORT_MODES = {
+    estructuras: 'Hoja de casas, árboles u objetos → estructuras del tileset',
     charset: 'Hoja de personaje 4×4 (RPG Maker / Essentials) → personaje del mapa GBA',
+    ow_single: 'Un solo cuadro de personaje (mirando abajo) → personaje del mapa',
     front: 'Fakemon de frente (64×64; si mide 64×128 trae 2 cuadros)',
     back: 'Fakemon de espalda (64×64)',
     icon: 'Ícono del equipo (32×32, 2 cuadros apilados)',
@@ -181,6 +185,11 @@
         if (uw > W || uh > H) { const s = Math.min(W / uw, H / uh); part = scaleNearest(part, Math.floor(uw * s), Math.floor(uh * s)); }
         sprite.frames[i] = crop(part, -Math.floor((W - part.w) / 2), -(H - part.h), W, H).px;
       });
+    } else if (mode === 'ow_single') {
+      sprite = F.newSprite('overworld', name, { palette: q.palette });
+      sprite.frames[0] = fit(q, 32, 32, warn);
+      for (let i = 1; i < 9; i++) sprite.frames[i] = sprite.frames[0].slice();
+      warn.push('Solo trae la vista de frente: se copió en los 9 cuadros. Dibuja arriba e izquierda en Pixel y usa “Generar caminata”.');
     } else if (mode === 'free' || mode === 'tileset') {
       const W = Math.ceil(q.w / 8) * 8, H = Math.ceil(q.h / (mode === 'tileset' ? 16 : 8)) * (mode === 'tileset' ? 16 : 8);
       sprite = F.newSprite(mode, name, { w: mode === 'tileset' ? 128 : W, h: H, frames: 1, palette: q.palette });
@@ -204,6 +213,7 @@
     const nameIn = F.h('input', { id: 'imp-name', value: file.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ') });
     const prev = F.h('div', { class: 'imp-preview' }), notes = F.h('ul', { class: 'imp-notes' });
     const render = () => {
+      if (sel.value === 'estructuras') { prev.replaceChildren(F.h('p', { class: 'hint' }, 'Al continuar se abre el recortador: detecta el fondo y te deja elegir cada casa u objeto.')); notes.replaceChildren(); return; }
       const { sprite, warn } = F.imageToSprite(img, sel.value, nameIn.value);
       prev.replaceChildren(...sprite.frames.slice(0, 9).map((_, i) => F.h('figure', {}, F.thumb(sprite, i, 64), F.h('figcaption', {}, F.frameName(sprite, i)))));
       notes.replaceChildren(...(warn.length ? warn : ['Todo encaja sin cambios.']).map((w) => F.h('li', {}, w)));
@@ -215,6 +225,7 @@
       F.h('label', { class: 'field' }, F.h('span', {}, 'Nombre'), nameIn), prev, notes);
     const ok = await F.dialog({ title: 'Importar imagen', body, actions: [{ label: 'Cancelar', value: false }, { label: 'Importar', value: true, primary: true }] });
     if (!ok) return null;
+    if (sel.value === 'estructuras') { const ts = F.state.project.sprites.find((x) => x.kind === 'tileset'); await F.sliceSheetFlow(file, ts ? ts.id : '__new'); return null; }
     const { sprite } = F.imageToSprite(img, sel.value, nameIn.value);
     F.state.project.sprites.push(sprite); F.emit('sprites');
     F.toast('Importado: ' + sprite.name);

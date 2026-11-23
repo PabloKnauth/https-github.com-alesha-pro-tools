@@ -191,7 +191,7 @@ F.confirm = (title, body, label = 'Sí, continuar') => F.dialog({ title, body, a
 const CRC_TABLE = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
 F.crc32 = (buf, crc = 0xffffffff) => { for (let i = 0; i < buf.length; i++) crc = CRC_TABLE[(crc ^ buf[i]) & 255] ^ (crc >>> 8); return (crc ^ 0xffffffff) >>> 0; };
 const adler32 = (buf) => { let a = 1, b = 0; for (let i = 0; i < buf.length; i++) { a = (a + buf[i]) % 65521; b = (b + a) % 65521; } return ((b << 16) | a) >>> 0; };
-const zlibStored = (data) => {
+const zlibStored = (F.zlibStored = (data) => {
   const blocks = Math.ceil(data.length / 65535) || 1; const out = new Uint8Array(2 + data.length + blocks * 5 + 4); let o = 0;
   out[o++] = 0x78; out[o++] = 0x01;
   for (let i = 0; i < blocks; i++) {
@@ -201,7 +201,7 @@ const zlibStored = (data) => {
   }
   const ad = adler32(data); out[o++] = ad >>> 24; out[o++] = (ad >>> 16) & 255; out[o++] = (ad >>> 8) & 255; out[o++] = ad & 255;
   return out;
-};
+});
 const u32 = (n) => [n >>> 24, (n >>> 16) & 255, (n >>> 8) & 255, n & 255];
 const chunk = (type, data) => {
   const t = new TextEncoder().encode(type), body = new Uint8Array(t.length + data.length); body.set(t); body.set(data, t.length);
@@ -265,10 +265,14 @@ F.zip = (files) => {
 /* ---------- dibujo de sprites en canvas (vistas previas) ---------- */
 F.frameToImageData = (sprite, fi, flip = false) => {
   const img = new ImageData(sprite.w, sprite.h), src = sprite.frames[fi] || sprite.frames[0];
-  const pal = sprite.palette.map(F.hexToRgb);
+  const multi = sprite.kind === 'tileset' && sprite.extraPalettes && sprite.extraPalettes.length;
+  const pals = multi ? [sprite.palette, ...sprite.extraPalettes].map((p) => p.map(F.hexToRgb)) : [sprite.palette.map(F.hexToRgb)];
+  const cols = sprite.w / 16;
   for (let y = 0; y < sprite.h; y++) for (let x = 0; x < sprite.w; x++) {
-    const v = src[y * sprite.w + (flip ? sprite.w - 1 - x : x)], o = (y * sprite.w + x) * 4;
-    if (v === 0) continue; const c = pal[v]; img.data[o] = c[0]; img.data[o + 1] = c[1]; img.data[o + 2] = c[2]; img.data[o + 3] = 255;
+    const sx = flip ? sprite.w - 1 - x : x, v = src[y * sprite.w + sx], o = (y * sprite.w + x) * 4;
+    if (v === 0) continue;
+    const pal = multi ? pals[(sprite.blockPal && sprite.blockPal[Math.floor(y / 16) * cols + Math.floor(sx / 16)]) || 0] || pals[0] : pals[0];
+    const c = pal[v]; img.data[o] = c[0]; img.data[o + 1] = c[1]; img.data[o + 2] = c[2]; img.data[o + 3] = 255;
   }
   return img;
 };
@@ -330,4 +334,21 @@ F.encodeBMP4 = (px, w, h, palette) => {
     for (let x = 0; x < w; x++) { const v = px[y * w + x] & 15; buf[row + (x >> 1)] |= x & 1 ? v : v << 4; }
   }
   return buf;
+};
+
+/* PNG a todo color con transparencia (para tilesets con varias paletas en Essentials). */
+F.encodePNGRGBA = (rgba, w, h) => {
+  const raw = new Uint8Array((w * 4 + 1) * h);
+  for (let y = 0; y < h; y++) { raw[y * (w * 4 + 1)] = 0; raw.set(rgba.subarray(y * w * 4, (y + 1) * w * 4), y * (w * 4 + 1) + 1); }
+  const u32 = (n) => [n >>> 24, (n >>> 16) & 255, (n >>> 8) & 255, n & 255];
+  const chunk = (type, data) => { const t = new TextEncoder().encode(type), body = new Uint8Array(t.length + data.length); body.set(t); body.set(data, t.length); const out = new Uint8Array(12 + data.length); out.set(u32(data.length)); out.set(body, 4); out.set(u32(F.crc32(body)), 8 + data.length); return out; };
+  const z = F.zlibStored(raw), ihdr = new Uint8Array([...u32(w), ...u32(h), 8, 6, 0, 0, 0]);
+  const parts = [new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', ihdr), chunk('IDAT', z), chunk('IEND', new Uint8Array(0))];
+  const png = new Uint8Array(parts.reduce((a, p) => a + p.length, 0)); let o = 0; for (const p of parts) { png.set(p, o); o += p.length; } return png;
+};
+/** Imagen RGBA de un sprite ampliada (respeta varias paletas). */
+F.spriteRGBA = (sprite, fi = 0, scale = 1) => {
+  const img = F.frameToImageData(sprite, fi), W = sprite.w * scale, H = sprite.h * scale, out = new Uint8Array(W * H * 4);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const s = ((Math.floor(y / scale)) * sprite.w + Math.floor(x / scale)) * 4; out.set(img.data.subarray(s, s + 4), (y * W + x) * 4); }
+  return { data: out, w: W, h: H };
 };
