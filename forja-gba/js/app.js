@@ -23,7 +23,8 @@
     F.state.project = p; F.pixel.spriteId = null; F.pixel.undo = []; F.pixel.redo = []; F.fakemon.id = null; F.map.id = null; F.events.id = null;
     $('#proj-name').value = p.name; F.autosave(); rerender(); if (msg) F.toast(msg);
   };
-  const loadSample = () => setProject(F.deserialize(F.SAMPLE), 'Proyecto de ejemplo cargado');
+  F.makeSample = () => { const p = F.deserialize(F.SAMPLE); try { F.nature.buildSample(p); } catch (e) { console.error(e); } return p; };
+  const loadSample = () => setProject(F.makeSample(), 'Proyecto de ejemplo cargado');
   const openFile = async (file) => {
     try { setProject(F.deserialize(await file.text()), 'Proyecto abierto: ' + file.name); }
     catch (e) { F.toast(e.message || 'No se pudo abrir el archivo.', 'error'); }
@@ -35,8 +36,8 @@
     const p = F.state.project, root = $('#view');
     const steps = [
       ['pixel', 'Dibuja', `${p.sprites.length} sprites`, 'Personajes, Fakemon y bloques con la paleta real de la GBA. Generador de personajes con 11 predeterminados. Importa tus PNG y se ajustan solos.'],
-      ['fakemon', 'Crea Fakemon', `${p.fakemons.length} criaturas`, 'Tipos, estadísticas con guía de balance, habilidades, movimientos y evolución.'],
-      ['mapas', 'Arma mapas', `${p.maps.length} mapas`, 'Casas, árboles y objetos como estructuras de un clic: predeterminadas o recortadas de tus hojas de recursos. Colisiones y eventos.'],
+      ['fakemon', 'Crea Fakemon', `${p.fakemons.length} criaturas`, 'Tipos, estadísticas y evolución, con la referencia de los 1025 Pokémon oficiales y 900 movimientos en español.'],
+      ['mapas', 'Arma mapas', `${p.maps.length} mapas`, 'Pinta pasto, caminos, arena y agua con bordes automáticos; arrastra casas, árboles y bosques al mapa. Colisiones y eventos.'],
       ['eventos', 'Programa eventos', `${p.scripts.length} eventos`, 'Diálogos, elecciones, banderas, contadores, regalos y combates con bloques. Genera XSE, Poryscript y comandos de Essentials.'],
       ['probar', 'Pruébalo', 'en el navegador', 'Camina por tu mapa en una pantalla de 240×160 y habla con los personajes.'],
       ['exportar', 'Exporta', 'ROM, decomp o Essentials', 'Scripts de XSE y guía para Advance Map, proyecto decomp o archivos de Essentials, con un LEEME paso a paso.'],
@@ -102,7 +103,7 @@
     $('#btn-open').addEventListener('click', () => $('#open-file').click());
     $('#open-file').addEventListener('change', (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) openFile(f); });
     $('#btn-export').addEventListener('click', () => F.go('exportar'));
-    F.state.project = F.loadAutosave() || F.deserialize(F.SAMPLE);
+    F.state.project = F.loadAutosave() || F.makeSample();
     $('#proj-name').value = F.state.project.name;
     F.go((location.hash || '#inicio').slice(1));
     window.addEventListener('hashchange', () => { const v = location.hash.slice(1); if (v !== F.state.view) F.go(v); });

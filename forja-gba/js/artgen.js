@@ -44,7 +44,8 @@
   const shades = (hex) => { const r = F.ramp(hex, 5); return { dark: r[1], mid: F.snapHex(hex), light: r[3] }; };
   A.charPalette = (o) => {
     const sk = A.SKINS[o.skin] || A.SKINS.clara, hr = shades(o.hair || '#5a3020'), ht = shades(o.hatColor || '#e04020'), tp = shades(o.top || '#3878d0'), bt = shades(o.bottom || '#4a5268');
-    return ['#73c5a4', '#202028', F.snapHex(sk[1]), F.snapHex(sk[0]), hr.dark, hr.mid, ht.dark, ht.mid, ht.light, tp.dark, tp.mid, bt.dark, bt.mid, F.snapHex(o.shoes || '#383030'), '#f8f8f8', o.bag ? F.snapHex(o.bagColor || '#c84838') : '#80c0f8'].map(F.snapHex);
+    const noHat = !o.hat || o.hat === 'ninguno';
+    return ['#73c5a4', '#202028', F.snapHex(sk[1]), F.snapHex(sk[0]), hr.dark, hr.mid, noHat ? hr.dark : ht.dark, noHat ? hr.mid : ht.mid, noHat ? hr.light : ht.light, tp.dark, tp.mid, bt.dark, bt.mid, F.snapHex(o.shoes || '#383030'), '#f8f8f8', o.bag ? F.snapHex(o.bagColor || '#c84838') : '#80c0f8'].map(F.snapHex);
   };
   /* dir: down | up | left · phase: 0 quieto, 1 paso A, 2 paso B */
   A.charFrame = (o, dir, phase) => {
@@ -79,6 +80,8 @@
       c.rect(21, 19 - bob + ra, 22, 23 - bob + ra, o.outfit === 'bata' ? 14 : 9); c.rect(21, 24 - bob + ra, 22, 24 - bob + ra, 2);
     }
     if (o.stripes) for (let y = 19; y <= bodyBottom; y += 2) { c.swap(10, 14, y - bob, y - bob); c.swap(9, 14, y - bob, y - bob); }
+    if (o.outfit === 'camiseta') { c.swap(10, 11, 25 - bob, 25 - bob); c.swap(9, 11, 25 - bob, 25 - bob); c.swap(14, 11, 25 - bob, 25 - bob); }   // cinturón
+    for (let y = 24; y < 31; y++) for (let x = 0; x < 32; x++) if (c.get(x, y) === 13 && c.get(x, y - 1) !== 13 && c.get(x - 1, y) !== 13) c.set(x, y, 14);   // brillo del zapato
     // cabeza
     c.ellipse(hx + 0.5, 12.5 - bob, 6.5, 6, 3, 2);
     const hair = o.hairStyle || 'corto';
@@ -117,6 +120,9 @@
       c.ellipse(hx + 0.5, 9.5 - bob, 6.8, 4.6, 5, 4);
       if (dir === 'down') { c.rect(ix - 5, 11 - bob, ix + 6, 11 - bob, 5); c.set(ix - 2, 12 - bob, 5); c.set(ix + 2, 12 - bob, 5); }
       if (hair === 'punta') for (const sx of [-4, -1, 2, 5]) { c.set(ix + sx, 5 - bob, 5); c.set(ix + sx, 4 - bob, 5); c.set(ix + sx + 1, 5 - bob, 4); }
+      // brillo del pelo (usa el tono claro libre cuando no hay sombrero)
+      if (dir !== 'up') { c.set(ix - 2, 7 - bob, 8); c.set(ix - 1, 7 - bob, 8); c.set(ix - 3, 8 - bob, 8); }
+      else { c.set(ix - 1, 9 - bob, 8); c.set(ix, 9 - bob, 8); c.set(ix + 1, 10 - bob, 8); }
     }
     c.outline(1);
     return c.px;
@@ -159,10 +165,10 @@
     sign: [['', 'Sin letrero'], ['tienda', 'Tienda (franja azul)'], ['centro', 'Centro de curación (cruz)'], ['lab', 'Laboratorio'], ['gym', 'Gimnasio (estrella)']],
   };
   A.BUILD_PRESETS = [
-    { name: 'Casa de tejado rojo', w: 4, floors: 1, roof: 'teja', roofColor: '#d84838', wall: 'yeso', door: '#8a5a30', chimney: true },
+    { name: 'Casa de tejado rojo', w: 4, floors: 1, roof: 'teja', roofColor: '#d84838', wall: 'yeso', door: '#8a5a30', chimney: true, flowers: true },
     { name: 'Casa de dos aguas verde', w: 4, floors: 1, roof: 'dos_aguas', roofColor: '#68a858', wall: 'tablas', door: '#58a050' },
     { name: 'Cabaña de madera', w: 3, floors: 1, roof: 'dos_aguas', roofColor: '#c84838', wall: 'madera', door: '#d04040' },
-    { name: 'Casa de dos pisos azul', w: 5, floors: 2, roof: 'teja', roofColor: '#3878c8', wall: 'ladrillo', door: '#3868b8' },
+    { name: 'Casa de dos pisos azul', w: 5, floors: 2, roof: 'teja', roofColor: '#3878c8', wall: 'ladrillo', door: '#3868b8', flowers: true },
     { name: 'Casa de ladrillo', w: 4, floors: 1, roof: 'plano', roofColor: '#d85050', wall: 'ladrillo', door: '#c83838' },
     { name: 'Tienda', w: 4, floors: 1, roof: 'plano', roofColor: '#4888d8', wall: 'yeso', door: '#88c8f0', sign: 'tienda' },
     { name: 'Centro de curación', w: 5, floors: 1, roof: 'teja', roofColor: '#e05858', wall: 'yeso', door: '#88c8f0', sign: 'centro' },
@@ -191,7 +197,15 @@
     if (floors === 2) c.rect(wx0, wallTop + 22, wx1, wallTop + 23, Wt.d2);
     // tejado
     if (o.roof === 'teja') {
-      c.poly([[0, roofH], [W, roofH], [W - 6, 2], [6, 2]], (x, y) => (y >= roofH - 2 ? R.d2 : y <= 3 ? R.l2 : (y - 2) % 4 === 3 ? R.d1 : x < W * 0.12 + (roofH - y) * 0.2 ? R.d1 : x > W * 0.82 ? R.l1 : R.m));
+      // tejas escalonadas: cada fila tiene borde iluminado arriba, sombra abajo y juntas alternadas
+      c.poly([[0, roofH], [W, roofH], [W - 6, 2], [6, 2]], (x, y) => {
+        if (y >= roofH - 2) return R.d2; if (y <= 3) return R.l2;
+        const row = Math.floor((y - 4) / 4), ry = (y - 4) % 4, seam = (x + (row % 2) * 4) % 8 === 0;
+        const edgeL = x < 6 + (roofH - y) * 0.25 + 2, edgeR = x > W - 8 - (roofH - y) * 0.25;
+        if (ry === 3) return R.d1; if (seam && ry > 0) return R.d1;
+        if (ry === 0) return edgeL ? R.m : R.l1;
+        return edgeL ? R.d1 : edgeR ? R.l1 : R.m;
+      });
     } else if (o.roof === 'dos_aguas') {
       const cx = W / 2;
       c.poly([[-1, roofH], [cx, 0], [W + 1, roofH]], (x, y) => { const left = x < cx; const k = (left ? x + y : W - x + y) % 5; return k === 0 ? R.d1 : left ? R.m : R.l1; });
@@ -205,12 +219,21 @@
       else for (let x = 10; x < W - 10; x += 8) c.rect(x, 7, x + 4, 10, '#c8d8e8');
     }
     if (o.chimney) { const x = Math.round(W * 0.68); c.rect(x, 0, x + 5, 10, '#a04838'); c.rect(x, 0, x + 5, 1, '#6a3028'); }
+    // sombra del alero sobre el muro
+    c.rect(wx0 + 2, wallTop + 1, wx1 - 2, wallTop + 2, Wt.d2); c.rect(wx0 + 2, wallTop + 3, wx1 - 2, wallTop + 3, Wt.d1);
     // puerta, ventanas y letrero
     const doorW = o.sign === 'centro' || o.sign === 'gym' || o.sign === 'tienda' ? 14 : 10, doorH = 15, dx0 = Math.round(W / 2 - doorW / 2) + (o.sign ? 0 : (o.w % 2 ? 0 : 8)), dy0 = wy1 - 1 - doorH;
     const Dt = tone(o.door || '#8a5a30');
+    c.rect(dx0 - 3, wy1 - 1, dx0 + doorW + 2, wy1, '#c8c0b8'); c.rect(dx0 - 3, wy1, dx0 + doorW + 2, wy1, '#989088');   // escalón
     c.rect(dx0 - 1, dy0 - 1, dx0 + doorW, wy1 - 2, OUT); c.rect(dx0, dy0, dx0 + doorW - 1, wy1 - 2, Dt.m); c.rect(dx0, dy0, dx0 + 1, wy1 - 2, Dt.l1); c.rect(dx0 + doorW - 2, dy0, dx0 + doorW - 1, wy1 - 2, Dt.d1);
     if (doorW > 12) { c.rect(dx0 + doorW / 2, dy0, dx0 + doorW / 2, wy1 - 2, Dt.d2); c.rect(dx0 + 2, dy0 + 2, dx0 + 4, dy0 + 6, '#f8f8f8'); } else c.set(dx0 + doorW - 3, dy0 + 8, '#f0c040');
-    const win = (x, y) => { c.rect(x - 1, y - 1, x + 11, y + 9, OUT); c.rect(x, y, x + 10, y + 8, '#78b8e8'); c.rect(x, y, x + 3, y + 2, '#d8f0f8'); c.rect(x + 5, y, x + 5, y + 8, '#f8f8f8'); c.rect(x, y + 4, x + 10, y + 4, '#f8f8f8'); c.rect(x - 1, y + 9, x + 11, y + 9, Wt.d2); };
+    const win = (x, y) => {
+      c.rect(x - 1, y - 1, x + 11, y + 9, OUT); c.rect(x, y, x + 10, y + 8, '#78b8e8'); c.rect(x, y + 5, x + 10, y + 8, '#5890d0');
+      c.rect(x + 1, y + 1, x + 3, y + 1, '#e0f4fc'); c.set(x + 1, y + 2, '#e0f4fc'); c.rect(x + 7, y + 6, x + 8, y + 6, '#a8d8f8');
+      c.rect(x + 5, y, x + 5, y + 8, '#f8f8f8'); c.rect(x, y + 4, x + 10, y + 4, '#f8f8f8');
+      c.rect(x - 2, y + 9, x + 12, y + 10, '#f0f0f0'); c.rect(x - 2, y + 10, x + 12, y + 10, Wt.d2);   // alféizar
+      if (o.flowers) { c.rect(x - 1, y + 11, x + 11, y + 13, '#8a5a30'); c.rect(x - 1, y + 11, x + 11, y + 11, '#b07840'); for (let k = 0; k < 5; k++) { c.set(x + k * 2 + 1, y + 10 - (k % 2), ['#f06060', '#f8f0f8', '#f8d048'][k % 3]); c.set(x + k * 2, y + 11, '#3f8a4a'); } }
+    };
     const rows = floors === 2 ? [wallTop + 6, wy1 - 15] : [wy1 - 15];
     const slots = []; for (let x = 6; x + 12 < W - 5; x += 16) if (x + 12 < dx0 - 3 || x > dx0 + doorW + 3) slots.push(x);
     rows.forEach((y, ri) => slots.forEach((x) => win(x, y)));

@@ -3,7 +3,8 @@
 'use strict';
 (() => {
   const F = window.F, { h } = F;
-  const T = 16, MAX_PALETTES = 6, MAX_H = 512;
+  const T = 16, MAX_PALETTES = 12, MAX_H = 512;
+  F.MAX_PALETTES = MAX_PALETTES;
 
   /* ---------- paletas por bloque ---------- */
   F.palCount = (s) => 1 + (s.extraPalettes ? s.extraPalettes.length : 0);
@@ -18,7 +19,7 @@
   const growTileset = (ts) => { if (ts.h >= MAX_H) return false; const nh = ts.h + T, nf = new Uint8Array(ts.w * nh); nf.set(ts.frames[0]); ts.frames[0] = nf; ts.h = nh; return true; };
   const usedBlocks = (ts) => {
     const used = new Set([0]);
-    F.state.project.maps.filter((m) => m.tileset === ts.id).forEach((m) => { m.bottom.forEach((v) => used.add(v)); m.top.forEach((v) => v >= 0 && used.add(v)); });
+    ((F.state.project && F.state.project.maps) || []).filter((m) => m.tileset === ts.id).forEach((m) => { m.bottom.forEach((v) => used.add(v)); m.top.forEach((v) => v >= 0 && used.add(v)); });
     (ts.stamps || []).forEach((st) => st.cells.forEach((c) => { if (c.b >= 0) used.add(c.b); if (c.t >= 0) used.add(c.t); }));
     return used;
   };
@@ -39,11 +40,11 @@
     const W = Math.ceil(img.width / T) * T, H = Math.ceil(img.height / T) * T, ox = Math.floor((W - img.width) / 2), oy = H - img.height;
     const cw = W / T, ch = H / T, topRows = Math.min(opts.topRows || 0, ch - 1);
     const ground = opts.ground != null && opts.ground >= 0 ? blockRGBA(ts, opts.ground) : null;
-    const rgba = new Uint8ClampedArray(W * H * 4);
+    const rgba = new Uint8ClampedArray(W * H * 4), src = new Uint8ClampedArray(W * H * 4);
     for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
       const sx = x - ox, sy = y - oy, o = (y * W + x) * 4, cellRow = Math.floor(y / T);
       let px = null;
-      if (sx >= 0 && sy >= 0 && sx < img.width && sy < img.height && img.data[(sy * img.width + sx) * 4 + 3] >= 128) { const s = (sy * img.width + sx) * 4; px = [img.data[s], img.data[s + 1], img.data[s + 2]]; }
+      if (sx >= 0 && sy >= 0 && sx < img.width && sy < img.height && img.data[(sy * img.width + sx) * 4 + 3] >= 128) { const s = (sy * img.width + sx) * 4; px = [img.data[s], img.data[s + 1], img.data[s + 2]]; src.set([px[0], px[1], px[2], 255], o); }
       if (!px && ground && cellRow >= topRows) { const g = ((y % T) * T + (x % T)) * 4; if (ground[g + 3]) px = [ground[g], ground[g + 1], ground[g + 2]]; }
       if (px) { rgba[o] = px[0]; rgba[o + 1] = px[1]; rgba[o + 2] = px[2]; rgba[o + 3] = 255; }
     }
@@ -57,16 +58,26 @@
     if (q.lost) warn.push(`Tenía ${q.lost + 15} colores; se redujo a 15.`);
     const used = new Set(q.px); used.delete(0);
     const qcols = [...used].map((i) => F.hexToRgb(q.palette[i]));
-    let palIdx = -1, best = Infinity, bestMap = null;
+    // índices que ya usan los bloques de cada paleta (los demás son huecos libres)
+    const usedIdx = (p) => { const u = new Set([0]); for (let b = 0; b < blockCount(ts); b++) if (F.blockPalIndex(ts, b) === p) blockPixels(ts, b).forEach((v) => u.add(v)); return u; };
+    const CLOSE = 260;
+    let palIdx = -1, best = Infinity, bestMap = null, remap = null;
     for (let p = 0; p < F.palCount(ts); p++) {
-      const pal = F.palAt(ts, p).map(F.hexToRgb); let worst = 0; const map = {};
-      [...used].forEach((i, k) => { let bi = 1, bd = Infinity; for (let j = 1; j < 16; j++) { const d = dist(qcols[k], pal[j]); if (d < bd) { bd = d; bi = j; } } map[i] = bi; worst = Math.max(worst, bd); });
-      if (worst < best) { best = worst; palIdx = p; bestMap = map; }
+      const pal = F.palAt(ts, p).map(F.hexToRgb), uu = usedIdx(p); let worst = 0, missing = []; const map = {};
+      [...used].forEach((i, k) => { let bi = 1, bd = Infinity; for (let j = 1; j < 16; j++) { if (!uu.has(j) && F.palAt(ts, p)[j] === '#000000') continue; const d = dist(qcols[k], pal[j]); if (d < bd) { bd = d; bi = j; } } map[i] = bi; worst = Math.max(worst, bd); if (bd > CLOSE) missing.push(i); });
+      // ¿caben los colores que faltan en los huecos libres de esta paleta?
+      const free = [...Array(15).keys()].map((j) => j + 1).filter((j) => !uu.has(j) && F.palAt(ts, p)[j] === '#000000' && !Object.values(map).some((v, n) => v === j && !missing.includes(+Object.keys(map)[n])));
+      if (missing.length <= free.length) {
+        const score = missing.length * 1e6 + worst;
+        if (score < best) { best = score; palIdx = p; bestMap = { map, missing, free }; }
+      } else if (worst < best && best >= 1e9) { /* sin espacio */ }
+      if (!bestMap && worst < best) { best = 1e9 + worst; palIdx = p; bestMap = { map, missing: [], free: [], nearestOnly: true }; }
     }
-    let remap;
-    if (best <= 900) remap = bestMap; // los colores ya existen en una paleta
-    else if (F.palCount(ts) < MAX_PALETTES) { ts.extraPalettes = ts.extraPalettes || []; ts.extraPalettes.push(q.palette.slice()); palIdx = ts.extraPalettes.length; remap = null; }
-    else { remap = bestMap; warn.push('El tileset ya usa 6 paletas: los colores se adaptaron a la más parecida.'); }
+    if (bestMap && !bestMap.nearestOnly) {
+      const P = F.palAt(ts, palIdx); bestMap.missing.forEach((i, n) => { const j = bestMap.free[n]; P[j] = q.palette[i]; bestMap.map[i] = j; });
+      remap = bestMap.map;
+    } else if (F.palCount(ts) < MAX_PALETTES) { ts.extraPalettes = ts.extraPalettes || []; ts.extraPalettes.push(q.palette.slice()); palIdx = ts.extraPalettes.length; remap = null; }
+    else { remap = bestMap.map; warn.push(`El tileset ya usa ${MAX_PALETTES} paletas: los colores se adaptaron a la más parecida.`); }
     // 3) colocar cada bloque (reutilizando los idénticos)
     const cells = [], free = freeBlocks(ts), cols = ts.w / T;
     const findSame = (px) => { for (let b = 1; b < blockCount(ts); b++) { if (F.blockPalIndex(ts, b) !== palIdx) continue; const o = blockPixels(ts, b); let same = true; for (let i = 0; i < o.length; i++) if (o[i] !== px[i]) { same = false; break; } if (same && o.some((v) => v)) return b; } return -1; };
@@ -87,6 +98,7 @@
       cells.push(isTop ? { b: -1, t: b, c: 0 } : { b, t: -1, c: isDoor ? 0 : solid });
     }
     const stamp = { id: F.uid('est'), name: opts.name || 'Estructura', w: cw, h: ch, cells, credit: opts.credit || '', door: opts.door || null };
+    if (opts.name !== '_bloque' && src.some((v, i) => i % 4 === 3 && v === 0)) { let b64 = ''; for (let i = 0; i < src.length; i += 8192) b64 += String.fromCharCode.apply(null, src.subarray(i, i + 8192)); stamp.src = btoa(b64); stamp.topRows = topRows; }
     ts.stamps = ts.stamps || []; ts.stamps.push(stamp);
     F.state.dirty = true; F.scheduleAutosave();
     return { stamp, warn };
@@ -106,10 +118,35 @@
     return cv;
   };
   /** Coloca una estructura en el mapa; devuelve true si cambió algo. */
-  F.placeStamp = (m, st, x0, y0) => {
+  /* RGBA de una celda de la imagen original (con transparencia) de una estructura. */
+  const srcCell = (st, i) => {
+    if (!st.src) return null; if (!st._src) { const bin = atob(st.src), arr = new Uint8ClampedArray(bin.length); for (let k = 0; k < bin.length; k++) arr[k] = bin.charCodeAt(k); Object.defineProperty(st, '_src', { value: arr, enumerable: false, writable: true }); }
+    const W = st.w * T, cx = (i % st.w) * T, cy = Math.floor(i / st.w) * T, out = new Uint8ClampedArray(T * T * 4);
+    for (let y = 0; y < T; y++) out.set(st._src.subarray(((cy + y) * W + cx) * 4, ((cy + y) * W + cx + T) * 4), y * T * 4);
+    return out;
+  };
+  /* Funde la celda de la estructura sobre el suelo que ya hay en el mapa (camino, arena, agua…). */
+  const blendOnGround = (ts, st, i, groundB) => {
+    ts.blend = ts.blend || {}; const key = `${st.id}:${i}:${groundB}`;
+    if (ts.blend[key] != null) return ts.blend[key];
+    const top = srcCell(st, i); if (!top) return null;
+    if (top.every((v, n) => n % 4 !== 3 || v === 255)) return null;               // la celda es opaca: no hace falta
+    const base = blockRGBA(ts, groundB);
+    for (let p = 0; p < T * T; p++) if (top[p * 4 + 3]) base.set(top.subarray(p * 4, p * 4 + 4), p * 4); else base[p * 4 + 3] = base[p * 4 + 3] || 0;
+    if (!base.some((v, n) => n % 4 === 3 && v)) return null;
+    const r = F.addStructure(ts, new ImageData(base, T, T), { name: '_bloque', solid: 'none' });
+    if (!r.stamp) return null;
+    ts.stamps = ts.stamps.filter((x) => x !== r.stamp);
+    return (ts.blend[key] = r.stamp.cells[0].b);
+  };
+  F.placeStamp = (m, st, x0, y0, tsArg) => {
+    const ts = tsArg || (F.state.project && F.find('sprites', m.tileset));
     st.cells.forEach((cell, i) => {
       const x = x0 + (i % st.w), y = y0 + Math.floor(i / st.w); if (x < 0 || y < 0 || x >= m.w || y >= m.h) return; const k = y * m.w + x;
-      if (cell.b >= 0) m.bottom[k] = cell.b; if (cell.t >= 0) m.top[k] = cell.t; else if (cell.b >= 0) m.top[k] = -1;
+      let b = cell.b;
+      const plain = ts && ts.terrain && Object.entries(ts.terrain).some(([key, v]) => key.startsWith('0000') && v === m.bottom[k]);
+      if (b >= 0 && ts && st.src && m.bottom[k] !== b && !plain) { const nb = blendOnGround(ts, st, i, m.bottom[k]); if (nb != null) b = nb; }
+      if (b >= 0) m.bottom[k] = b; if (cell.t >= 0) m.top[k] = cell.t; else if (cell.b >= 0) m.top[k] = -1;
       if (cell.b >= 0 || cell.t >= 0) m.coll[k] = cell.c;
     });
     if (st.door) {
@@ -182,7 +219,7 @@
   const tilesetChooser = (current) => {
     const p = F.state.project, sets = p.sprites.filter((s) => s.kind === 'tileset');
     const full = (s) => Math.round((1 - (freeBlocks(s).length + ((MAX_H - s.h) / T) * (s.w / T)) / ((MAX_H / T) * (s.w / T))) * 100);
-    return h('select', { id: 'st-target' }, ...sets.map((s) => h('option', { value: s.id, selected: s.id === current }, `${s.name} (${full(s)}% usado · ${F.palCount(s)}/6 paletas)`)), h('option', { value: '__new', selected: current === '__new' }, '+ Tileset nuevo'));
+    return h('select', { id: 'st-target' }, ...sets.map((s) => h('option', { value: s.id, selected: s.id === current }, `${s.name} (${full(s)}% usado · ${F.palCount(s)}/${MAX_PALETTES} paletas)`)), h('option', { value: '__new', selected: current === '__new' }, '+ Tileset nuevo'));
   };
   const resolveTileset = (val) => { if (val !== '__new') return F.find('sprites', val); const ts = F.newSprite('tileset', 'Tileset de estructuras'); ts.h = 16; ts.frames = [new Uint8Array(ts.w * 16)]; F.state.project.sprites.push(ts); return ts; };
   const groundChooser = (ts, ground) => h('label', { class: 'field' }, h('span', {}, 'Suelo debajo'),
@@ -272,7 +309,8 @@
           h('div', { class: 'chip-row' }, ...A.BUILD_PRESETS.map((pr) => h('button', { class: 'btn xs' + (pr.name === o.name ? ' sel' : ''), onclick: () => { o = { ...pr }; renderForm(); } }, pr.name))),
           h('div', { class: 'row' }, sel('Tejado', 'roof', A.BUILD_OPTIONS.roof), color('Color del tejado', 'roofColor'), sel('Muros', 'wall', A.BUILD_OPTIONS.wall), color('Puerta', 'door')),
           h('div', { class: 'row' }, sel('Ancho', 'w', [[3, '3 bloques'], [4, '4 bloques'], [5, '5 bloques'], [6, '6 bloques'], [7, '7 bloques']]), sel('Pisos', 'floors', [[1, '1 piso'], [2, '2 pisos']]), sel('Letrero', 'sign', A.BUILD_OPTIONS.sign),
-            h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: !!o.chimney, onchange: (e) => { o.chimney = e.target.checked; draw(); } }), 'Chimenea')))
+            h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: !!o.chimney, onchange: (e) => { o.chimney = e.target.checked; draw(); } }), 'Chimenea'),
+            h('label', { class: 'check' }, h('input', { type: 'checkbox', checked: !!o.flowers, onchange: (e) => { o.flowers = e.target.checked; draw(); } }), 'Jardineras')))
           : h('div', { class: 'chip-row' }, ...Object.entries(A.OBJECTS).map(([k, ob]) => h('button', { class: 'btn sm' + (k === objKey ? ' sel' : ''), onclick: () => { objKey = k; renderForm(); } }, ob.label))));
       form.querySelectorAll('select').forEach((s) => s.addEventListener('change', () => { o.w = +o.w; o.floors = +o.floors; draw(); }));
       draw();

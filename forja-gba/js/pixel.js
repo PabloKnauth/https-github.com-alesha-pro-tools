@@ -288,7 +288,7 @@
       h('section', { class: 'panel' }, h('h3', {}, 'Paleta GBA'), h('p', { class: 'hint' }, 'Máximo 16 colores. El primero es el transparente.'),
         s.kind === 'tileset' ? h('div', { class: 'row tight' },
           h('select', { id: 'px-palsel', 'aria-label': 'Paleta', onchange: (e) => { S.palIdx = +e.target.value; renderPalette(); } }, ...[...Array(F.palCount(s)).keys()].map((i) => h('option', { value: i, selected: i === (S.palIdx || 0) }, 'Paleta ' + i))),
-          h('button', { class: 'btn xs', disabled: F.palCount(s) >= 6, title: 'La GBA permite hasta 6 paletas en un tileset secundario', onclick: () => { pushUndo(); s.extraPalettes = s.extraPalettes || []; s.extraPalettes.push(s.palette.slice()); S.palIdx = s.extraPalettes.length; changed(true); } }, '+ Paleta'),
+          h('button', { class: 'btn xs', disabled: F.palCount(s) >= F.MAX_PALETTES, title: 'Un mapa de GBA muestra hasta 12 paletas de tiles (7 del tileset primario y 6 del secundario)', onclick: () => { pushUndo(); s.extraPalettes = s.extraPalettes || []; s.extraPalettes.push(s.palette.slice()); S.palIdx = s.extraPalettes.length; changed(true); } }, '+ Paleta'),
           h('button', { class: 'btn xs', id: 'px-useblock', disabled: S.lastBlock == null, title: 'Los píxeles del último bloque tocado usarán esta paleta', onclick: () => { pushUndo(); s.blockPal = s.blockPal || {}; if (S.palIdx) s.blockPal[S.lastBlock] = S.palIdx; else delete s.blockPal[S.lastBlock]; changed(true); } }, 'Usar en el bloque ' + (S.lastBlock ?? '—'))) : null,
         h('div', { id: 'px-palette', class: 'palette' }),
         h('div', { class: 'row' }, colorIn, h('span', { id: 'px-color-info', class: 'mono small' })),

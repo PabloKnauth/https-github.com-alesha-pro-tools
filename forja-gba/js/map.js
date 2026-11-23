@@ -82,6 +82,7 @@
     }
     const st = curStamp();
     if (st && S.layer !== 'coll' && e.button !== 2) { pushUndo(); F.placeStamp(m, st, x, y); changed(); return; }
+    if (S.terrain != null && S.layer !== 'coll' && tilesetOf(m)) { pushUndo(); paintTerrain(m, x, y, e.button === 2 || S.tool === 'eraser'); drag = { terrain: true, last: x + ',' + y }; draw(); return; }
     if (S.tool === 'picker') { const v = layerArr(m)[y * m.w + x]; if (S.layer !== 'coll' && v >= 0) { S.tile = v; renderSide(); } return; }
     pushUndo(); const arr = layerArr(m), v = paintVal(erase);
     if (S.tool === 'fill') { flood(arr, m, x, y, v); changed(); return; }
@@ -93,6 +94,7 @@
     const pos = $('#map-pos'); if (pos) pos.textContent = inside(m, x, y) ? `x ${x} · y ${y}` : '';
     if (curStamp() && (!S.hover || S.hover[0] !== x || S.hover[1] !== y)) { S.hover = [x, y]; draw(); }
     if (!drag || !inside(m, x, y)) return;
+    if (drag.terrain) { if (drag.last !== x + ',' + y) { drag.last = x + ',' + y; paintTerrain(m, x, y, e.buttons === 2 || S.tool === 'eraser'); draw(); } return; }
     if (drag.moveEv) { if (drag.moveEv.x !== x || drag.moveEv.y !== y) { if (!drag.pushed) { pushUndo(); drag.pushed = true; } drag.moveEv.x = x; drag.moveEv.y = y; draw(); } return; }
     if (drag.rect) { drag.rect[2] = x; drag.rect[3] = y; draw(); return; }
     layerArr(m)[y * m.w + x] = drag.v; draw();
@@ -103,6 +105,12 @@
     const wasMove = drag.moveEv; drag = null; changed(); if (wasMove) renderSide();
   };
   const changed = () => { draw(); F.state.dirty = true; F.scheduleAutosave(); };
+  /* pincel de terrenos (bordes automáticos) y de decoración */
+  const paintTerrain = (m, x, y, erase) => {
+    const ts = tilesetOf(m), size = S.brush || 1, ox = x - Math.floor((size - 1) / 2), oy = y - Math.floor((size - 1) / 2);
+    if (typeof S.terrain === 'number' || erase) F.nature.paint(m, ts, erase ? 0 : S.terrain, ox, oy, size);
+    else for (let yy = oy; yy < oy + size; yy++) for (let xx = ox; xx < ox + size; xx++) { const v = S.terrain === 'hierba' ? Math.floor(Math.random() * 2) : Math.floor(Math.random() * 3); F.nature.paintDecor(m, ts, S.terrain + ':' + v, xx, yy); }
+  };
   const curStamp = () => { const m = cur(), ts = m && tilesetOf(m); return ts && S.stamp ? (ts.stamps || []).find((x) => x.id === S.stamp) : null; };
 
   const newEvent = (type, x, y) => ({ id: F.uid('ev'), type: type || 'npc', x, y, name: (F.EVENT_TYPES[type || 'npc'].label) + ' ' + (cur().events.length + 1), sprite: '', facing: 'down', movement: 'quieto', script: '', item: 'Poción', toMap: '', toX: 0, toY: 0, hideFlag: '', var: 'PROGRESO', value: 0 });
@@ -150,7 +158,7 @@
           if (mode === 'solid') { const set = new Set(ts.solid || []); set.has(i) ? set.delete(i) : set.add(i); ts.solid = [...set]; }
           else { ts.behav = ts.behav || {}; if (ts.behav[i] === mode) delete ts.behav[i]; else ts.behav[i] = mode; }
           F.scheduleAutosave();
-        } else { S.tile = i; S.stamp = null; if (S.layer === 'coll' || S.layer === 'events') S.layer = 'bottom'; }
+        } else { S.tile = i; S.stamp = null; S.terrain = null; if (S.layer === 'coll' || S.layer === 'events') S.layer = 'bottom'; }
         render();
       });
       const markSel = h('select', { id: 'map-mark', onchange: (e) => { S.markMode = e.target.value; } }, h('option', { value: '' }, 'Clic elige bloque para pintar'), ...Object.entries(F.BEHAVIORS).map(([k, [l]]) => h('option', { value: k, selected: S.markMode === k }, 'Clic marca: ' + l)));
@@ -178,17 +186,28 @@
           h('label', { class: 'field' }, h('span', {}, 'Banco (A-Map)'), h('input', { id: 'map-bank', type: 'number', min: 0, max: 42, value: m.bank, class: 'num', onchange: (e) => { m.bank = +e.target.value; changed(); } })),
           h('label', { class: 'field' }, h('span', {}, 'Mapa (A-Map)'), h('input', { id: 'map-num', type: 'number', min: 0, max: 255, value: m.num, class: 'num', onchange: (e) => { m.num = +e.target.value; changed(); } }))),
         h('small', { class: 'muted' }, 'Banco y número del mapa que reemplazas en tu ROM. Se usan en los teletransportes de XSE.')),
-      S.layer === 'events' ? evPanel : structPanel(m, ts),
+      S.layer === 'events' ? evPanel : terrainPanel(m, ts),
+      S.layer === 'events' ? null : structPanel(m, ts),
       S.layer === 'events' ? null : h('section', { class: 'panel' }, h('h3', {}, 'Bloques'), picker),
       wildPanel(m));
   };
 
+  /* Terrenos: se pintan y los bordes se calculan solos. */
+  const TERRAIN_SWATCH = { 0: ['#82cc72', '#a6e08e'], 1: ['#d6b67c', '#8a6840'], 2: ['#ecdc9c', '#b8a060'], 3: ['#4f8ce0', '#c8e6fa'], hierba: ['#3f8a4a', '#82c870'], flores: ['#82cc72', '#f06060'] };
+  const terrainPanel = (m, ts) => {
+    const items = [...F.nature.TERRAINS.map((t) => [t.id, t.label]), ['hierba', 'Hierba alta'], ['flores', 'Flores']];
+    return h('section', { class: 'panel' }, h('h3', {}, 'Terrenos'),
+      h('div', { class: 'terrain-grid' }, ...items.map(([id, label]) => h('button', { class: 'terrain' + (S.terrain === id ? ' sel' : ''), style: { '--a': TERRAIN_SWATCH[id][0], '--b': TERRAIN_SWATCH[id][1] }, 'aria-pressed': S.terrain === id ? 'true' : 'false', onclick: () => { S.terrain = S.terrain === id ? null : id; S.stamp = null; if (S.layer === 'coll' || S.layer === 'events') S.layer = 'bottom'; render(); } }, h('span', { class: 'terrain-swatch' }), label))),
+      h('div', { class: 'row tight' }, h('small', { class: 'muted' }, 'Tamaño del pincel'), ...[1, 2, 3].map((n) => h('button', { class: 'btn xs' + ((S.brush || 1) === n ? ' sel' : ''), onclick: () => { S.brush = n; render(); } }, n + '×' + n))),
+      h('p', { class: 'hint' }, S.terrain != null ? 'Pinta arrastrando. Los bordes, esquinas y orillas se ajustan solos. Clic derecho borra (vuelve a pasto).' : 'Elige un terreno y pinta: caminos, arena y agua se unen con bordes redondeados automáticos.'),
+      ts && !ts.terrain ? h('button', { class: 'btn sm', onclick: () => { const nt = F.nature.createTileset(); F.state.project.sprites.push(nt); m.tileset = nt.id; F.emit('sprites'); render(); } }, 'Usar el tileset de naturaleza') : null);
+  };
   /* Estructuras: casas, árboles y objetos de varios bloques que se colocan con un clic. */
   const structPanel = (m, ts) => {
     const fileIn = h('input', { type: 'file', accept: 'image/*', hidden: true, id: 'map-sheet', onchange: async (e) => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; const t = await F.sliceSheetFlow(f, ts ? ts.id : '__new', S.tile); if (t && !m.tileset) m.tileset = t.id; render(); } });
     const list = ts ? (ts.stamps || []) : [];
     return h('section', { class: 'panel' }, h('h3', {}, 'Estructuras'),
-      list.length ? h('div', { class: 'stamp-grid' }, ...list.map((st) => h('button', { class: 'stamp' + (st.id === S.stamp ? ' sel' : ''), title: st.name + (st.credit ? ' · créditos: ' + st.credit : ''), onclick: () => { S.stamp = S.stamp === st.id ? null : st.id; if (S.layer === 'coll' || S.layer === 'events') S.layer = 'bottom'; render(); } },
+      list.length ? h('div', { class: 'stamp-grid' }, ...list.map((st) => h('button', { class: 'stamp' + (st.id === S.stamp ? ' sel' : ''), draggable: 'true', ondragstart: (e) => { e.dataTransfer.setData('text/plain', 'forja-stamp:' + st.id); e.dataTransfer.effectAllowed = 'copy'; S.stamp = st.id; S.terrain = null; }, title: st.name + (st.credit ? ' · créditos: ' + st.credit : '') + ' — arrástrala al mapa o haz clic y luego clic en el mapa', onclick: () => { S.stamp = S.stamp === st.id ? null : st.id; S.terrain = null; if (S.layer === 'coll' || S.layer === 'events') S.layer = 'bottom'; render(); } },
         F.stampCanvas(ts, st, 1), h('span', {}, st.name),
         h('span', { class: 'stamp-x', role: 'button', tabindex: 0, 'aria-label': 'Quitar estructura', onclick: (e) => { e.stopPropagation(); ts.stamps = ts.stamps.filter((x) => x.id !== st.id); if (S.stamp === st.id) S.stamp = null; F.scheduleAutosave(); render(); } }, '×'))))
         : h('p', { class: 'hint' }, 'Todavía no hay estructuras en este tileset.'),
@@ -244,7 +263,7 @@
     const m = cur();
     const list = h('aside', { class: 'side' },
       h('div', { class: 'side-head' }, h('h2', {}, 'Mapas'), h('span', { class: 'count' }, p.maps.length)),
-      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', onclick: () => { const ts = p.sprites.find((s) => s.kind === 'tileset'); const nm = F.newMap('Mapa ' + (p.maps.length + 1), ts && ts.id); p.maps.push(nm); S.id = nm.id; F.emit('maps'); render(); } }, '+ Nuevo')),
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn primary', onclick: () => { let ts = p.sprites.find((s) => s.kind === 'tileset' && s.terrain) || null; if (!ts) { ts = F.nature.createTileset(); p.sprites.push(ts); } const nm = F.newMap('Mapa ' + (p.maps.length + 1), ts.id); F.nature.ensureVtx(nm); F.nature.refresh(nm, ts, 0, 0, nm.w - 1, nm.h - 1, true); p.maps.push(nm); S.id = nm.id; F.emit('maps'); render(); } }, '+ Nuevo')),
       h('div', { class: 'asset-list' }, ...p.maps.map((mm) => h('button', { class: 'asset' + (mm.id === S.id ? ' sel' : ''), onclick: () => { S.id = mm.id; S.selEvent = null; render(); } },
         miniMap(mm), h('span', { class: 'asset-text' }, h('b', {}, mm.name), h('small', {}, `${mm.w}×${mm.h} · ${mm.events.length} eventos`))))));
     if (!m) { root.replaceChildren(h('div', { class: 'split' }, list, h('section', { class: 'empty' }, h('h2', {}, 'Crea un mapa'), h('p', {}, 'Pinta el suelo, pon árboles y casas en la capa de encima, marca por dónde no se puede pasar y coloca personajes, carteles y puertas.')))); return; }
@@ -252,6 +271,8 @@
     const TOOLS = [['brush', 'Pincel', 'M3 21l3-1 12-12-2-2L4 18z'], ['rect', 'Rectángulo', 'M4 5h16v14H4z'], ['fill', 'Cubeta', 'M5 11l7-7 7 7-7 7z'], ['eraser', 'Borrar', 'M8 20h12M5 15l8-8 6 6-5 5H8z'], ['picker', 'Cuentagotas', 'M14 4l6 6-2 2-6-6zM12 8l-8 8v4h4l8-8']];
     canvas = h('canvas', { id: 'map-canvas', 'aria-label': 'Mapa ' + m.name }); ctx = canvas.getContext('2d');
     canvas.addEventListener('pointerdown', onDown); canvas.addEventListener('pointermove', onMove); canvas.addEventListener('pointerup', onUp); canvas.addEventListener('pointercancel', onUp); canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+    canvas.addEventListener('dragover', (e) => { if (!curStamp()) return; e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; const [x, y] = cell(e); if (!S.hover || S.hover[0] !== x || S.hover[1] !== y) { S.hover = [x, y]; draw(); } });
+    canvas.addEventListener('drop', (e) => { const data = e.dataTransfer.getData('text/plain'); if (!data.startsWith('forja-stamp:')) return; e.preventDefault(); e.stopPropagation(); const st = curStamp(); if (!st) return; const [x, y] = cell(e); pushUndo(); F.placeStamp(m, st, x, y); changed(); });
     const center = h('section', { class: 'editor' },
       h('div', { class: 'toolbar' },
         h('div', { class: 'seg', role: 'tablist', 'aria-label': 'Capa' }, ...LAYERS.map(([k, l, tip]) => h('button', { class: S.layer === k ? 'sel' : '', role: 'tab', 'aria-selected': S.layer === k ? 'true' : 'false', title: tip, onclick: () => { S.layer = k; render(); } }, l))),

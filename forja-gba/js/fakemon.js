@@ -99,7 +99,7 @@
       h('tbody', {}, ...mon.learnset.map((m, i) => { const res = F.moveId(m.move); return h('tr', {},
         h('td', {}, h('input', { type: 'number', min: 1, max: 100, value: m.lvl, class: 'num', 'aria-label': 'Nivel', onchange: (e) => { m.lvl = F.clamp(+e.target.value || 1, 1, 100); save(); } })),
         h('td', {}, h('input', { list: 'dl-moves', value: m.move, 'aria-label': 'Movimiento', onchange: (e) => { m.move = e.target.value; save(); render(); } })),
-        h('td', { class: 'mono small' + (res.known ? '' : ' warn') }, res.id ? 'MOVE_' + res.id : ''),
+        h('td', { class: 'mono small' + (res.known ? '' : ' warn') }, res.id ? 'MOVE_' + res.id : '', (() => { const info = F.MOVES_INFO && Object.entries(F.MOVES_INFO).find(([, v]) => v[0] === res.id); if (!info) return null; const [, [, ty, pw, acc, , cls]] = info, t = F.typeInfo(ty); return h('span', { class: 'move-info' }, t ? h('span', { class: 'type-chip sm', style: { '--t': t[2] } }, t[1]) : null, ` ${cls}${pw ? ' · ' + pw : ''}${acc ? ' · ' + acc + '%' : ''}`); })()),
         h('td', {}, h('button', { class: 'btn sm ghost', 'aria-label': 'Quitar movimiento', onclick: () => { mon.learnset.splice(i, 1); save(); render(); } }, '×'))); })));
 
     const others = p.fakemons.filter((m) => m.id !== mon.id);
@@ -122,6 +122,7 @@
             field('Peso (kg)', h('input', { type: 'number', step: 0.1, min: 0.1, value: mon.weight, class: 'num', id: 'fm-w', onchange: (e) => { mon.weight = +e.target.value; save(); } })),
             field('Color', select('fm-color', F.COLORS.map(([v, l]) => [v, l]), mon.color, (v) => { mon.color = v; save(); })))),
         h('section', { class: 'card' }, h('h3', {}, 'Estadísticas base'), h('div', { class: 'stats' }, h('div', { class: 'stat-rows' }, ...statRows), h('div', { class: 'radar-box' }, radar, bstEl))),
+        F.refCard ? F.refCard(mon, render) : null,
         h('section', { class: 'card' }, h('h3', {}, 'Habilidades'), abDl,
           field('Habilidad 1', abInput(mon.abilities[0], (v) => (mon.abilities[0] = v), 'fm-ab1'), null), warnIf(F.abilityId(mon.abilities[0])),
           field('Habilidad 2 (opcional)', abInput(mon.abilities[1], (v) => (mon.abilities[1] = v), 'fm-ab2')), warnIf(F.abilityId(mon.abilities[1])),

@@ -14,8 +14,9 @@ y el proyecto se guarda solo en ese navegador (descárgalo con **Guardar** para 
 | **Animación** | Vista previa con el ritmo del juego (7.5 fps), las 4 direcciones y caminata. Ayudantes que dejan un borrador consistente: caminata desde los 3 cuadros quietos, cuadro de entrada del Fakemon, salto del ícono. |
 | **Importar** | Detecta imágenes ampliadas (×2 a ×12, desfasadas o con escala no entera como ×3.4), reduce a 15 colores y convierte hojas 4×4 de RPG Maker / Essentials al orden de 9 cuadros de la GBA. Un personaje de un solo cuadro se acomoda como personaje del mapa. |
 | **Generadores** | Personajes del mapa originales (11 predeterminados: entrenadores, profesora, científico, niño, abuelo, excursionista, marinera, deportista, pescador) con piel, peinado, sombrero, ropa, rayas y mochila. Edificios (9 predeterminados: casas, cabaña, dos pisos, tienda, centro de curación, laboratorio, gimnasio) con tejado, muros, pisos, ancho y letrero; y objetos (pino, árbol, arbusto, roca, flores, valla, cartel, buzón, farol). |
-| **Estructuras** | Una casa o un árbol se guarda como estructura del tileset y se coloca con un clic (con vista previa). Se crean desde los generadores, arrastrando sobre el tileset o con el **recortador de hojas**: detecta el fondo (liso, cuadriculado de transparencia, pasto con textura, JPG), separa cada objeto, permite recortes a mano, estima la escala, compone el suelo debajo y guarda los créditos del autor (CREDITOS.txt). La puerta crea su warp. |
-| **Fakemon** | Tipos, estadísticas con radar y guía de balance por total, habilidades y movimientos en español (se traducen a constantes `MOVE_*` / `ABILITY_*`), crianza, evolución y vista de combate. |
+| **Naturaleza** | Terrenos que se pintan con bordes automáticos (pasto, tierra, arena y agua con orilla), hierba alta de hojas en punta, flores, árboles frondosos con volumen, pinos, bosque que se repite sin cortes, arbustos, rocas y tocones. Todo con paletas planificadas por material. |
+| **Estructuras** | Una casa o un árbol se guarda como estructura del tileset y se coloca con un clic (con vista previa). Se arrastran desde el panel al mapa y se funden con el suelo que haya debajo (camino, arena…). Se crean desde los generadores, arrastrando sobre el tileset o con el **recortador de hojas**: detecta el fondo (liso, cuadriculado de transparencia, pasto con textura, JPG), separa cada objeto, permite recortes a mano, estima la escala, compone el suelo debajo y guarda los créditos del autor (CREDITOS.txt). La puerta crea su warp. |
+| **Fakemon** | Tipos, estadísticas con radar y guía de balance por total, habilidades y movimientos en español (se traducen a constantes `MOVE_*` / `ABILITY_*`), crianza, evolución y vista de combate. **Referencia oficial**: los 1025 Pokémon (y formas Mega, Alola, Galar, Hisui, Paldea) con estadísticas, tipos, habilidades, captura y crecimiento; buscador con filtros, comparación en radar, “los más parecidos a tu Fakemon”, percentil del total y botones para copiar o escalar un reparto. Diccionario completo de 900 movimientos (tipo, potencia, precisión) y 313 habilidades en español. |
 | **Mapas** | Bloques de 16×16, capa de suelo y capa de encima, colisiones automáticas y comportamientos de bloque (sólido, hierba alta, agua). Eventos: NPC (con flag para ocultarlos), carteles, objetos, puertas, **gatillos** con variable y valor, inicio del jugador y evento al entrar al mapa. Tabla de Pokémon salvajes. |
 | **Eventos** | Mecánicas con bloques: mensajes, preguntas sí/no, **elegir entre 2-4 opciones** (p. ej. el Pokémon inicial), banderas, contadores (variables), regalos, combates, curar, mover, ocultar y mostrar personajes, teletransportar. Avisa de los caracteres que la GBA no tiene. Genera **XSE**, **Poryscript** y la lista de comandos de **Essentials** en vivo. |
 | **Probar** | Pantalla de 240×160 donde caminas, hablas con los NPC, pisas gatillos, encuentras Fakemon en la hierba alta y ejecutas los eventos con menús de elección. Cruceta táctil incluida. |
@@ -33,6 +34,7 @@ y produce la ROM. Para distribuir un hack se comparte un parche (`.bps`/`.ups`),
 - Archivos de Advance Map 1.95: tabla de caracteres de Gen 3, comportamientos de bloque y tipos de movimiento.
 - XSE 1.1.1: índices de especies y objetos (`tools/make_rom_tables.py` genera `js/romdata.js` a partir de ellos).
 - Video “Cómo hacer tu propio juego de Pokémon 2” (Essentials 16.3): capas del mapa y el evento de elegir inicial.
+- Datos de PokeAPI (CSV, licencia BSD-3): estadísticas, tipos, habilidades y movimientos de los Pokémon oficiales. `tools/make_pokedex.py` genera `js/pokedex.js`. No se incluye ningún gráfico oficial.
 
 ## Desarrollo
 
@@ -42,9 +44,9 @@ y produce la ROM. Para distribuir un hack se comparte un parche (`.bps`/`.ups`),
 - `js/compilers.js` traduce los eventos a Poryscript, XSE y Essentials.
 - `tools/build_artifact.py` produce `dist/` para publicarlo como página web.
 
-## Límites conocidos (versión 0.3)
+## Límites conocidos (versión 0.4)
 
-- Hasta 6 paletas por tileset (como un tileset secundario de la GBA); cada bloque de 16×16 usa una. Los bloques no se componen de tiles 8×8 con volteo.
+- Hasta 12 paletas por tileset (lo que muestra un mapa de GBA: 7 del primario + 6 del secundario); cada bloque de 16×16 usa una. Al exportar a Advance Map hay que repartirlas entre ambos tilesets. Los bloques no se componen de tiles 8×8 con volteo.
 - Reducir pixel art con escala no entera (×3.4) puede deformar algún píxel: revisa la estructura en Pixel.
 - Si las piezas de una hoja se tocan, el recortador las ve como un solo objeto: márcalas a mano arrastrando.
 - La capa “Encima” se usa en la vista previa; en Porymap se configura con bloques de capa superior.

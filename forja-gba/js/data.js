@@ -34,7 +34,7 @@
     'Energibola': 'ENERGY_BALL', 'Bomba Germen': 'SEED_BOMB', 'Picadura': 'BUG_BITE', 'Tijera X': 'X_SCISSOR', 'Disparo Demora': 'STRING_SHOT',
     'Brillo Mágico': 'DAZZLING_GLEAM', 'Viento Feérico': 'FAIRY_WIND', 'Fuerza Lunar': 'MOONBLAST', 'Encanto': 'CHARM', 'Dulce Aroma': 'SWEET_SCENT',
     'Danza Espada': 'SWORDS_DANCE', 'Defensa Férrea': 'IRON_DEFENSE', 'Fortaleza': 'HARDEN', 'Protección': 'PROTECT', 'Descanso': 'REST', 'Bostezo': 'YAWN',
-    'Hiperrayo': 'HYPER_BEAM', 'Golpe Cuerpo': 'BODY_SLAM', 'Doble Filo': 'DOUBLE_EDGE', 'Derribo': 'TAKE_DOWN', 'Cabezazo': 'HEADBUTT', 'Rapidez': 'SWIFT',
+    'Hiperrayo': 'HYPER_BEAM', 'Golpe Cuerpo': 'BODY_SLAM', 'Doble Filo': 'DOUBLE_EDGE', 'Derribo': 'TAKE_DOWN', 'Golpe Cabeza': 'HEADBUTT', 'Cabezazo': 'SKULL_BASH', 'Rapidez': 'SWIFT',
     'Cuchillada': 'SLASH', 'Corte': 'CUT', 'Fuerza': 'STRENGTH',
   };
   F.ABILITIES = {
