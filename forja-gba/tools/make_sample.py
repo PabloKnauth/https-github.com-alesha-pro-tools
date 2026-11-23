@@ -377,9 +377,9 @@ def main():
     solid = [5, 6, 7, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 22, 23, 24]
     coll = [1 if bottom[i] in solid else 0 for i in range(W * H)]
     project = {
-        'format': 'forja-gba', 'version': 1, 'name': 'Pueblo Brisa (ejemplo)',
+        'format': 'forja-gba', 'version': 2, 'name': 'Pueblo Brisa (ejemplo)',
         'sprites': [
-            {'id': 'spr_ts', 'name': 'Tileset Pueblo', 'kind': 'tileset', 'w': 128, 'h': 128, 'fps': 4, 'palette': [snap(c) for c in TS_PAL], 'frames': [ts.hex()], 'solid': solid},
+            {'id': 'spr_ts', 'name': 'Tileset Pueblo', 'kind': 'tileset', 'w': 128, 'h': 128, 'fps': 4, 'palette': [snap(c) for c in TS_PAL], 'frames': [ts.hex()], 'solid': solid, 'behav': {'2': 'grass', '5': 'water', '6': 'water'}},
             {'id': 'spr_hero', 'name': 'Protagonista', 'kind': 'overworld', 'w': 32, 'h': 32, 'fps': 7.5, 'palette': [snap(c) for c in CHAR_PAL], 'frames': character_frames(), 'player': True},
             {'id': 'spr_npc', 'name': 'Vecina', 'kind': 'overworld', 'w': 32, 'h': 32, 'fps': 7.5, 'palette': [snap(c) for c in NPC_PAL], 'frames': character_frames()},
             {'id': 'spr_front', 'name': 'Brasín · frente', 'kind': 'front', 'w': 64, 'h': 64, 'fps': 4, 'palette': [snap(c) for c in MON_PAL], 'frames': [front.hex(), stretch_up(front).hex()]},
@@ -393,7 +393,7 @@ def main():
              'dex': 'Lleva una mecha encendida en la cabeza. Cuando está feliz, la llama chisporrotea como una vela de cumpleaños.',
              'evo': {'into': 'mon_fogaton', 'method': 'LEVEL', 'param': 16},
              'learnset': [{'lvl': 1, 'move': 'Arañazo'}, {'lvl': 1, 'move': 'Gruñido'}, {'lvl': 7, 'move': 'Ascuas'}, {'lvl': 13, 'move': 'Mordisco'}, {'lvl': 19, 'move': 'Rueda Fuego'}, {'lvl': 28, 'move': 'Lanzallamas'}],
-             'sprites': {'front': 'spr_front', 'back': 'spr_back', 'icon': 'spr_icon'}},
+             'sprites': {'front': 'spr_front', 'back': 'spr_back', 'icon': 'spr_icon'}, 'romSlot': ''},
             {'id': 'mon_fogaton', 'name': 'Fogatón', 'category': 'Hoguera', 'types': ['FIRE', 'DRAGON'], 'stats': {'hp': 62, 'atk': 70, 'def': 58, 'spa': 82, 'spd': 66, 'spe': 80},
              'abilities': ['Mar Llamas', ''], 'hidden': 'Cuerpo Llama', 'growth': 'MEDIUM_SLOW', 'catchRate': 45, 'expYield': 142, 'genderFemale': 12.5,
              'eggGroups': ['FIELD', 'DRAGON'], 'height': 1.1, 'weight': 24.0, 'color': 'RED', 'dex': '',
@@ -413,14 +413,22 @@ def main():
                         {'op': 'give_item', 'item': 'Poción', 'qty': 3}], 'else': [
                         {'op': 'msg', 'text': 'Ah… Si cambias de opinión, aquí estaré.'}]}]}]},
             {'id': 'scr_cartel', 'name': 'Cartel del pueblo', 'steps': [{'op': 'msg', 'text': 'PUEBLO BRISA\nDonde sopla el viento de las aventuras.'}]},
+            {'id': 'scr_salida', 'name': 'No salgas sin Fakemon', 'steps': [
+                {'op': 'if_flag', 'flag': 'RECIBIO_BRASIN', 'then': [
+                    {'op': 'set_var', 'var': 'SALIDA_PUEBLO', 'value': 1}], 'else': [
+                    {'op': 'msg', 'text': '¡[player], espera! La hierba alta es peligrosa sin un Fakemon.\nHabla con la vecina de la casa.'},
+                    {'op': 'move', 'who': 'player', 'path': 'abajo'}]}]},
         ],
         'maps': [{
             'id': 'map_brisa', 'name': 'Pueblo Brisa', 'w': W, 'h': H, 'tileset': 'spr_ts', 'music': '', 'weather': 'NONE',
-            'bottom': bottom, 'top': top, 'coll': coll,
+            'bottom': bottom, 'top': top, 'coll': coll, 'bank': 3, 'num': 0, 'onEnter': '',
+            'wild': {'rate': 20, 'list': [{'mon': 'mon_brasin', 'min': 3, 'max': 5, 'pct': 100}]},
             'events': [
                 {'id': 'ev_start', 'type': 'start', 'x': 4, 'y': 8, 'name': 'Inicio'},
                 {'id': 'ev_vecina', 'type': 'npc', 'x': 7, 'y': 8, 'name': 'Vecina', 'sprite': 'spr_npc', 'facing': 'left', 'movement': 'mirar', 'script': 'scr_vecina', 'item': '', 'toMap': '', 'toX': 0, 'toY': 0},
                 {'id': 'ev_cartel', 'type': 'sign', 'x': 12, 'y': 8, 'name': 'Cartel', 'sprite': '', 'facing': 'down', 'movement': 'quieto', 'script': 'scr_cartel', 'item': '', 'toMap': '', 'toX': 0, 'toY': 0},
+                {'id': 'ev_trig1', 'type': 'trigger', 'x': 9, 'y': 1, 'name': 'Salida norte A', 'script': 'scr_salida', 'var': 'SALIDA_PUEBLO', 'value': 0},
+                {'id': 'ev_trig2', 'type': 'trigger', 'x': 10, 'y': 1, 'name': 'Salida norte B', 'script': 'scr_salida', 'var': 'SALIDA_PUEBLO', 'value': 0},
                 {'id': 'ev_item', 'type': 'item', 'x': 16, 'y': 8, 'name': 'Objeto', 'sprite': '', 'facing': 'down', 'movement': 'quieto', 'script': '', 'item': 'Superpoción', 'toMap': '', 'toX': 0, 'toY': 0},
             ],
         }],

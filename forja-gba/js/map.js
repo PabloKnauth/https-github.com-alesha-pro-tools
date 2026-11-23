@@ -12,8 +12,10 @@
     sign: { label: 'Cartel', color: '#7cc6ff' },
     item: { label: 'Objeto en el suelo', color: '#ff7aa8' },
     warp: { label: 'Puerta / salida', color: '#9cf28a' },
+    trigger: { label: 'Gatillo (al pisar)', color: '#c58cff' },
     start: { label: 'Inicio del jugador', color: '#ffffff' },
   };
+  F.BEHAVIORS = { solid: ['Sólido', 'rgba(232,60,70,.9)'], grass: ['Hierba alta (Pokémon salvajes)', 'rgba(70,200,90,.95)'], water: ['Agua', 'rgba(70,140,240,.95)'] };
 
   /* caché de bloques como canvas para dibujar rápido */
   const tileCache = new Map();
@@ -60,7 +62,7 @@
       const info = F.EVENT_TYPES[ev.type], px = ev.x * T * z, py = ev.y * T * z, sp = ev.sprite && F.find('sprites', ev.sprite);
       if (sp && ev.type === 'npc') F.drawFrame(ctx, sp, F.WALK.stand[ev.facing || 'down'], px + (T * z - sp.w * z) / 2, py + T * z - sp.h * z, z, ev.facing === 'right');
       ctx.strokeStyle = info.color; ctx.lineWidth = ev.id === S.selEvent ? 3 : 1.5; ctx.strokeRect(px + 1.5, py + 1.5, T * z - 3, T * z - 3); ctx.lineWidth = 1;
-      if (!(sp && ev.type === 'npc')) { ctx.fillStyle = info.color; ctx.font = `bold ${8 * z}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText({ npc: '☺', sign: '▤', item: '●', warp: '⇲', start: '★' }[ev.type], px + T * z / 2, py + T * z / 2); }
+      if (!(sp && ev.type === 'npc')) { ctx.fillStyle = info.color; ctx.font = `bold ${8 * z}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText({ npc: '☺', sign: '▤', item: '●', warp: '⇲', start: '★', trigger: '⌖' }[ev.type], px + T * z / 2, py + T * z / 2); }
     }
     if (drag && drag.rect) { const r = drag.rect; ctx.strokeStyle = '#ffb547'; ctx.lineWidth = 2; ctx.strokeRect(Math.min(r[0], r[2]) * T * z, Math.min(r[1], r[3]) * T * z, (Math.abs(r[2] - r[0]) + 1) * T * z, (Math.abs(r[3] - r[1]) + 1) * T * z); ctx.lineWidth = 1; }
   };
@@ -97,7 +99,7 @@
   };
   const changed = () => { draw(); F.state.dirty = true; F.scheduleAutosave(); };
 
-  const newEvent = (type, x, y) => ({ id: F.uid('ev'), type: type || 'npc', x, y, name: (F.EVENT_TYPES[type || 'npc'].label) + ' ' + (cur().events.length + 1), sprite: '', facing: 'down', movement: 'quieto', script: '', item: 'Poción', toMap: '', toX: 0, toY: 0 });
+  const newEvent = (type, x, y) => ({ id: F.uid('ev'), type: type || 'npc', x, y, name: (F.EVENT_TYPES[type || 'npc'].label) + ' ' + (cur().events.length + 1), sprite: '', facing: 'down', movement: 'quieto', script: '', item: 'Poción', toMap: '', toX: 0, toY: 0, hideFlag: '', var: 'PROGRESO', value: 0 });
 
   const resize = (m, w, hgt) => {
     const remap = (arr, fillV) => { const out = new Array(w * hgt).fill(fillV); for (let y = 0; y < Math.min(hgt, m.h); y++) for (let x = 0; x < Math.min(w, m.w); x++) out[y * w + x] = arr[y * m.w + x]; return out; };
@@ -105,8 +107,9 @@
   };
   /* Marca automáticamente como sólidos los bloques que el usuario etiquetó en el tileset. */
   const autoColl = (m) => {
-    const solid = new Set(tilesetOf(m)?.solid || []); pushUndo();
-    for (let i = 0; i < m.w * m.h; i++) m.coll[i] = solid.has(m.bottom[i]) || (m.top[i] >= 0 && solid.has(m.top[i])) ? 1 : 0;
+    const ts = tilesetOf(m), solid = new Set(ts?.solid || []); pushUndo();
+    const wet = (t) => (ts?.behav || {})[t] === 'water';
+    for (let i = 0; i < m.w * m.h; i++) m.coll[i] = solid.has(m.bottom[i]) || wet(m.bottom[i]) || (m.top[i] >= 0 && solid.has(m.top[i])) ? 1 : 0;
     changed(); F.toast('Colisiones calculadas a partir de los bloques marcados como sólidos.');
   };
 
@@ -119,11 +122,25 @@
     if (ts) {
       const z = 2, cv = h('canvas', { width: ts.w * z, height: ts.h * z, class: 'ts-picker', 'aria-label': 'Bloques del tileset' }), c = cv.getContext('2d');
       c.imageSmoothingEnabled = false; c.fillStyle = '#2a2836'; c.fillRect(0, 0, cv.width, cv.height); c.drawImage(tileCanvas(ts), 0, 0, ts.w * z, ts.h * z);
-      const solid = new Set(ts.solid || []);
-      for (let i = 0; i < tileCount(ts); i++) { const x = (i % (ts.w / T)) * T * z, y = Math.floor(i / (ts.w / T)) * T * z; if (solid.has(i)) { c.fillStyle = 'rgba(232,60,70,.85)'; c.fillRect(x + T * z - 9, y + 2, 7, 7); } }
+      const solid = new Set(ts.solid || []), behav = ts.behav || {};
+      for (let i = 0; i < tileCount(ts); i++) {
+        const x = (i % (ts.w / T)) * T * z, y = Math.floor(i / (ts.w / T)) * T * z;
+        if (solid.has(i)) { c.fillStyle = F.BEHAVIORS.solid[1]; c.fillRect(x + T * z - 9, y + 2, 7, 7); }
+        if (behav[i]) { c.fillStyle = F.BEHAVIORS[behav[i]][1]; c.fillRect(x + 2, y + 2, 7, 7); }
+      }
       const sx = (S.tile % (ts.w / T)) * T * z, sy = Math.floor(S.tile / (ts.w / T)) * T * z; c.strokeStyle = '#ffb547'; c.lineWidth = 3; c.strokeRect(sx + 1.5, sy + 1.5, T * z - 3, T * z - 3);
-      cv.addEventListener('click', (e) => { const r = cv.getBoundingClientRect(), i = Math.floor((e.clientY - r.top) / (T * z)) * (ts.w / T) + Math.floor((e.clientX - r.left) / (T * z)); if (e.shiftKey) { const set = new Set(ts.solid || []); set.has(i) ? set.delete(i) : set.add(i); ts.solid = [...set]; F.scheduleAutosave(); } else { S.tile = i; if (S.layer === 'coll' || S.layer === 'events') S.layer = 'bottom'; } render(); });
-      picker = h('div', { class: 'stack' }, cv, h('p', { class: 'hint' }, 'Clic: elegir bloque. Mayús + clic: marcar como sólido (punto rojo) para calcular colisiones solas.'),
+      cv.addEventListener('click', (e) => {
+        const r = cv.getBoundingClientRect(), i = Math.floor((e.clientY - r.top) / (T * z)) * (ts.w / T) + Math.floor((e.clientX - r.left) / (T * z));
+        if (e.shiftKey || S.markMode) {
+          const mode = S.markMode || 'solid';
+          if (mode === 'solid') { const set = new Set(ts.solid || []); set.has(i) ? set.delete(i) : set.add(i); ts.solid = [...set]; }
+          else { ts.behav = ts.behav || {}; if (ts.behav[i] === mode) delete ts.behav[i]; else ts.behav[i] = mode; }
+          F.scheduleAutosave();
+        } else { S.tile = i; if (S.layer === 'coll' || S.layer === 'events') S.layer = 'bottom'; }
+        render();
+      });
+      const markSel = h('select', { id: 'map-mark', onchange: (e) => { S.markMode = e.target.value; } }, h('option', { value: '' }, 'Clic elige bloque para pintar'), ...Object.entries(F.BEHAVIORS).map(([k, [l]]) => h('option', { value: k, selected: S.markMode === k }, 'Clic marca: ' + l)));
+      picker = h('div', { class: 'stack' }, cv, markSel, h('p', { class: 'hint' }, 'Marca qué bloques son sólidos (rojo), hierba alta (verde) o agua (azul). Con eso se calculan las colisiones y los encuentros salvajes. Atajo: Mayús + clic marca sólido.'),
         h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', onclick: () => F.pixel.open(ts.id) }, 'Editar tileset'), h('button', { class: 'btn sm', onclick: () => autoColl(m) }, 'Calcular colisiones')));
     }
     const ev = m.events.find((v) => v.id === S.selEvent);
@@ -141,10 +158,30 @@
           h('label', { class: 'field' }, h('span', {}, 'Ancho'), h('input', { id: 'map-w', type: 'number', min: 8, max: 128, value: m.w, class: 'num', onchange: (e) => { resize(m, F.clamp(+e.target.value, 8, 128), m.h); render(); } })),
           h('label', { class: 'field' }, h('span', {}, 'Alto'), h('input', { id: 'map-h', type: 'number', min: 6, max: 128, value: m.h, class: 'num', onchange: (e) => { resize(m, m.w, F.clamp(+e.target.value, 6, 128)); render(); } }))),
         h('small', { class: 'muted' }, 'La pantalla de la GBA muestra 15×10 bloques.'),
-        h('label', { class: 'field' }, h('span', {}, 'Tileset'), tsSel)),
-      S.layer === 'events' ? evPanel : h('section', { class: 'panel' }, h('h3', {}, 'Bloques'), picker));
+        h('label', { class: 'field' }, h('span', {}, 'Tileset'), tsSel),
+        h('label', { class: 'field' }, h('span', {}, 'Evento al entrar al mapa'), h('select', { id: 'map-onenter', onchange: (e) => { m.onEnter = e.target.value; changed(); } }, h('option', { value: '' }, '— ninguno —'), ...p.scripts.map((sc) => h('option', { value: sc.id, selected: sc.id === m.onEnter }, sc.name)))),
+        h('div', { class: 'row' },
+          h('label', { class: 'field' }, h('span', {}, 'Banco (A-Map)'), h('input', { id: 'map-bank', type: 'number', min: 0, max: 42, value: m.bank, class: 'num', onchange: (e) => { m.bank = +e.target.value; changed(); } })),
+          h('label', { class: 'field' }, h('span', {}, 'Mapa (A-Map)'), h('input', { id: 'map-num', type: 'number', min: 0, max: 255, value: m.num, class: 'num', onchange: (e) => { m.num = +e.target.value; changed(); } }))),
+        h('small', { class: 'muted' }, 'Banco y número del mapa que reemplazas en tu ROM. Se usan en los teletransportes de XSE.')),
+      S.layer === 'events' ? evPanel : h('section', { class: 'panel' }, h('h3', {}, 'Bloques'), picker),
+      wildPanel(m));
   };
 
+  /* Pokémon salvajes de la hierba alta del mapa. */
+  const wildPanel = (m) => {
+    const p = F.state.project, w = m.wild, total = w.list.reduce((a, x) => a + (+x.pct || 0), 0);
+    return h('section', { class: 'panel' }, h('h3', {}, 'Pokémon salvajes'),
+      h('label', { class: 'field inline' }, h('span', {}, 'Frecuencia en hierba'), h('input', { id: 'wild-rate', type: 'number', min: 1, max: 100, class: 'num', value: w.rate, onchange: (e) => { w.rate = F.clamp(+e.target.value, 1, 100); changed(); } }), h('small', { class: 'muted' }, '/ 100 pasos')),
+      ...w.list.map((x, i) => h('div', { class: 'row tight wild-row' },
+        h('select', { 'aria-label': 'Fakemon', onchange: (e) => { x.mon = e.target.value; changed(); } }, h('option', { value: '' }, '—'), ...p.fakemons.map((f) => h('option', { value: f.id, selected: f.id === x.mon }, f.name))),
+        h('input', { type: 'number', class: 'num', min: 1, max: 100, value: x.min, 'aria-label': 'Nivel mínimo', title: 'Nivel mínimo', onchange: (e) => { x.min = +e.target.value; changed(); } }),
+        h('input', { type: 'number', class: 'num', min: 1, max: 100, value: x.max, 'aria-label': 'Nivel máximo', title: 'Nivel máximo', onchange: (e) => { x.max = +e.target.value; changed(); } }),
+        h('input', { type: 'number', class: 'num', min: 1, max: 100, value: x.pct, 'aria-label': 'Probabilidad %', title: '% de aparición', onchange: (e) => { x.pct = +e.target.value; renderSide(); changed(); } }),
+        h('button', { class: 'btn xs ghost', 'aria-label': 'Quitar', onclick: () => { w.list.splice(i, 1); renderSide(); changed(); } }, '×'))),
+      w.list.length ? h('small', { class: total === 100 ? 'muted' : 'warn' }, `Fakemon · nivel mín. · máx. · %   (suma ${total}%${total === 100 ? '' : ', debería ser 100'})`) : h('p', { class: 'hint' }, 'Añade qué Fakemon aparecen al caminar por la hierba alta.'),
+      h('button', { class: 'btn sm', disabled: !p.fakemons.length, onclick: () => { w.list.push({ mon: p.fakemons[0].id, min: 2, max: 4, pct: Math.max(0, 100 - total) || 10 }); renderSide(); changed(); } }, '+ Fakemon salvaje'));
+  };
   const eventForm = (m, ev) => {
     const p = F.state.project, set = (k) => (e) => { ev[k] = e.target.type === 'number' ? +e.target.value : e.target.value; changed(); };
     const scripts = h('select', { id: 'ev-script', onchange: (e) => { ev.script = e.target.value; changed(); } }, h('option', { value: '' }, '— sin evento —'), ...p.scripts.map((s) => h('option', { value: s.id, selected: s.id === ev.script }, s.name)));
@@ -155,11 +192,17 @@
         h('label', { class: 'field' }, h('span', {}, 'Mira hacia'), h('select', { id: 'ev-facing', onchange: set('facing') }, ...[['down', 'Abajo'], ['up', 'Arriba'], ['left', 'Izquierda'], ['right', 'Derecha']].map(([v, l]) => h('option', { value: v, selected: ev.facing === v }, l)))),
         h('label', { class: 'field' }, h('span', {}, 'Movimiento'), h('select', { id: 'ev-move', onchange: set('movement') }, ...[['quieto', 'Quieto'], ['mirar', 'Mira alrededor'], ['pasear', 'Pasea']].map(([v, l]) => h('option', { value: v, selected: ev.movement === v }, l))))));
     }
+    if (ev.type === 'npc') rows.push(h('label', { class: 'field' }, h('span', {}, 'Bandera para ocultarlo (opcional)'), h('input', { id: 'ev-hideflag', value: ev.hideFlag || '', placeholder: 'ej. VECINA_SE_FUE', onchange: (e) => { ev.hideFlag = F.constName(e.target.value).replace(/^SIN_NOMBRE$/, ''); changed(); renderSide(); } })),
+      h('small', { class: 'muted' }, 'Mientras esa bandera esté activa, el personaje no aparece (la “People ID” de Advance Map).'));
+    if (ev.type === 'trigger') rows.push(h('div', { class: 'row' },
+      h('label', { class: 'field' }, h('span', {}, 'Contador'), h('input', { id: 'ev-var', value: ev.var || 'PROGRESO', onchange: (e) => { ev.var = F.constName(e.target.value); changed(); } })),
+      h('label', { class: 'field' }, h('span', {}, 'Se activa si vale'), h('input', { id: 'ev-val', type: 'number', min: 0, max: 65535, class: 'num', value: ev.value || 0, onchange: set('value') }))),
+      h('small', { class: 'muted' }, 'Para que no se repita, cambia el contador a otro valor dentro del evento (como enseña el tema XI).'));
     if (ev.type === 'item') rows.push(h('label', { class: 'field' }, h('span', {}, 'Objeto'), h('input', { id: 'ev-item', list: 'dl-items', value: ev.item, onchange: set('item') }), h('datalist', { id: 'dl-items' }, ...Object.keys(F.ITEMS).map((k) => h('option', { value: k })))));
     if (ev.type === 'warp') rows.push(h('label', { class: 'field' }, h('span', {}, 'Lleva al mapa'), h('select', { id: 'ev-tomap', onchange: set('toMap') }, h('option', { value: '' }, '— elegir —'), ...p.maps.map((mm) => h('option', { value: mm.id, selected: mm.id === ev.toMap }, mm.name)))),
       h('div', { class: 'row' }, h('label', { class: 'field' }, h('span', {}, 'Llega a x'), h('input', { id: 'ev-tox', type: 'number', class: 'num', value: ev.toX, onchange: set('toX') })), h('label', { class: 'field' }, h('span', {}, 'y'), h('input', { id: 'ev-toy', type: 'number', class: 'num', value: ev.toY, onchange: set('toY') }))));
-    if (ev.type === 'npc' || ev.type === 'sign') rows.push(h('label', { class: 'field' }, h('span', {}, 'Qué pasa al hablarle'), scripts),
-      h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', onclick: () => { const s = F.newScript(ev.name); s.steps.push({ op: 'msg', text: ev.type === 'sign' ? 'Ruta 1 → Pueblo Brisa' : '¡Hola! Bienvenido a mi pueblo.' }); p.scripts.push(s); ev.script = s.id; F.emit('scripts'); F.events.open(s.id); } }, 'Crear evento nuevo'),
+    if (ev.type === 'npc' || ev.type === 'sign' || ev.type === 'trigger') rows.push(h('label', { class: 'field' }, h('span', {}, ev.type === 'trigger' ? 'Qué pasa al pisarlo' : 'Qué pasa al hablarle'), scripts),
+      h('div', { class: 'btn-row' }, h('button', { class: 'btn sm', onclick: () => { const s = F.newScript(ev.name); s.steps.push({ op: 'msg', text: ev.type === 'sign' ? 'Ruta 1 → Pueblo Brisa' : ev.type === 'trigger' ? '¡Espera! No salgas todavía.' : '¡Hola! Bienvenido a mi pueblo.' }); if (ev.type === 'trigger') s.steps.push({ op: 'set_var', var: ev.var || 'PROGRESO', value: (+ev.value || 0) + 1 }); p.scripts.push(s); ev.script = s.id; F.emit('scripts'); F.events.open(s.id); } }, 'Crear evento nuevo'),
         ev.script ? h('button', { class: 'btn sm', onclick: () => F.events.open(ev.script) }, 'Editar evento') : null));
     rows.push(h('p', { class: 'mono small muted' }, `Posición ${ev.x}, ${ev.y}`), h('button', { class: 'btn sm danger', onclick: () => { pushUndo(); m.events = m.events.filter((v) => v.id !== ev.id); S.selEvent = null; changed(); renderSide(); } }, 'Quitar evento'));
     return h('div', { class: 'stack ev-form' }, h('h4', {}, F.EVENT_TYPES[ev.type].label), ...rows);

@@ -37,9 +37,9 @@
       ['pixel', 'Dibuja', `${p.sprites.length} sprites`, 'Personajes, Fakemon y bloques con la paleta real de 16 colores de la GBA. Importa tus PNG y se ajustan solos.'],
       ['fakemon', 'Crea Fakemon', `${p.fakemons.length} criaturas`, 'Tipos, estadísticas con guía de balance, habilidades, movimientos y evolución.'],
       ['mapas', 'Arma mapas', `${p.maps.length} mapas`, 'Suelo, capa de encima, colisiones y eventos: personajes, carteles, objetos y puertas.'],
-      ['eventos', 'Programa eventos', `${p.scripts.length} eventos`, 'Diálogos, preguntas, regalos y combates con bloques. Genera Poryscript.'],
+      ['eventos', 'Programa eventos', `${p.scripts.length} eventos`, 'Diálogos, elecciones, banderas, contadores, regalos y combates con bloques. Genera XSE, Poryscript y comandos de Essentials.'],
       ['probar', 'Pruébalo', 'en el navegador', 'Camina por tu mapa en una pantalla de 240×160 y habla con los personajes.'],
-      ['exportar', 'Exporta', 'decomp o Essentials', 'ZIP con PNG indexados, paletas, datos y un LEEME con los pasos.'],
+      ['exportar', 'Exporta', 'ROM, decomp o Essentials', 'Scripts de XSE y guía para Advance Map, proyecto decomp o archivos de Essentials, con un LEEME paso a paso.'],
     ];
     const fileIn = h('input', { type: 'file', accept: 'image/*,.json', multiple: true, hidden: true, id: 'home-files', onchange: async (e) => { for (const f of e.target.files) await handleFile(f); e.target.value = ''; } });
     root.replaceChildren(h('div', { class: 'home' },

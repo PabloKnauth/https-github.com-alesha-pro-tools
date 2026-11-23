@@ -112,15 +112,23 @@ F.newFakemon = (name) => ({
   stats: { hp: 50, atk: 55, def: 50, spa: 45, spd: 50, spe: 60 },
   abilities: ['', ''], hidden: '', growth: 'MEDIUM_FAST', catchRate: 45, expYield: 64, genderFemale: 50,
   eggGroups: ['FIELD', ''], height: 0.6, weight: 8.5, color: 'BLUE', dex: '', evo: { into: '', method: 'LEVEL', param: 16 },
-  learnset: [{ lvl: 1, move: 'Placaje' }], sprites: { front: '', back: '', icon: '' },
+  learnset: [{ lvl: 1, move: 'Placaje' }], sprites: { front: '', back: '', icon: '' }, romSlot: '',
 });
 F.newMap = (name, tilesetId, w = 20, h = 15) => ({
   id: F.uid('map'), name: name || 'Mapa nuevo', w, h, tileset: tilesetId || '', music: '', weather: 'NONE',
   bottom: new Array(w * h).fill(0), top: new Array(w * h).fill(-1), coll: new Array(w * h).fill(0), events: [],
+  bank: 3, num: 0, onEnter: '', wild: { rate: 20, list: [] },
 });
 F.newScript = (name) => ({ id: F.uid('scr'), name: name || 'Evento nuevo', steps: [] });
 
-F.blankProject = () => ({ format: 'forja-gba', version: 1, name: 'Mi Hack', sprites: [], fakemons: [], maps: [], scripts: [] });
+/* Ajustes del hack: valores por defecto tomados de los tutoriales de Escuela ROM Hack (Rojo Fuego) y de Essentials 16. */
+F.DEFAULT_SETTINGS = {
+  player: 'ROJO', rival: 'AZUL',
+  romBase: 'BPRE', dynamic: '0x800000', firstFlag: 0x200, firstVar: 0x7fff, lineWidth: 34,
+  essVersion: 'v16', essFirstNum: 722,
+};
+F.settings = () => F.state.project.settings;
+F.blankProject = () => ({ format: 'forja-gba', version: 2, name: 'Mi Hack', settings: { ...F.DEFAULT_SETTINGS }, sprites: [], fakemons: [], maps: [], scripts: [] });
 F.find = (kind, id) => (F.state.project[kind] || []).find((x) => x.id === id);
 
 /* ---------- guardar / cargar ---------- */
@@ -130,6 +138,9 @@ F.deserialize = (json) => {
   if (p.format !== 'forja-gba') throw new Error('Este archivo no es un proyecto de Forja GBA.');
   p.sprites = (p.sprites || []).map((s) => ({ ...s, frames: s.frames.map((f) => (typeof f === 'string' ? F.strToPx(f, s.w * s.h) : Uint8Array.from(f))) }));
   for (const k of ['fakemons', 'maps', 'scripts']) p[k] = p[k] || [];
+  p.settings = { ...F.DEFAULT_SETTINGS, ...(p.settings || {}) };
+  p.maps.forEach((m, i) => { if (m.bank == null) { m.bank = 3; m.num = i; } m.onEnter = m.onEnter || ''; m.wild = m.wild || { rate: 20, list: [] }; });
+  p.fakemons.forEach((m) => { if (m.romSlot == null) m.romSlot = ''; });
   return p;
 };
 const LS_KEY = 'forja-gba:autosave';
@@ -275,3 +286,48 @@ F.thumb = (sprite, fi = 0, size = 48) => {
   F.drawFrame(c.getContext('2d'), sprite, fi, 0, 0, s); return c;
 };
 F.bitmapCache = bitmapCache;
+
+/* ---------- texto de GBA ---------- */
+/* Caracteres del juego de caracteres occidental de Gen 3 (tabla de Advance Map). */
+F.GBA_CHARS = new Set([...' ÀÁÂÇÈÉÊËÌÎÏÒÓÔÙÚÛÑßàáçèéêëìîïòóôùúûñºª&+=;¿¡%()âíÍ<>0123456789!?.-·«»\'$,*/:ÄÖÜäöüABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz']);
+F.GBA_REPLACE = { '“': '"', '”': '"', '"': '"', '‘': "'", '’': "'", '…': '...', '—': '-', '–': '-', 'ã': 'a', 'õ': 'o', 'Ã': 'A', 'Õ': 'O', 'ý': 'y' };
+/** Devuelve los caracteres que la GBA no puede mostrar (ignorando [player], [rival] y saltos). */
+F.gbaBadChars = (text) => {
+  const bad = new Set();
+  for (const ch of String(text || '').replace(/\[(player|rival)\]/gi, '').replace(/\n/g, '')) if (!F.GBA_CHARS.has(ch) && !F.GBA_REPLACE[ch]) bad.add(ch);
+  return [...bad];
+};
+F.gbaClean = (text) => {
+  const t = String(text || '').replace(/\[player\]/gi, '\u0001').replace(/\[rival\]/gi, '\u0002');
+  return [...t].map((ch) => (ch === '\n' || ch === '\u0001' || ch === '\u0002' || F.GBA_CHARS.has(ch) ? ch : F.GBA_REPLACE[ch] ?? '')).join('').replace(/\u0001/g, '[player]').replace(/\u0002/g, '[rival]');
+};
+/** Ajusta el texto a la caja de diálogo como XSE: \n segunda línea, \l desplazar, \p página nueva. */
+F.xseText = (text, width) => {
+  width = width || (F.state.project && F.settings().lineWidth) || 34;
+  const vis = (w) => w.replace(/\[(player|rival)\]/g, 'XXXXXXX').length;
+  const paras = F.gbaClean(text).split(/\n+/).map((para) => {
+    const lines = []; let line = '';
+    for (const w of para.split(/\s+/).filter(Boolean)) { const t = line ? line + ' ' + w : w; if (vis(t) > width && line) { lines.push(line); line = w; } else line = t; }
+    if (line) lines.push(line);
+    return lines.map((l, i) => (i === 0 ? '' : i % 2 === 1 ? '\\n' : '\\l') + l).join('');
+  });
+  return paras.join('\\p');
+};
+/** Texto para mostrar en la prueba: reemplaza [player] y [rival]. */
+F.fillNames = (text) => String(text || '').replace(/\[player\]/gi, F.settings().player).replace(/\[rival\]/gi, F.settings().rival);
+F.hex = (n) => '0x' + (Number(n) >>> 0).toString(16).toUpperCase();
+
+/* ---------- BMP de 16 colores (lo que cargan Advance Map, NSE y unLZ-GBA) ---------- */
+F.encodeBMP4 = (px, w, h, palette) => {
+  const rowBytes = Math.ceil(w / 2), stride = (rowBytes + 3) & ~3, dataSize = stride * h, off = 14 + 40 + 64;
+  const buf = new Uint8Array(off + dataSize), dv = new DataView(buf.buffer);
+  buf[0] = 0x42; buf[1] = 0x4d; dv.setUint32(2, off + dataSize, true); dv.setUint32(10, off, true);
+  dv.setUint32(14, 40, true); dv.setInt32(18, w, true); dv.setInt32(22, h, true); dv.setUint16(26, 1, true); dv.setUint16(28, 4, true);
+  dv.setUint32(34, dataSize, true); dv.setUint32(38, 2835, true); dv.setUint32(42, 2835, true); dv.setUint32(46, 16, true); dv.setUint32(50, 16, true);
+  for (let i = 0; i < 16; i++) { const [r, g, b] = F.hexToRgb(palette[i] || '#000000'); buf[54 + i * 4] = b; buf[55 + i * 4] = g; buf[56 + i * 4] = r; }
+  for (let y = 0; y < h; y++) {
+    const row = off + (h - 1 - y) * stride;
+    for (let x = 0; x < w; x++) { const v = px[y * w + x] & 15; buf[row + (x >> 1)] |= x & 1 ? v : v << 4; }
+  }
+  return buf;
+};
