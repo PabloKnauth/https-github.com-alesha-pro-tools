@@ -1,0 +1,23 @@
+# Master Creative Brief
+
+- Marca/proyecto:
+- Producto/oferta:
+- Objetivo de negocio:
+- Objetivo de comunicación:
+- Audiencia primaria:
+- Situación / contexto:
+- Problema humano:
+- Insight:
+- Mensaje único:
+- Reason to believe / prueba:
+- Objeciones:
+- CTA:
+- Tono verbal:
+- Tono visual:
+- Canales/formatos:
+- Assets disponibles:
+- Restricciones / claims:
+- KPI primario:
+- KPI secundario:
+- Fecha / deadline:
+- Aprobadores:
