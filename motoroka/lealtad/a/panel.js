@@ -3,23 +3,27 @@
   function msg(m, malo) { var e = $("msg"); e.textContent = m; e.className = "aviso " + (malo ? "error" : "ok"); e.hidden = false; clearTimeout(t0); t0 = setTimeout(function () { e.hidden = true; }, 5000); }
   function vista(on) { $("entrar").hidden = on; $("app").hidden = !on; }
   function pedir(cuerpo) {
-    return MR.api("/api/panel", cuerpo).then(function (d) {
+    return MR.api("/lealtad/api/panel", cuerpo).then(function (d) {
       if (d._estado === 401 && cuerpo.accion !== "entrar") { vista(false); throw new Error("Tu sesión venció. Vuelve a entrar."); }
       if (d._estado >= 400) throw new Error(d.error || "Error.");
       return d;
     });
   }
   function ficha(d) {
-    actual = d; $("ficha").hidden = false;
+    actual = d; document.body.dataset.tarjeta = d.id; $("ficha").hidden = false;
     $("f-nombre").textContent = d.nombre + " · " + d.codigo;
     $("f-estado").textContent = d.estado + (d.canjes ? " · " + d.canjes + " canje(s)" : "");
     MR.pasos($("f-pasos"), d.sellos, d.meta);
     $("sellar").disabled = d.listo; $("canjear").disabled = !d.listo; $("quitar").disabled = !d.sellos;
-    $("f-wa").href = "https://wa.me/52" + d.tel + "?text=" + encodeURIComponent("Hola " + d.nombre + ", esta es tu tarjeta de lealtad de Moto Roka: " + location.origin + "/tarjeta.html#" + d.id);
+    $("f-regalo").hidden = !d.regalo; $("regalo").hidden = !d.regalo;
+    if (d.regalo) $("f-regalo-x").textContent = d.regalo.texto + " · vence el " + d.regalo.vence;
+    $("f-cumple-form").cumple.value = d.cumple || "";
+    $("f-wa").href = "https://wa.me/52" + d.tel + "?text=" + encodeURIComponent("Hola " + d.nombre + ", esta es tu tarjeta de lealtad de Moto Roka: " + location.origin + "/lealtad/tarjeta.html#" + d.id);
     var h = $("f-hist"); h.textContent = "";
     d.historial.slice().reverse().forEach(function (x) { var li = document.createElement("li"); li.textContent = new Date(x.t).toLocaleString("es-MX") + " — " + x.tipo; h.appendChild(li); });
   }
   function buscar(q) { return pedir({ accion: "buscar", q: q }).then(ficha).catch(function (e) { msg(e.message, true); }); }
+  MR.accion = function (a, extra, texto) { pedir(Object.assign({ accion: a }, extra)).then(function (d) { ficha(d); msg(texto); }).catch(function (e) { msg(e.message, true); }); };
   function accion(a, texto) {
     if (!actual) return;
     pedir({ accion: a, id: actual.id }).then(function (d) { ficha(d); msg(texto); }).catch(function (e) { msg(e.message, true); });
@@ -43,4 +47,15 @@
   $("salir").addEventListener("click", function (e) { e.preventDefault(); pedir({ accion: "salir" }).finally(function () { vista(false); }); });
   function inicio() { var id = location.hash.slice(1); if (id) { buscar(id); history.replaceState(null, "", location.pathname); } }
   pedir({ accion: "estado" }).then(function () { vista(true); inicio(); }).catch(function () { vista(false); });
+})();
+(function () {
+  var $ = function (i) { return document.getElementById(i); };
+  $("regalo").addEventListener("click", function () {
+    var id = document.body.dataset.tarjeta; if (!id || !confirm("¿Entregar el regalo de cumpleaños?")) return;
+    MR.accion("regalo", { id: id }, "Regalo de cumpleaños entregado.");
+  });
+  $("f-cumple-form").addEventListener("submit", function (e) {
+    e.preventDefault(); var id = document.body.dataset.tarjeta; if (!id) return;
+    MR.accion("cumple", { id: id, cumple: e.target.cumple.value }, "Cumpleaños guardado.");
+  });
 })();
