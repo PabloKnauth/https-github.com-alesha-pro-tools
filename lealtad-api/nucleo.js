@@ -1,7 +1,8 @@
 // Tarjeta de lealtad Moto Roka (Cloudflare Pages Functions + KV). Núcleo compartido.
 // KV "LEALTAD": t/<id> tarjeta · tel/<10 dígitos> · cod/<MR-XXXXXX> · cumple/<MMDD>/<id> · apple/… · config/promo · lim/…
+import { temaDe, selloDe } from "./temas.js";
 
-export const SELLOS_META = 5; // 5 sellos = el 6.º Servicio Express gratis
+export const SELLOS_META = 4; // 4 sellos = el 5.º Servicio Express gratis
 export const RECOMPENSA = "Servicio Express gratis";
 export const NEGOCIO = "Moto Roka Fix & Shop";
 export const BASE_RUTA = "/lealtad";
@@ -59,12 +60,14 @@ export function regaloCumple(t, ahora = Date.now()) {
   return { activo: false };
 }
 
-export const puntos = (n) => "●".repeat(n) + "○".repeat(Math.max(0, SELLOS_META - n));
+// Imagen de la franja de sellos (estática, generada con generar-franjas.mjs): a = Apple, g = Google.
+export const franjaRuta = (t, tipo) => `/franjas/${tipo}-${temaDe(t)}-${selloDe(t)}-${Math.min(t.sellos, SELLOS_META)}.png`;
 export function resumen(t, env) {
-  const listo = t.sellos >= SELLOS_META, r = regaloCumple(t);
+  const n = Math.min(t.sellos, SELLOS_META), listo = n >= SELLOS_META, r = regaloCumple(t);
   return {
-    sellos: t.sellos, meta: SELLOS_META, puntos: puntos(Math.min(t.sellos, SELLOS_META)), listo,
-    estado: listo ? "¡Tu próximo Servicio Express es GRATIS!" : `${t.sellos} de ${SELLOS_META} servicios`,
+    sellos: n, meta: SELLOS_META, listo, tema: temaDe(t), sello: selloDe(t),
+    progreso: `${n} de ${SELLOS_META}`,
+    estado: listo ? "¡Tu 5.º servicio es GRATIS!" : `Te ${SELLOS_META - n === 1 ? "falta 1 sello" : `faltan ${SELLOS_META - n} sellos`} para tu servicio gratis`,
     cumple: cumpleBonito(t.cumple), regalo: r.activo ? { texto: regaloTexto(env), vence: r.vence } : null,
     textoCumple: r.activo ? `¡Feliz cumpleaños! ${regaloTexto(env)} · válido hasta el ${r.vence}`
       : r.entregado ? "Regalo de cumpleaños entregado. ¡Felicidades!"

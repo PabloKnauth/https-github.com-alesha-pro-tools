@@ -1,5 +1,5 @@
 // Google Wallet (programa de lealtad): enlace "Guardar", actualización de sellos y mensajes.
-import { cfg, resumen, NEGOCIO, RECOMPENSA, SELLOS_META } from "./nucleo.js";
+import { cfg, resumen, franjaRuta, NEGOCIO, SELLOS_META } from "./nucleo.js";
 
 const API = "https://walletobjects.googleapis.com/walletobjects/v1";
 export const googleListo = (env) => !!(cfg(env, "GOOGLE_ISSUER_ID") && cfg(env, "GOOGLE_SA_JSON"));
@@ -44,7 +44,7 @@ function clase(env, base) {
     id: claseId(env), issuerName: NEGOCIO, programName: "Tarjeta de lealtad", reviewStatus: "UNDER_REVIEW",
     programLogo: { sourceUri: { uri: base + "/a/logo-660.png" }, contentDescription: { defaultValue: { language: "es-MX", value: NEGOCIO } } },
     hexBackgroundColor: "#0b0d12",
-    textModulesData: [{ id: "regla", header: "Cómo funciona", body: `Cada servicio suma un sello. Al juntar ${SELLOS_META}, tu siguiente servicio es un ${RECOMPENSA}. En tu cumpleaños tienes 20% de descuento en accesorios (30 días).` }],
+    textModulesData: [{ id: "regla", header: "Cómo funciona", body: `Cada servicio suma un sello. Al juntar ${SELLOS_META}, tu 5.º Servicio Express es gratis. En tu cumpleaños tienes 20% de descuento en accesorios (30 días).` }],
     linksModuleData: { uris: [{ id: "wa", uri: "https://wa.me/527226665997", description: "WhatsApp del taller" }] },
     multipleDevicesAndHoldersAllowedStatus: "ONE_USER_ALL_DEVICES",
   };
@@ -53,8 +53,9 @@ function objeto(env, t, base) {
   const r = resumen(t, env);
   return {
     id: objetoId(env, t), classId: claseId(env), state: "ACTIVE", accountId: t.codigo, accountName: t.nombre,
-    loyaltyPoints: { label: "Sellos", balance: { string: r.puntos } },
-    secondaryLoyaltyPoints: { label: "Progreso", balance: { string: r.estado } },
+    loyaltyPoints: { label: "Sellos", balance: { string: r.progreso } },
+    secondaryLoyaltyPoints: { label: "Servicio gratis", balance: { string: r.listo ? "¡Listo!" : `En ${SELLOS_META - r.sellos}` } },
+    heroImage: { sourceUri: { uri: base + franjaRuta(t, "g") }, contentDescription: { defaultValue: { language: "es-MX", value: `${r.progreso} sellos` } } },
     textModulesData: [{ id: "cumple", header: "Cumpleaños", body: r.textoCumple }],
     barcode: { type: "QR_CODE", value: `${base}/panel.html#${t.id}`, alternateText: t.codigo },
     linksModuleData: { uris: [{ id: "web", uri: `${base}/tarjeta.html#${t.id}`, description: "Ver mi tarjeta" }] },

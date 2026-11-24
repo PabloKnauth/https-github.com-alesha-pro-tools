@@ -1,7 +1,8 @@
 // /lealtad/api/tarjeta — alta de clientes (POST) y consulta con el enlace secreto (GET).
-import { json, seguro, kv, ip, nuevoId, nuevoCodigo, telNormal, cumpleNormal, leerTarjeta, guardarTarjeta, resumen, promoActual, limitar } from "../../../lealtad-api/nucleo.js";
-import { appleListo } from "../../../lealtad-api/apple.js";
-import { googleListo } from "../../../lealtad-api/google.js";
+import { json, seguro, kv, ip, sitio, nuevoId, nuevoCodigo, telNormal, cumpleNormal, leerTarjeta, guardarTarjeta, resumen, promoActual, limitar } from "../../../lealtad-api/nucleo.js";
+import { appleListo, avisarApple } from "../../../lealtad-api/apple.js";
+import { googleListo, actualizarGoogle } from "../../../lealtad-api/google.js";
+import { TEMAS, SELLOS } from "../../../lealtad-api/temas.js";
 
 const publica = async (env, t) => ({ id: t.id, codigo: t.codigo, nombre: t.nombre, canjes: t.canjes, ...resumen(t, env),
   promo: await promoActual(env), apple: appleListo(env), google: googleListo(env) });
@@ -13,6 +14,16 @@ export const onRequestGet = seguro(async ({ request, env }) => {
 
 export const onRequestPost = seguro(async ({ request, env }) => {
   const d = await request.json().catch(() => ({}));
+  if (d.accion === "personalizar") { // quien tiene el enlace de su tarjeta elige tema e icono del sello
+    const t = await leerTarjeta(env, d.id);
+    if (!t) return json({ error: "Tarjeta no encontrada." }, 404);
+    if (!TEMAS[d.tema] || !SELLOS.includes(d.sello)) return json({ error: "Opción no válida." }, 400);
+    if (!(await limitar(env, "pers:" + t.id, 30, 60))) return json({ error: "Demasiados cambios seguidos. Intenta en un rato." }, 429);
+    t.tema = d.tema; t.sello = d.sello;
+    await guardarTarjeta(env, t);
+    await Promise.allSettled([avisarApple(env, [t.id]), actualizarGoogle(env, t, sitio(env, request))]);
+    return json(await publica(env, t));
+  }
   if (d.sitio) return json({ error: "Solicitud inválida." }, 400); // trampa para bots
   const nombre = String(d.nombre || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, 60);
   const tel = telNormal(d.tel), cumple = d.cumple ? cumpleNormal(d.cumple) : null;

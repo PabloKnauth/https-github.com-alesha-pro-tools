@@ -1,26 +1,38 @@
-<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0d12"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0d12"><link rel="icon" href="/assets/img/favicon-64.png"><link rel="apple-touch-icon" href="/lealtad/a/icono-180.png"><link rel="stylesheet" href="/lealtad/a/estilo.css">
+<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0d12"><link rel="icon" href="/assets/img/favicon-64.png"><link rel="apple-touch-icon" href="/lealtad/a/icono-180.png"><link rel="stylesheet" href="/lealtad/a/estilo.css">
 <meta name="robots" content="noindex"><meta name="referrer" content="no-referrer">
 <title>Mi tarjeta · Moto Roka Fix &amp; Shop</title></head>
 <body><main>
-<a class="marca" href="/"><img src="/lealtad/a/icono-180.png" alt="" width="44" height="44"><span>Moto Roka Fix &amp; Shop<small>Tarjeta de lealtad</small></span></a>
+<a class="marca" href="/"><img src="/lealtad/a/icono-180.png" alt="" width="40" height="40"><span>Moto Roka Fix &amp; Shop<small>Tarjeta de lealtad</small></span></a>
 <p class="aviso" id="cargando">Cargando tu tarjeta…</p>
 <div id="vista" hidden>
-  <p class="aviso ok" id="nueva" hidden>¡Listo! Guarda tu tarjeta en tu Wallet o guarda este enlace en tus favoritos.</p>
-  <article class="tarjeta">
-    <header><img src="/lealtad/a/mr-texto.png" alt="Moto Roka"><code id="codigo"></code></header>
-    <p class="nombre" id="nombre"></p>
-    <p class="estado" id="estado"></p>
-    <p class="cumple-linea" id="cumple-linea"></p><div class="pasos" id="pasos"></div>
-    <div class="qr" id="qr"></div>
-    <small>Muéstralo en el mostrador para sumar tu sello</small>
+  <p class="aviso ok" id="nueva" hidden>Tu tarjeta está lista. Guárdala en tu Wallet o guarda este enlace en tus favoritos.</p>
+  <article class="pase" id="pase" data-tema="noche">
+    <header class="pase__cab"><img class="pase__logo" src="/lealtad/a/mr-texto.png" alt="Moto Roka" width="92" height="22"><div class="pase__dato der"><span class="pase__etq">Sellos</span><span class="pase__val grande" id="progreso"></span></div></header>
+    <div class="franja" id="franja"></div>
+    <div class="pase__campos">
+      <div class="pase__dato"><span class="pase__etq">Cliente</span><span class="pase__val" id="nombre"></span></div>
+      <div class="pase__dato der"><span class="pase__etq">Servicio gratis</span><span class="pase__val" id="gratis"></span></div>
+      <div class="pase__dato ancho"><span class="pase__etq">Cumpleaños</span><span class="pase__val" id="cumple"></span></div>
+    </div>
+    <div class="pase__qr"><div class="qr" id="qr"></div><small id="codigo"></small></div>
   </article>
-  <div class="regalo-cumple" id="regalo" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg><div><b>¡Feliz cumpleaños!</b><span id="regalo-x"></span></div></div>
+  <p class="estado-grande" id="estado"></p>
+  <div class="regalo-cumple" id="regalo" hidden><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg><div><b>¡Feliz cumpleaños!</b><span id="regalo-x"></span></div></div>
   <div class="acciones">
     <a class="boton negro" id="apple" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.8-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.3.8 1.4 0 2.3-1.2 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.8-1-2.8-4.3zM13.9 5.3c.7-.9 1.2-2 1-3.3-1 .1-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3.1 1.1.1 2.2-.6 2.9-1.3z"/></svg>Agregar a Apple Wallet</a>
     <a class="boton blanco" id="google" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z"/><path fill="#FBBC05" d="M6.4 14a6 6 0 0 1 0-3.9V7.5H3.1a10 10 0 0 0 0 9z"/><path fill="#EA4335" d="M12 6c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.5L6.4 10C7.2 7.8 9.4 6 12 6z"/></svg>Guardar en Google Wallet</a>
   </div>
+  <section class="bloque" aria-labelledby="t-pers">
+    <h2 id="t-pers">Personaliza tu tarjeta</h2>
+    <p>Elige su color y el icono de tus sellos. El cambio también llega a tu Wallet.</p>
+    <h3>Color</h3>
+    <div class="opciones temas" id="temas"></div>
+    <h3 class="bloque-sub">Icono de tus sellos</h3>
+    <div class="opciones iconos" id="iconos"></div>
+    <p class="guardado" id="guardado" role="status"></p>
+  </section>
   <div class="promo" id="promo" hidden><b id="promo-t"></b><p id="promo-x"></p></div>
   <p class="pie">Este enlace es tu tarjeta: no lo compartas. <a href="https://wa.me/527226665997">WhatsApp del taller</a></p>
 </div>
 <p class="aviso error" id="error" role="alert" hidden></p>
-</main><script src="/lealtad/a/comun.js"></script><script src="/lealtad/a/qrcode.js"></script><script src="/lealtad/a/tarjeta.js"></script></body></html>
+</main><script src="/lealtad/a/iconos.js"></script><script src="/lealtad/a/comun.js"></script><script src="/lealtad/a/qrcode.js"></script><script src="/lealtad/a/tarjeta.js"></script></body></html>

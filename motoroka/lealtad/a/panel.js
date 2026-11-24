@@ -13,7 +13,7 @@
     actual = d; document.body.dataset.tarjeta = d.id; $("ficha").hidden = false;
     $("f-nombre").textContent = d.nombre + " · " + d.codigo;
     $("f-estado").textContent = d.estado + (d.canjes ? " · " + d.canjes + " canje(s)" : "");
-    MR.pasos($("f-pasos"), d.sellos, d.meta);
+    $("f-pasos").dataset.tema = d.tema; MR.franja($("f-pasos"), d.sellos, d.meta, d.sello);
     $("sellar").disabled = d.listo; $("canjear").disabled = !d.listo; $("quitar").disabled = !d.sellos;
     $("f-regalo").hidden = !d.regalo; $("regalo").hidden = !d.regalo;
     if (d.regalo) $("f-regalo-x").textContent = d.regalo.texto + " · vence el " + d.regalo.vence;

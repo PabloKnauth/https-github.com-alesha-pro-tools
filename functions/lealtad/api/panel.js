@@ -51,7 +51,7 @@ export const onRequestPost = seguro(async ({ request, env }) => {
     case "sellar":
       if (t.sellos >= SELLOS_META) return json({ error: `Ya tiene ${SELLOS_META} sellos: primero canjea su ${RECOMPENSA}.` }, 409);
       t.sellos++;
-      return guardar("sello", t.sellos >= SELLOS_META ? `¡Completaste ${SELLOS_META} sellos! Tu próximo servicio es un ${RECOMPENSA}.` : `Sumaste un sello: ${t.sellos} de ${SELLOS_META}.`);
+      return guardar("sello", t.sellos >= SELLOS_META ? `¡Completaste ${SELLOS_META} sellos! Tu 5.º servicio es GRATIS.` : `Sumaste un sello: ${t.sellos} de ${SELLOS_META}.`);
     case "canjear":
       if (t.sellos < SELLOS_META) return json({ error: `Le faltan ${SELLOS_META - t.sellos} sellos.` }, 409);
       t.sellos = 0; t.canjes++;
