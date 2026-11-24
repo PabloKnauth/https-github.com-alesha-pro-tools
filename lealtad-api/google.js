@@ -44,7 +44,7 @@ function clase(env, base) {
     id: claseId(env), issuerName: NEGOCIO, programName: "Tarjeta de lealtad", reviewStatus: "UNDER_REVIEW",
     programLogo: { sourceUri: { uri: base + "/a/logo-660.png" }, contentDescription: { defaultValue: { language: "es-MX", value: NEGOCIO } } },
     hexBackgroundColor: "#0b0d12",
-    textModulesData: [{ id: "regla", header: "Cómo funciona", body: `Cada servicio suma un sello. Al juntar ${SELLOS_META}, tu siguiente servicio es un ${RECOMPENSA}. En tu cumpleaños te espera un regalo.` }],
+    textModulesData: [{ id: "regla", header: "Cómo funciona", body: `Cada servicio suma un sello. Al juntar ${SELLOS_META}, tu siguiente servicio es un ${RECOMPENSA}. En tu cumpleaños tienes 20% de descuento en accesorios (30 días).` }],
     linksModuleData: { uris: [{ id: "wa", uri: "https://wa.me/527226665997", description: "WhatsApp del taller" }] },
     multipleDevicesAndHoldersAllowedStatus: "ONE_USER_ALL_DEVICES",
   };

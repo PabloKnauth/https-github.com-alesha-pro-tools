@@ -11,7 +11,7 @@ desde el cumpleaños, una vez al año).
 ## Configuración en Cloudflare (Workers & Pages → proyecto de Moto Roka → Settings)
 - **Bindings → KV namespace:** nombre de variable `LEALTAD`.
 - **Variables y secretos:** `PANEL_CLAVE`, `LEALTAD_SECRETO` (32+ caracteres), `CRON_CLAVE` (20+), `SITIO_URL`,
-  `REGALO_CUMPLE` (texto del regalo), y cuando existan: `APPLE_PASS_TYPE_ID`, `APPLE_TEAM_ID`, `APPLE_PASS_CERT_P12` (base64),
+  `REGALO_CUMPLE` (opcional; por defecto «20% de descuento en accesorios»), y cuando existan: `APPLE_PASS_TYPE_ID`, `APPLE_TEAM_ID`, `APPLE_PASS_CERT_P12` (base64),
   `APPLE_PASS_CERT_PASS`, `APPLE_WWDR_PEM`, `GOOGLE_ISSUER_ID`, `GOOGLE_SA_JSON`.
 - Avisos push de Apple: certificado del Pass Type ID subido con `wrangler mtls-certificate upload` y enlazado como `APNS_CERT`
   (pendiente de verificar con la cuenta real).

@@ -10,7 +10,7 @@ const UBICACION = { lat: 18.9496043, lng: -99.4935796 }; // pin de Google Maps d
 const ZONA_MX = -6 * 3600e3; // Centro de México, sin horario de verano desde 2022
 
 export const cfg = (env, k) => String(env?.[k] ?? "").trim();
-export const regaloTexto = (env) => cfg(env, "REGALO_CUMPLE") || "Regalo de cumpleaños";
+export const regaloTexto = (env) => cfg(env, "REGALO_CUMPLE") || "20% de descuento en accesorios";
 
 export function json(datos, estado = 200, extra = {}) {
   return new Response(JSON.stringify(datos), {

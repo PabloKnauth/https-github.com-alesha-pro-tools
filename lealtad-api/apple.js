@@ -43,7 +43,7 @@ export async function passJson(env, t, base) {
       auxiliaryFields: [{ key: "cumple", label: "CUMPLEAÑOS", value: r.textoCumple, changeMessage: "%@" }],
       backFields: [
         { key: "promo", label: "PROMOCIÓN", value: promo ? `${promo.titulo}\n${promo.texto}` : "Pronto tendremos promociones para ti.", changeMessage: "%@" },
-        { key: "regla", label: "CÓMO FUNCIONA", value: `Cada servicio suma un sello. Al juntar ${SELLOS_META} sellos, tu siguiente servicio es un ${RECOMPENSA}. En tu cumpleaños te espera un regalo. Muestra esta tarjeta en el mostrador.` },
+        { key: "regla", label: "CÓMO FUNCIONA", value: `Cada servicio suma un sello. Al juntar ${SELLOS_META} sellos, tu siguiente servicio es un ${RECOMPENSA}. En tu cumpleaños tienes 20% de descuento en accesorios (30 días). Muestra esta tarjeta en el mostrador.` },
         { key: "contacto", label: "WHATSAPP", value: "722 666 5997" },
         { key: "web", label: "MI TARJETA", value: `${base}/tarjeta.html#${t.id}` },
       ],

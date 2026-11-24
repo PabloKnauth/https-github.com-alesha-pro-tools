@@ -19,7 +19,7 @@ export const onRequestPost = seguro(async ({ request, env }) => {
     t.felicitado = anio;
     await guardarTarjeta(env, t); // cambia la fecha del pase: Wallet descarga la versión con el regalo
     await Promise.allSettled([avisarApple(env, [id]),
-      actualizarGoogle(env, t, sitio(env, request), `¡Feliz cumpleaños, ${t.nombre.split(" ")[0]}! ${regaloTexto(env)}: pasa por él al taller.`)]);
+      actualizarGoogle(env, t, sitio(env, request), `¡Feliz cumpleaños, ${t.nombre.split(" ")[0]}! ${regaloTexto(env)}: úsalo en el taller.`)]);
     avisados++;
   }
   return json({ ok: true, fecha: mmdd, avisados });

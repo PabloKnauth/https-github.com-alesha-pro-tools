@@ -7,7 +7,7 @@
       var d = x[1]; if (!x[0]) return fallo(d.error || "No encontramos tu tarjeta.");
       $("codigo").textContent = d.codigo; $("nombre").textContent = d.nombre; $("estado").textContent = d.estado;
       MR.pasos($("pasos"), d.sellos, d.meta); $("cumple-linea").textContent = d.regalo ? "" : d.textoCumple;
-      if (d.regalo) { $("regalo-x").textContent = d.regalo.texto + ": pasa por él al taller. Válido hasta el " + d.regalo.vence + "."; $("regalo").hidden = false; }
+      if (d.regalo) { $("regalo-x").textContent = d.regalo.texto + " en tu cumpleaños. Muestra esta tarjeta en el taller. Válido hasta el " + d.regalo.vence + "."; $("regalo").hidden = false; }
       var qr = qrcode(0, "M"); qr.addData(location.origin + "/lealtad/panel.html#" + d.id); qr.make();
       $("qr").innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
       if (d.apple) { $("apple").href = "/lealtad/api/apple/pase?id=" + encodeURIComponent(d.id); $("apple").hidden = false; }
