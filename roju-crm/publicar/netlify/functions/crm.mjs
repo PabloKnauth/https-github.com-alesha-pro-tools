@@ -11,6 +11,8 @@ import {
 export default async (req, context) => {
   // GET /api/crm: diagnóstico sin datos sensibles (no muestra contraseñas, solo si están listas).
   if (req.method === "GET") {
+    // Sin sesión solo se confirma que el servidor responde: no se revelan nombres de variables ni usuarios.
+    if (!usuarioDelToken(req)) return json({ servidor: "activo" });
     const estado = (u) => { const n = clave(u).length; return n === 0 ? "falta" : n < 10 ? "muy corta (mínimo 10 caracteres)" : "lista"; };
     // Nombres (nunca valores) de las variables parecidas, con caracteres ocultos visibles, para detectar errores al escribirlas.
     const parecidas = Object.keys(process.env).filter((k) => /clave|crm|pablo|kevin/i.test(k)).map((k) => JSON.stringify(k).slice(1, -1));

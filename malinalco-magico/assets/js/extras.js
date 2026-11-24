@@ -88,7 +88,7 @@
     if (hs && hs.length) {
       cont.innerHTML = hs.map(function (h, i) {
         var f = h.foto != null ? c.fotos[h.foto] : null;
-        return '<article class="recamara">' + (f ? '<img src="' + FOTOS + "med/" + esc(f) + '.webp" onerror="this.src=\'' + FOTOS + esc(f) + '.webp\'" alt="' + esc(h.nombre || "Recámara " + (i + 1)) + '" loading="lazy">' : '<div class="recamara__ico">' + icono("cama", "ico ico--grande") + "</div>") +
+        return '<article class="recamara">' + (f ? '<img src="' + FOTOS + "med/" + esc(f) + '.webp" data-alt="' + FOTOS + esc(f) + '.webp" alt="' + esc(h.nombre || "Recámara " + (i + 1)) + '" loading="lazy">' : '<div class="recamara__ico">' + icono("cama", "ico ico--grande") + "</div>") +
           "<h4>" + esc(h.nombre || "Recámara " + (i + 1)) + "</h4><p>" + esc(h.camas || "") + "</p></article>";
       }).join("");
       return;
@@ -158,7 +158,7 @@
       var c = x.c;
       return '<button type="button" class="rank' + (i < 3 ? " rank--podio" : "") + '" data-ver="' + c.id + '">' +
         '<span class="rank__pos">' + (i + 1) + "</span>" +
-        '<img src="' + FOTOS + "min/" + esc(c.fotos[0]) + '.webp" onerror="this.src=\'' + FOTOS + esc(c.fotos[0]) + '.webp\'" alt="" loading="lazy">' +
+        '<img src="' + FOTOS + "min/" + esc(c.fotos[0]) + '.webp" data-alt="' + FOTOS + esc(c.fotos[0]) + '.webp" alt="" loading="lazy">' +
         '<span class="rank__txt"><strong>' + esc(c.nombre) + "</strong><small>" + esc(c.destino) + " · " + x.r.n + (x.r.n === 1 ? " evaluación" : " evaluaciones") + "</small></span>" +
         '<span class="rank__nota">★ ' + fmt(x.r.media) + (x.r.favorito ? "<em>Favorita</em>" : "") + "</span></button>";
     }).join("");

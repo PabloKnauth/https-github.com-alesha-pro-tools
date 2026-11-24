@@ -1033,3 +1033,9 @@ window.MM = {
     }
   ]
 };
+
+// Imagen de respaldo sin manejadores en línea (compatible con la política de seguridad de contenido).
+document.addEventListener("error", function (e) {
+  var t = e.target;
+  if (t && t.tagName === "IMG" && t.dataset && t.dataset.alt && t.getAttribute("src") !== t.dataset.alt) t.src = t.dataset.alt;
+}, true);

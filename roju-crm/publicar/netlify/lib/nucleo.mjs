@@ -13,7 +13,7 @@ const MOTIVOS = ["", "Precio", "Eligió a otra agencia", "No era el momento", "S
 const COBROS = ["Pago único", "Iguala mensual"];
 const COLORES = ["azul", "naranja", "verde", "rosa", "amarillo", "gris"];
 export const LIMITE_PDF = 5 * 1024 * 1024; // Netlify acepta cuerpos de hasta ~6 MB por petición.
-const DIAS_SESION = 30;
+const DIAS_SESION = 7; // la sesión vence en una semana
 
 // Mismo esquema que la base original (drizzle/migrations/0000_create_crm_tables.sql en el ZIP de Lovable).
 const T = (max, def = "") => ({ tipo: "texto", max, def });

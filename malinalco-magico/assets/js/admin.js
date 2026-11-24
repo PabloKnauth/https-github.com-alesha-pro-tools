@@ -219,7 +219,7 @@
     $("#vista").innerHTML = '<h1 class="adm-h1">Casas</h1><p class="adm-sub">Los cambios se publican en la página en un minuto. Las fotos se cambian aparte: envíalas y se procesan para mantener la calidad.</p>' +
       '<div class="adm-casas">' + BASE.map(function (b) {
         var o = D.casas[b.id] || {};
-        return '<button type="button" class="adm-casa' + (b.id === casaSel ? " activa" : "") + '" data-casa="' + b.id + '"><img src="assets/img/casas/min/' + b.fotos[0] + '.webp" onerror="this.src=\'assets/img/casas/' + b.fotos[0] + '.webp\'" alt=""><span>' + esc(o.nombre || b.nombre) + (o.oculta ? ' <em>oculta</em>' : "") + "</span></button>";
+        return '<button type="button" class="adm-casa' + (b.id === casaSel ? " activa" : "") + '" data-casa="' + b.id + '"><img src="assets/img/casas/min/' + b.fotos[0] + '.webp" data-alt="assets/img/casas/' + b.fotos[0] + '.webp" alt=""><span>' + esc(o.nombre || b.nombre) + (o.oculta ? ' <em>oculta</em>' : "") + "</span></button>";
       }).join("") + "</div>" +
       (c ? panel("Editar " + esc(c.nombre),
         '<form class="adm-form" id="f-casa">' +

@@ -7,8 +7,4 @@
   [headers.values]
     Cache-Control = "public, max-age=2592000"
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+# Las cabeceras de seguridad (CSP, HSTS, etc.) están en _headers, que leen Cloudflare Pages y Netlify.
