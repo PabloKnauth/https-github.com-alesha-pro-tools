@@ -42,6 +42,8 @@ Skills instaladas en `.claude/skills/` (cada una conserva su licencia):
 - `ui-ux-pro-max` (nextlevelbuilder): paleta, tipografías y sistema de diseño según el giro del negocio.
 - `impeccable` (Paul Bakaus): reglas de tipografía, espaciado y auditoría (`/impeccable audit`, `/polish`).
   Su ejecutable se descarga la primera vez; si un permiso lo bloquea, pide autorización al usuario.
+- `security-audit` (Cloudflare, MIT, commit c1c8a8c): auditoría de seguridad. Por defecto da guía puntual;
+  la auditoría completa (6 fases, con informes `REPORT.md` y `findings.json`) solo cuando se pide explícitamente.
 - Skills de Emil Kowalski (`emil-design-eng`, `animate`, `review-animations`, etc.): animación e interacción.
 
 Flujo para cada sitio:
