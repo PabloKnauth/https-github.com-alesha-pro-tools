@@ -163,3 +163,8 @@ h3{font-size:22px;font-weight:700}
   *,*::before,*::after{animation:none!important;transition:none!important}
   html{scroll-behavior:auto}.linea>span{transform:none}.js .revela{opacity:1;transform:none}
 }
+.redes{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.redes a{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font:700 15px M,sans-serif;padding:12px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.2);transition:background .4s,border-color .4s,transform .5s var(--ease)}
+.redes a:hover{background:rgba(255,255,255,.08);border-color:var(--nar);transform:translateY(-2px)}
+.redes svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.redes svg .r{fill:currentColor;stroke:none}
+.pie__redes a{text-decoration:none}.pie__redes a:hover{color:#fff}
