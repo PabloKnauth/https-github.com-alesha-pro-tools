@@ -86,6 +86,9 @@ h3{font-size:22px;font-weight:700}
 .caso--inv .caso__media{transform:perspective(1400px) rotateY(4deg)}
 .caso:hover .caso__media{transform:none}
 .caso__media img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top}
+.caso__media--foto{position:relative;overflow:visible;background:none}.caso__media--foto>img:first-child{border-radius:18px;object-position:50% 60%}
+.caso__media--foto .mini{position:absolute;width:38%;aspect-ratio:3/4;right:-4%;bottom:-12%;border-radius:14px;border:5px solid var(--noche);box-shadow:0 20px 40px rgba(0,0,0,.5)}
+.cinta b.txt{font-weight:800}
 .nav-m{height:30px;background:#EEF1F5;display:flex;align-items:center;gap:7px;padding:0 14px;font-size:12px;color:var(--gris)}
 .nav-m i{width:9px;height:9px;border-radius:50%;background:#C9D0DA}.nav-m span{margin-left:10px;background:#fff;border-radius:8px;padding:2px 10px}
 .caso__txt h3{font-size:clamp(26px,3vw,36px);margin-bottom:18px}
