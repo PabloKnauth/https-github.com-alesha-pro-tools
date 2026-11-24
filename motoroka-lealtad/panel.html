@@ -1,0 +1,31 @@
+<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0d12"><link rel="icon" href="/assets/img/favicon-64.png"><link rel="apple-touch-icon" href="/assets/img/icono-180.png"><link rel="stylesheet" href="/assets/estilo.css">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<title>Panel · Lealtad Moto Roka</title></head>
+<body><main>
+<a class="marca" href="/"><img src="/assets/img/icono-180.png" alt="" width="44" height="44"><span>Moto Roka Fix &amp; Shop<small>Tarjeta de lealtad</small></span></a>
+<form id="entrar" hidden>
+  <h1>Panel del taller</h1>
+  <label>Clave<input name="clave" type="password" autocomplete="current-password" required></label>
+  <button type="submit">Entrar</button>
+</form>
+<div id="app" hidden>
+  <section>
+    <form id="buscar"><label>Código, WhatsApp o escanea el QR con la cámara<input name="q" autocomplete="off" placeholder="MR-ABC234 o 7220000000"></label><button type="submit">Buscar</button></form>
+    <div class="panel-tarjeta" id="ficha" hidden>
+      <h2 id="f-nombre"></h2><p class="estado" id="f-estado"></p>
+      <div class="pasos" id="f-pasos"></div>
+      <div class="fila"><button id="sellar">+1 sello</button><button id="canjear" class="fantasma boton">Canjear gratis</button></div>
+      <div class="fila mas"><a class="boton fantasma" id="f-wa" target="_blank" rel="noopener">Enviar enlace</a><button id="quitar" class="boton fantasma">Quitar sello</button></div>
+      <ul class="historial" id="f-hist"></ul>
+    </div>
+  </section>
+  <section>
+    <h3>Enviar promoción a todos</h3>
+    <form id="promo"><label>Título<input name="titulo" maxlength="50" required placeholder="Diciembre: cambio de aceite"></label>
+    <label>Texto<textarea name="texto" rows="3" maxlength="240" required placeholder="Liqui Moly con 10% de descuento hasta el 31 de diciembre."></textarea></label>
+    <button type="submit">Enviar aviso</button></form>
+  </section>
+  <p class="pie"><a href="#" id="salir">Salir</a></p>
+</div>
+<p class="aviso" id="msg" role="status" hidden></p>
+</main><script src="/assets/comun.js"></script><script src="/assets/panel.js"></script></body></html>
