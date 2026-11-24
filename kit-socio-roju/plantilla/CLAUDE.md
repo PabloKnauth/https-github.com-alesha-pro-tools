@@ -46,3 +46,15 @@ con probabilidad baja, preguntale al usuario en vez de adivinar.
   y comprobar contra `model.sha256`. Pasale el audio ya decodificado como array float32 de 16 kHz.
 - El contenedor se borra tras un tiempo sin uso: guardá todo con commit y push.
 - Nunca pidas claves en el chat: usá el formulario seguro de credenciales o los Secretos de red del entorno.
+
+## Ahorro de tokens (aplica siempre)
+
+- **Modelos:** la sesión usa `opusplan` (Opus al planear, Sonnet al ejecutar). Delega lo mecánico (buscar,
+  listar, renombrar, resumir, convertir, verificar) al agente `rapido` (Haiku). Usa `revisor-final` (Opus) una
+  sola vez, al final, en entregables para clientes o código que se despliega. Nunca Opus para tareas simples.
+- **Lecturas:** lee solo las líneas necesarias (offset/limit, `grep -n`), no archivos enteros ni salidas largas;
+  filtra con `head`/`tail`. No repitas lecturas de lo que ya está en la conversación.
+- **Imágenes:** pide capturas recortadas a lo relevante; para revisar video usa mosaicos pequeños (scale 360).
+- **Respuestas:** breves; sin resúmenes de lo ya dicho ni listas de opciones que no se van a usar.
+- **Sesiones:** una sesión por tema. Si una conversación se alarga, sugiere `/compact` o abrir una nueva.
+- **Graphify:** sin hooks automáticos; usa `/graphify` o `graphify query` solo para preguntas de código.

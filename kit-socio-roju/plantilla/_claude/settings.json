@@ -9,5 +9,6 @@
   },
   "enabledPlugins": {
     "ponytail@ponytail": true
-  }
+  },
+  "model": "opusplan"
 }

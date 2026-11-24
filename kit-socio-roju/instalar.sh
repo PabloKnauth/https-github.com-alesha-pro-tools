@@ -24,7 +24,8 @@ chmod +x "$DEST/.claude/skills/gemini-consejo/ask_gemini.sh"
 
 echo "3/4 Graphify (mapa del código)"
 pip install -q graphifyy
-(cd "$DEST" && graphify install --project --platform claude >/dev/null && graphify update . >/dev/null 2>&1; rm -f .claude/settings.json.graphify-bak) || true
+(cd "$DEST" && graphify install --project --platform claude >/dev/null && graphify update . >/dev/null 2>&1; rm -f .claude/settings.json.graphify-bak
+  python3 -c "import json;p='.claude/settings.json';d=json.load(open(p));d.pop('hooks',None);json.dump(d,open(p,'w'),indent=2)") || true  # sin hooks: ahorran tokens
 
 echo "4/4 Ponytail (plugin)"
 if command -v claude >/dev/null; then
