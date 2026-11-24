@@ -5,7 +5,7 @@
 // para que dos personas guardando al mismo tiempo no se borren cambios.
 import {
   ESQUEMA, ErrorDatos, json, leer, eliminarConCascada, usuarioDelToken, txt, RESPONSABLES, USUARIOS,
-  clave, lista, limitar, iguales, crearToken, crearFila, actualizarFila,
+  clave, lista, limitar, iguales, crearToken, crearFila, actualizarFila, cookieSesion, cookieBorrar,
 } from "../lib/nucleo.mjs";
 
 export default async (req, context) => {
@@ -24,15 +24,21 @@ export default async (req, context) => {
   let d;
   try { d = await req.json(); } catch { return json({ error: "Datos inválidos" }, 400); }
 
+  if (d.accion === "salir") return json({ ok: true }, 200, { "set-cookie": cookieBorrar() });
+
   if (d.accion === "entrar") {
     if (RESPONSABLES.includes(d.usuario) && !lista(d.usuario))
       return json({ error: `La contraseña de ${d.usuario} no está lista en Netlify: ${USUARIOS[d.usuario]} debe tener 10 caracteres o más. Corrígela y vuelve a desplegar.` }, 503);
     if (!(await limitar(context?.ip))) return json({ error: "Demasiados intentos. Espera 15 minutos." }, 429);
     if (!RESPONSABLES.includes(d.usuario) || !iguales(String(d.clave ?? "").trim(), clave(d.usuario))) {
+      console.warn(JSON.stringify({ evento: "acceso_fallido", usuario: txt(d.usuario, 40), ip: context?.ip ?? null }));
       await new Promise((ok) => setTimeout(ok, 600));
       return json({ error: "Contraseña incorrecta para " + (RESPONSABLES.includes(d.usuario) ? d.usuario : "ese usuario") + ". Cada uno tiene su propia contraseña." }, 401);
     }
-    return json(crearToken(d.usuario));
+    const { token, vence } = crearToken(d.usuario);
+    console.info(JSON.stringify({ evento: "acceso", usuario: d.usuario, ip: context?.ip ?? null }));
+    // El token real solo viaja en la cookie HttpOnly; la página recibe un marcador sin valor.
+    return json({ token: "cookie", vence }, 200, { "set-cookie": cookieSesion(token, vence) });
   }
 
   const usuario = usuarioDelToken(req);
@@ -52,7 +58,7 @@ export default async (req, context) => {
   } catch (e) {
     if (e instanceof ErrorDatos) return json({ error: e.message }, 400);
     console.error(e);
-    return json({ error: e.message || "Error del servidor" }, 500);
+    return json({ error: "Error del servidor. Intenta de nuevo en un minuto." }, 500);
   }
 };
 

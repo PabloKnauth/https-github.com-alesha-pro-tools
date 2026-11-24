@@ -47,6 +47,8 @@ export function leerSesion(): Sesion | null {
 }
 
 export function cerrarSesion() {
+  // Borra la cookie de sesión en el servidor (HttpOnly: la página no puede borrarla por sí misma).
+  if (!DEMO) fetch("/api/crm", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ accion: "salir" }) }).catch(() => {});
   try {
     window.localStorage.removeItem(LLAVE);
   } catch {

@@ -64,16 +64,27 @@ export default async (req, context) => {
   if (req.method !== "POST") return json({ error: "Método no permitido" }, 405);
   let d; try { d = await req.json(); } catch { return json({ error: "Datos inválidos" }, 400); }
 
+  const COOKIE = "mm_sesion";
+  const cookie = (v, seg) => `${COOKIE}=${v}; Path=/api; HttpOnly; Secure; SameSite=Strict; Max-Age=${seg}`;
+  if (d.accion === "salir") return json({ ok: true }, 200, { "set-cookie": cookie("", 0) });
+
   if (d.accion === "entrar") {
     if (!process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD.length < 8)
       return json({ error: "Falta configurar ADMIN_PASSWORD (mínimo 8 caracteres) en Netlify." }, 503);
     if (!(await limitar(context?.ip, "login", 8, 15))) return json({ error: "Demasiados intentos. Espera 15 minutos." }, 429);
-    if (!claveCorrecta(d.clave)) { await new Promise((r) => setTimeout(r, 600)); return json({ error: "Contraseña incorrecta" }, 401); }
+    if (!claveCorrecta(d.clave)) {
+      console.warn(JSON.stringify({ evento: "acceso_fallido", ip: context?.ip ?? null }));
+      await new Promise((r) => setTimeout(r, 600)); return json({ error: "Contraseña incorrecta" }, 401);
+    }
     await reiniciarLimite(context?.ip, "login");
-    return json({ token: crearToken() });
+    console.info(JSON.stringify({ evento: "acceso", ip: context?.ip ?? null }));
+    // La sesión viaja en una cookie HttpOnly (12 h): el código de la página no puede leerla.
+    return json({ token: "cookie" }, 200, { "set-cookie": cookie(crearToken(), 12 * 3600) });
   }
 
-  const token = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
+  const bearer = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
+  const galleta = (req.headers.get("cookie") || "").match(/(?:^|;\s*)mm_sesion=([^;]+)/);
+  const token = bearer.includes(".") ? bearer : galleta ? galleta[1] : "";
   if (!tokenValido(token)) return json({ error: "Sesión vencida. Vuelve a entrar." }, 401);
 
   if (d.accion === "leer") return json(await leerTodo());

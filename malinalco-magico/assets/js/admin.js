@@ -40,7 +40,7 @@
       TOKEN = j.token; try { sessionStorage.setItem("mm-token", TOKEN); } catch (x) {} $("#clave").value = ""; cargar();
     }).catch(function (x) { err.textContent = x.message; err.hidden = false; });
   });
-  function salir() { TOKEN = null; try { sessionStorage.removeItem("mm-token"); } catch (x) {} $("#app").hidden = true; $("#pantalla-login").hidden = false; }
+  function salir() { if (TOKEN) fetch("/api/admin", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accion: "salir" }) }).catch(function () {}); TOKEN = null; try { sessionStorage.removeItem("mm-token"); } catch (x) {} $("#app").hidden = true; $("#pantalla-login").hidden = false; }
   $("#salir").addEventListener("click", salir);
   function cargar() {
     api({ accion: "leer" }).then(function (j) { D = j; $("#pantalla-login").hidden = true; $("#app").hidden = false; pintar(); })

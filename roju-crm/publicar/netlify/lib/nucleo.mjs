@@ -68,8 +68,20 @@ const CASCADA = {
 };
 
 class ErrorDatos extends Error {}
-const json = (datos, estado = 200) =>
-  new Response(JSON.stringify(datos), { status: estado, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
+const json = (datos, estado = 200, extra = {}) =>
+  new Response(JSON.stringify(datos), { status: estado, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", ...extra } });
+
+/* La sesión viaja en una cookie HttpOnly: el código de la página no puede leerla ni robarla. */
+const COOKIE = "roju_sesion";
+const cookieSesion = (token, vence) =>
+  `${COOKIE}=${token}; Path=/api; HttpOnly; Secure; SameSite=Strict; Max-Age=${Math.max(0, Math.floor((vence - Date.now()) / 1000))}`;
+const cookieBorrar = () => `${COOKIE}=; Path=/api; HttpOnly; Secure; SameSite=Strict; Max-Age=0`;
+function tokenDe(req) {
+  const bearer = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
+  if (bearer && bearer.includes(".")) return bearer; // sesiones anteriores guardadas en el navegador
+  const m = (req.headers.get("cookie") || "").match(new RegExp("(?:^|;\\s*)" + COOKIE + "=([^;]+)"));
+  return m ? m[1] : "";
+}
 
 function almacen() {
   if (globalThis.__ROJU_ALMACEN__) return globalThis.__ROJU_ALMACEN__; // pruebas locales
@@ -92,7 +104,7 @@ function crearToken(usuario) {
   return { token: carga + "." + firmar(carga), vence };
 }
 function usuarioDelToken(req) {
-  const token = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
+  const token = tokenDe(req);
   const [carga, firma] = token.split(".");
   if (!carga || !firma || !configurado() || !iguales(firma, firmar(carga))) return null;
   try {
@@ -306,4 +318,4 @@ export async function leerPdf(id) {
   return datos ? { fila, datos } : null;
 }
 
-export { ESQUEMA, ErrorDatos, json, leer, eliminarConCascada, usuarioDelToken, txt, almacen, RESPONSABLES, USUARIOS, SERVICIOS, ETAPAS, ESTATUS, ORIGENES, MOTIVOS, COBROS, clave, lista, limitar, iguales, crearToken };
+export { cookieSesion, cookieBorrar, ESQUEMA, ErrorDatos, json, leer, eliminarConCascada, usuarioDelToken, txt, almacen, RESPONSABLES, USUARIOS, SERVICIOS, ETAPAS, ESTATUS, ORIGENES, MOTIVOS, COBROS, clave, lista, limitar, iguales, crearToken };
