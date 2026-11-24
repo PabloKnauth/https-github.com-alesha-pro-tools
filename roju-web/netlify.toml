@@ -1,0 +1,3 @@
+# ROJU Consulting: sitio estático. Publica esta carpeta tal cual (Netlify Forms recibe el formulario de contacto).
+[build]
+  publish = "."
