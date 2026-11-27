@@ -36,22 +36,27 @@ Estilo tomado de 3 anuncios de referencia del usuario (ad_1, ad_2, ad_4; 18–25
   $100" → para surtir/revender/iniciar tu negocio → envío a todo México → CTA "conoce el catálogo / compra
   ahora" con la URL `https://tienda.vestidospinky.com`. Ritmo rápido: un corte cada 1–2,5 s.
 - **Subtítulos**: palabra por palabra, MAYÚSCULAS, sans geométrica muy negrita (tipo Montserrat/Poppins
-  Black), blanco con sombra; frases clave sobre **barra amarilla `#f6dc3c`** que se barre de izquierda a
+  Black), blanco con sombra; frases clave sobre **barra amarilla `#f7e01f`** que se barre de izquierda a
   derecha; las listas (VESTIDOS / BLUSAS / SUÉTERES / PLAYERAS) se apilan en barras amarillas; a la altura
   del pecho. Palabras fuertes (MAYOREO, TU NEGOCIO, 500) en amarillo grande con brillo.
 - **Gráficos**: degradado negro en el 30 % inferior; precio en píldora verde neón con flecha verde
   dibujada ("$100"); billetes con flecha de subida; zoom del globo a México con bandera ("enviamos a todo
   México"); catálogo/web en pantalla curva 3D desplazándose; presentador en círculo (PiP) sobre B-roll
   de fábrica; URL tecleándose dentro de barra amarilla; destellos blancos y zoom en cortes.
-- **Audio**: música de fondo enérgica constante (~154/77 BPM) unos 12 dB bajo la voz, *whoosh* en casi
-  cada corte, máster ≈ −14 LUFS.
+- **Audio**: las referencias traen música (~156 BPM), pero **el cliente pidió SIN música de fondo**: solo voz +
+  efectos (`mi-reel/sfx/pinky_lib/`: whooshes, subidas, destello y tecleo extraídos de las referencias; pop,
+  ka-ching y ding de myinstants.com), *whoosh* en cada corte, máster ≈ −14 LUFS.
+- **Plantilla**: `mi-reel/src/PinkyAd.tsx` + `sfx/pinky_specs.py` (widgets medidos sobre las referencias:
+  píldora gris translúcida con precio verde neón, recuadro de vidrio con billetes, globo satelital Natural
+  Earth II con bandera recortada a México, catálogo de la tienda en página curva, PiP que sigue la cara).
 - **Datos reales de la tienda** (tienda.vestidospinky.com): ropa al mayoreo a precio de saldo, envíos a
   todo México, vestidos/blusas/partes bajas/conjuntos/niña/pijamas, remates y lotes surtidos, mezcla tallas y
   colores, pago con tarjeta/transferencia/OXXO, precios de mayoreo solo para clientes registrados (precios
   vistos $53–$145 c/u). Tipografía web: Jost. WhatsApp wa.me/525539384621, IG @vestidospinkymx,
   FB VestidosPinkyMX. No inventes precios ni cifras: usa solo lo que dice el video o la tienda.
-- **Clips de stock** (Drive del cliente): iPhone **HDR HLG** → convertir a SDR (`person_cutout.py` ya lo
-  hace; para clips sin recorte usar el mismo `zscale…tonemap=hable` a 100 nits). El presentador viste
+- **Clips de stock** (Drive del cliente): iPhone **HDR HLG** → convertir a SDR con la LUT
+  `mi-reel/sfx/luts/iphone_hlg2sdr.cube` (ajustada sobre tomas idénticas exportadas por el iPhone; conserva la
+  iluminación original). **No** uses `tonemap=hable`: el cliente vio la luz lavada/gris. El presentador viste
   polo roja en el stock y negra en las referencias.
 
 Al transcribir, pasá estos nombres en `initial_prompt` de faster-whisper. Si una palabra clave sale

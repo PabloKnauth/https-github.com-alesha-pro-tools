@@ -1,9 +1,13 @@
-"""Original upbeat music bed + transition SFX for Vestidos Pinky ads (no third-party samples).
+"""SFX track (and optional original music bed) for Vestidos Pinky ads.
 
 Usage: python3 pinky_music.py events.json out.wav
-events.json: {"duration": 27.1, "whoosh": [t, ...], "pop": [t, ...], "cash": [t, ...], "hit": [t, ...],
-              "type": [[t0, t1], ...], "music_db": -18, "sfx_db": -14}
-Music: 124 BPM electro-pop loop (four-on-the-floor kick, claps on 2 & 4, off-beat hats, bass and
+events.json: {"duration": 27.1, "whoosh": [t, ...], "riser": [t, ...], "pop": [t, ...], "cash": [t, ...],
+              "hit": [t, ...], "sparkle": [t, ...], "type": [[t0, t1], ...], "music": false, "music_db": -43,
+              "sfx_db": -20}
+SFX come from pinky_lib/ (index.json): whooshes, risers, sparkle and typing extracted from the client's
+reference ads, plus pop / ka-ching / ding from myinstants.com. Whooshes are aligned on their loudest point
+to the cut; risers end on the cut. The client asked for no music (2026-11), so music is off by default.
+Music (only with "music": true): 124 BPM electro-pop loop (four-on-the-floor kick, claps on 2 & 4, off-beat hats, bass and
 plucked chords over Am-F-C-G) with sidechain pumping, a short intro filter sweep and a final hit.
 """
 import json, sys, numpy as np
@@ -61,7 +65,7 @@ PROG = [(57, [69, 72, 76]), (53, [65, 69, 72]), (48, [67, 72, 76]), (55, [67, 71
 
 drums = np.zeros(N); bass = np.zeros(N); keys = np.zeros(N); pump = np.ones(N)
 nbeats = int(DUR / BEAT) + 2
-for b in range(nbeats):
+for b in range(nbeats if EV.get("music", False) else 0):
     t0 = b * BEAT
     put(drums, kick(), t0, 1.0)
     i = int(t0 * SR); n = int(0.22 * SR)                       # sidechain envelope after each kick
@@ -83,47 +87,36 @@ end = int(SR * DUR)                                            # stop on the las
 music[end:] = 0
 music[max(0, end - int(0.4 * SR)):end] *= np.linspace(1, 0.6, min(end, int(0.4 * SR)))
 tail = kick()[: int(0.3 * SR)] + pluck([NOTE(m) for m in PROG[0][1]], 0.5)[: int(0.3 * SR)]
-put(music, tail, max(0, DUR - 0.3), 0.9)
-music = music / (np.sqrt((music[: end] ** 2).mean()) + 1e-9) * 10 ** (EV.get("music_db", -18) / 20)
+if EV.get("music", False): put(music, tail, max(0, DUR - 0.3), 0.9)
+music = music * 0 if not EV.get("music", False) else music / (np.sqrt((music[: end] ** 2).mean()) + 1e-9) * 10 ** (EV.get("music_db", -18) / 20)
 
-# ---------------- transition SFX ----------------
-def whoosh(d=0.38):
-    n = int(SR * d); x = rng.standard_normal(n); out = np.zeros(n); ch = 512
-    for k in range(0, n, ch):
-        f = 400 + 6000 * (k / n) ** 0.8
-        out[k:k + ch] = sosfilt(butter(2, [max(80, f * 0.6), min(SR / 2 - 200, f * 1.6)], btype="band", fs=SR, output="sos"), x[k:k + ch])
-    tt = np.arange(n) / n
-    return out * np.where(tt < 0.65, (tt / 0.65) ** 2, ((1 - tt) / 0.35) ** 1.5)
-def pop(f0=1000, f1=320, d=0.09):
-    t = t_(d); f = f1 + (f0 - f1) * np.exp(-t * 45)
-    return np.sin(2 * np.pi * np.cumsum(f) / SR) * env(len(t), 0.002, 0.03)
-def chime(notes, gap=0.07, dec=0.3):
-    out = np.zeros(int(SR * (gap * len(notes) + 0.9)))
-    for k, f in enumerate(notes):
-        t = t_(0.9); put(out, (np.sin(2 * np.pi * f * t) + 0.3 * np.sin(4 * np.pi * f * t)) * env(len(t), 0.003, dec), k * gap)
-    return out
-def cash():
-    out = np.zeros(int(SR * 1.0)); n = int(SR * 0.05)
-    put(out, bp(rng.standard_normal(n), 2500, 9000) * env(n, 0.0005, 0.01), 0, 0.8)
-    put(out, chime([1568, 2093], 0.06, 0.28), 0.03)
-    return out
-def hit():
-    t = t_(0.6); return np.sin(2 * np.pi * (48 + 70 * np.exp(-t * 20)) * t) * env(len(t), 0.002, 0.18) + bp(rng.standard_normal(len(t)), 200, 3000) * env(len(t), 0.001, 0.04)
-def key():
-    n = int(SR * 0.025); return bp(rng.standard_normal(n), 1800, 7000) * env(n, 0.0005, 0.004)
-
+# ---------------- SFX from the sample library ----------------
+import os
+LIB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pinky_lib")
+META = json.load(open(os.path.join(LIB, "index.json")))
+def smp(name):
+    return wavfile.read(os.path.join(LIB, name + ".wav"))[1].astype(float)
 sfx = np.zeros(N)
-def norm(s, dbv): return s / (np.abs(s).max() + 1e-9) * 10 ** (dbv / 20)
-base = EV.get("sfx_db", -14)
-for t in EV.get("whoosh", []): put(sfx, norm(whoosh(), base - 4), max(0, t - 0.28))
-for t in EV.get("pop", []): put(sfx, norm(pop(), base), t)
-for t in EV.get("cash", []): put(sfx, norm(cash(), base + 1), t)
-for t in EV.get("hit", []): put(sfx, norm(hit(), base + 1), t)
+base = EV.get("sfx_db", -20)
+def place(name, t, db_rel=0.0, align="start"):
+    y = smp(name) * 10 ** ((base + db_rel) / 20)          # samples are peak-normalised to -1 dBFS
+    m = META[name]
+    at = t - (m["peak_at"] if align == "peak" else m["dur"] if align == "end" else 0.0)
+    if at < 0: y = y[int(-at * SR):]; at = 0.0
+    put(sfx, y, at)
+WH = ["ref_whoosh1", "ref_whoosh2", "ref_whoosh3", "ref_whoosh4", "mi_whoosh"]
+for k, t in enumerate(EV.get("whoosh", [])): place(WH[k % len(WH)], t, -2, "peak")
+for k, t in enumerate(EV.get("riser", [])): place(["ref_riser", "ref_riser2"][k % 2], t + 0.05, -1, "end")
+for t in EV.get("sparkle", []): place("ref_sparkle", t, -4, "peak")
+for t in EV.get("pop", []): place("mi_pop", t, -3)
+for t in EV.get("cash", []): place("mi_cash", t, 0)
+for t in EV.get("hit", []): place("mi_ding", t, -3)
+typ = smp("mi_typing")
 for a, b in EV.get("type", []):
-    k = a
-    while k < b: put(sfx, norm(key(), base - 3), k + rng.uniform(-0.008, 0.008)); k += 0.06
+    n = min(len(typ), int((b - a) * SR)); y = typ[:n].copy(); f = int(0.05 * SR); y[-f:] *= np.linspace(1, 0, f)
+    put(sfx, y * 10 ** ((base + 4) / 20), a)
 
 mix = music + sfx
 mix = mix[: int(SR * DUR)]
-print(f"music RMS {20*np.log10(np.sqrt((music[:end]**2).mean())):.1f} dBFS, peak {20*np.log10(np.abs(mix).max()+1e-9):.1f} dBFS")
+print(f"music {'on' if EV.get('music', False) else 'off'}, SFX peak {20*np.log10(np.abs(sfx).max()+1e-9):.1f} dBFS")
 wavfile.write(OUT, SR, np.stack([mix, mix], 1).astype(np.float32))

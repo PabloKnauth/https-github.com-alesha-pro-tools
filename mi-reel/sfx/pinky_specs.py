@@ -5,6 +5,7 @@ Writes job_dir/props.json (for `remotion render PinkyAd --props`) and job_dir/ev
 Every overlay is anchored to a word of the transcript, so timings follow the real speech.
 """
 import json, re, subprocess, sys
+import cv2, numpy as np
 
 JOB, NAME = sys.argv[1], sys.argv[2]
 W = json.load(open(f"{JOB}/prep/words.json"))
@@ -30,83 +31,95 @@ def end(word, n=1, after=0.0):
     return round(next(e for s, e, *_ in W if abs(round(s, 2) - t) < 0.006), 2)
 
 URL = "tienda.vestidospinky.com"
+CAT = "pinky/catalog_vestidos.jpg"
 ov, punches, hl, em = [], [], [], []
 BROLL = []
 
-if NAME in ("v1", "v2"):   # Black Friday, presentador de rojo + B-roll (+ laptop en v1)
-    bf = at("black")
-    ov += [{"type": "big", "at": bf, "until": at("partir") - 0.05, "text": "BLACK\nFRIDAY", "size": 170, "y": 200}]
-    ov += [{"type": "badge", "at": at("20"), "until": end("compra") + 0.2, "top": "BLACK FRIDAY", "big": "20%", "small": "DE DESCUENTO", "y": 140}]
-    ov += [{"type": "price", "at": at("2000") - 0.1, "until": end("compra") + 0.25, "value": "$2,000", "label": "EN COMPRAS DESDE", "y": 1480}]
-    ov += [{"type": "catalog", "at": at("catálogo") - 0.2, "until": end("actualizado") + 0.2, "image": "pinky/catalog.jpg", "caption": "CATÁLOGO ACTUALIZADO"}]
-    ov += [{"type": "stack", "items": [[at("pijamas"), "PIJAMAS NUEVAS"]], "until": end("nuevas") + 0.6, "y": 420}]
-    ov += [{"type": "money", "at": at("revender"), "until": min(DUR, end("ganancia") + 0.5), "label": "GANANCIA", "y": 1470}]
-    punches = [[bf, 0.08], [at("20"), 0.1], [at("2000"), 0.06], [at("500"), 0.1], [at("mayoreo"), 0.07]]
-    hl = ["friday", "domingo", "descuento", "almacén", "negocio", "revender", "méxico", "pedido"]
-    em = ["500", "mayoreo"]
+def face_track(t0, t1, step=0.2):
+    """Face centre/width in the presenter clip (720x1280) every `step` s, smoothed, for the PiP framing."""
+    cas = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    cap = cv2.VideoCapture(f"public/{CLIP}")
+    pts = []
+    for t in np.arange(t0 - 0.2, t1 + 0.4, step):
+        cap.set(cv2.CAP_PROP_POS_MSEC, max(0, t) * 1000); ok, f = cap.read()
+        if not ok: continue
+        fs = cas.detectMultiScale(cv2.cvtColor(f, cv2.COLOR_BGR2GRAY), 1.1, 6, minSize=(90, 90))
+        if len(fs):
+            x, y, w, h = max(fs, key=lambda r: r[2] * r[3]); pts.append([round(float(t), 2), x + w / 2, y + h / 2, w])
+    a = np.array(pts, float)
+    for c in (1, 2, 3): a[:, c] = np.convolve(np.pad(a[:, c], 2, mode="edge"), np.ones(5) / 5, "valid")
+    return [[round(r[0], 2), round(r[1]), round(r[2]), round(r[3])] for r in a]
+
+if NAME in ("v1", "v2"):   # Black Friday, presentador de rojo, primer plano
+    ov += [{"type": "price", "at": at("2000") - 0.05, "until": end("compra") + 0.3, "value": "$2,000"}]
+    ov += [{"type": "catalog", "at": at("catálogo") - 0.15, "until": end("actualizado") + 0.25, "image": CAT}]
+    ov += [{"type": "stack", "items": [[at("pijamas"), "PIJAMAS NUEVAS"]], "until": end("nuevas") + 0.4}]
+    ov += [{"type": "money", "at": at("revender"), "until": min(DUR, end("ganancia") + 0.4)}]
+    punches = [[at("black"), 0.08], [at("20"), 0.1], [at("2000"), 0.06], [at("500"), 0.1], [at("mayoreo"), 0.07]]
+    hl = ["domingo", "descuento", "almacén", "negocio", "méxico", "pedido"]
+    em = ["black", "friday", "20", "500", "mayoreo", "revender"]
     if NAME == "v1":
-        ov += [{"type": "globe", "at": at("envíos") - 0.1, "until": end("méxico") + 0.15, "caption": "ENVÍOS A TODO MÉXICO"}]
-        ov += [{"type": "url", "at": at("haz") - 0.2, "until": DUR, "text": URL, "y": 1480}]
+        ov += [{"type": "globe", "at": at("envíos") - 0.1, "until": end("méxico") + 0.2}]
+        ov += [{"type": "url", "at": at("haz") - 0.1, "until": DUR, "text": URL}]
         punches += [[at("entra"), 0.08]]
     else:
-        ov += [{"type": "url", "at": max(end("ganancia") - 0.9, at("revender") + 0.6), "until": DUR, "text": URL, "y": 300}]
+        ov += [{"type": "url", "at": max(end("ganancia") - 0.9, at("revender") + 0.6), "until": DUR, "text": URL}]
 
-elif NAME == "v3":         # voz en off sobre B-roll del almacén: widgets grandes
-    ov += [{"type": "stack", "items": [[at("ropa"), "ROPA DE MUJER"], [at("mayoreo"), "A PRECIO DE MAYOREO"]], "until": at("pues") - 0.05, "y": 520}]
-    ov += [{"type": "money", "at": at("revenderlo"), "until": at("pues") + 0.1, "label": "GANANCIAS", "y": 1180}]
-    ov += [{"type": "big", "at": at("black") - 0.1, "until": at("tienes") - 0.05, "text": "BLACK\nFRIDAY", "size": 170, "y": 260}]
-    ov += [{"type": "badge", "at": at("20") - 0.1, "until": end("pesos") + 0.25, "top": "BLACK FRIDAY", "big": "20%", "small": "DE DESCUENTO", "y": 160}]
-    ov += [{"type": "price", "at": at("2000") - 0.15, "until": end("pesos") + 0.25, "value": "$2,000", "label": "EN COMPRAS ARRIBA DE", "y": 1200}]
-    ov += [{"type": "globe", "at": at("envíos") - 0.25, "until": end("méxico") + 0.2, "caption": "ENVÍOS A TODO MÉXICO"}]
-    ov += [{"type": "big", "at": at("500"), "until": end("diferentes") + 0.3, "text": "+500\nMODELOS", "size": 160, "y": 300}]
-    ov += [{"type": "money", "at": at("ingreso"), "until": end("extra") + 0.4, "label": "INGRESO EXTRA", "y": 1180}]
-    ov += [{"type": "catalog", "at": at("así") - 0.1, "until": end("carrito") + 0.2, "image": "pinky/catalog.jpg", "caption": "AGREGA A TU CARRITO"}]
-    ov += [{"type": "steps", "items": [[at("tarjeta"), "Tarjeta de débito"], [at("crédito"), "Crédito"], [at("efectivo"), "Pago en efectivo"]], "until": at("enviamos") + 0.2, "y": 300}]
-    ov += [{"type": "url", "at": at("enviamos") - 0.2, "until": DUR, "text": URL, "y": 1300}]
+elif NAME == "v3":         # voz en off sobre B-roll del almacén
+    ov += [{"type": "stack", "items": [[at("ropa"), "ROPA DE MUJER"], [at("mayoreo"), "A PRECIO DE MAYOREO"]], "until": min(at("pues"), at("revenderlo")) - 0.05}]
+    ov += [{"type": "money", "at": at("revenderlo"), "until": at("pues") + 0.1}]
+    ov += [{"type": "price", "at": at("2000") - 0.1, "until": end("pesos") + 0.3, "value": "$2,000"}]
+    ov += [{"type": "globe", "at": at("envíos") - 0.2, "until": end("méxico") + 0.25}]
+    ov += [{"type": "money", "at": at("ingreso"), "until": end("extra") + 0.4}]
+    ov += [{"type": "catalog", "at": at("así") - 0.1, "until": end("carrito") + 0.2, "image": CAT}]
+    ov += [{"type": "stack", "items": [[at("tarjeta"), "TARJETA DE DÉBITO"], [at("crédito"), "CRÉDITO"], [at("efectivo"), "PAGO EN EFECTIVO"]], "until": at("enviamos") + 0.1}]
+    ov += [{"type": "url", "at": at("enviamos") - 0.2, "until": DUR, "text": URL}]
     punches = [[at("black"), 0.08], [at("20"), 0.1], [at("500"), 0.1], [at("efectivo"), 0.06]]
     hl = ["negocio", "domingo", "descuento", "surtirla", "revenderla", "saldo", "surtirlo", "casa"]
-    em = ["mayoreo"]
+    em = ["black", "friday", "20", "500"]
 
 elif NAME == "v4":         # el gag del jefe + tutorial de compra en la laptop
-    ov += [{"type": "emoji", "at": at("gritado"), "until": at("bueno") - 0.05, "text": "😡", "x": 830, "y": 70}]
-    ov += [{"type": "big", "at": at("harta"), "until": at("bueno") - 0.05, "text": "¿HARTA?", "size": 170, "y": 300}]
-    ov += [{"type": "big", "at": at("sé"), "until": at("contamos") - 0.05, "text": "SÉ TU\nPROPIA JEFA", "size": 140, "y": 260}]
-    ov += [{"type": "big", "at": at("500"), "until": at("pijamas") - 0.05, "text": "+500\nMODELOS", "size": 160, "y": 260}]
-    ov += [{"type": "stack", "items": [[at("pijamas"), "PIJAMAS"], [at("vestidos"), "VESTIDOS"], [at("blusas"), "BLUSAS"]], "until": at("ahora") + 0.3, "y": 420}]
-    ov += [{"type": "stack", "items": [[at("mayoreo"), "PRECIOS DE MAYOREO"], [at("descuentos"), "DESCUENTOS"], [at("promociones"), "PROMOCIONES"]], "until": at("haz") + 0.4, "y": 360}]
-    ov += [{"type": "url", "at": at("entra") - 0.1, "until": at("sencillo") + 0.3, "text": URL, "y": 1300}]
-    ov += [{"type": "steps", "items": [[at("prenda", 1, at("oprimes") - 0.1), "Elige la prenda"], [at("talla"), "La talla"], [at("cantidad"), "La cantidad"], [at("carrito"), "Al carrito"]], "until": at("descuentos", 1, at("carrito")) + 0.6, "y": 220}]
-    ov += [{"type": "stamp", "at": at("renuncia"), "until": DUR, "text": "¡RENUNCIA!", "y": 260}]
+    ov += [{"type": "stack", "items": [[at("pijamas"), "PIJAMAS"], [at("vestidos"), "VESTIDOS"], [at("blusas"), "BLUSAS"]], "until": at("ahora") + 0.2}]
+    ov += [{"type": "stack", "items": [[at("mayoreo"), "PRECIOS DE MAYOREO"], [at("descuentos"), "DESCUENTOS"], [at("promociones"), "PROMOCIONES"]], "until": at("haz") + 0.3}]
+    ov += [{"type": "url", "at": at("entra") - 0.1, "until": at("sencillo") + 0.3, "text": URL}]
+    ov += [{"type": "stack", "items": [[at("prenda", 1, at("oprimes") - 0.1), "ELIGE LA PRENDA"], [at("talla"), "LA TALLA"], [at("cantidad"), "LA CANTIDAD"], [at("carrito"), "AL CARRITO"]], "until": at("descuentos", 1, at("carrito")) + 0.5}]
     punches = [[at("gritado"), 0.08], [at("harta"), 0.1], [at("jefa"), 0.08], [at("500"), 0.1], [at("renuncia"), 0.12]]
-    hl = ["pinky", "negocio", "boutique", "casa", "sencillo", "carrito", "compra", "empresa"]
-    em = []
+    hl = ["pinky", "negocio", "boutique", "casa", "sencillo", "compra", "empresa"]
+    em = ["harta", "jefa", "500", "renuncia"]
 
 elif NAME == "v5":         # anuncio propio armado con el stock (presentador de rojo + B-roll + laptop)
-    ov += [{"type": "stack", "items": [[at("vestidos"), "VESTIDOS"], [at("blusas"), "BLUSAS"]], "until": at("almacén") + 0.3, "y": 380}]
-    ov += [{"type": "big", "at": at("500"), "until": at("de", 1, at("tenemos", 2)) - 0.02, "text": "+500\nMODELOS", "size": 170, "y": 260}]
-    ov += [{"type": "stack", "items": [[at("blusas", 2), "BLUSAS"], [at("vestidos", 2), "VESTIDOS"], [at("suéteres"), "SUÉTERES"], [at("pijamas"), "PIJAMAS"]], "until": at("para", 2) - 0.05, "y": 620}]
-    ov += [{"type": "money", "at": at("ingreso"), "until": end("extra") + 0.1, "label": "INGRESO EXTRA", "y": 1440}]
-    ov += [{"type": "stack", "items": [[at("calidad", 2), "PRENDAS DE CALIDAD"], [at("completamente"), "COMPLETAMENTE NUEVAS"]], "until": end("nuevas") + 0.1, "y": 560}]
-    ov += [{"type": "globe", "at": at("te", 2) - 0.05, "until": end("casa") + 0.05, "caption": "TE LO ENVIAMOS A CASA"}]
-    ov += [{"type": "url", "at": at("tienda") - 0.1, "until": DUR, "text": URL, "y": 1430}]
-    BROLL = [{"src": "pinky/v5/aisles.mp4", "at": at("de", 1, at("tenemos", 2)), "until": at("para", 2) - 0.05, "from": 0, "pip": True},
-             {"src": "pinky/v5/racks.mp4", "at": at("todo"), "until": end("nuevas") + 0.05, "from": 0, "pip": False},
-             {"src": "pinky/v5/laptop.mp4", "at": at("así") - 0.02, "until": DUR, "from": 0.5, "pip": True}]
+    ov += [{"type": "stack", "items": [[at("vestidos"), "VESTIDOS"], [at("blusas"), "BLUSAS"]], "until": at("almacén") + 0.2}]
+    ov += [{"type": "stack", "items": [[at("blusas", 2), "BLUSAS"], [at("vestidos", 2), "VESTIDOS"], [at("suéteres"), "SUÉTERES"], [at("pijamas"), "PIJAMAS"]], "until": at("para", 2) - 0.05}]
+    ov += [{"type": "money", "at": at("ingreso"), "until": end("extra") + 0.1}]
+    ov += [{"type": "stack", "items": [[at("calidad", 2), "PRENDAS DE CALIDAD"], [at("completamente"), "COMPLETAMENTE NUEVAS"]], "until": end("nuevas") + 0.1}]
+    ov += [{"type": "globe", "at": at("te", 2) - 0.05, "until": end("casa") + 0.05}]
+    ov += [{"type": "url", "at": at("tienda") - 0.1, "until": DUR, "text": URL}]
+    b1 = (at("de", 1, at("tenemos", 2)), at("para", 2) - 0.05); b3 = (at("así") - 0.02, DUR)
+    BROLL = [{"src": "pinky/v5/aisles.mp4", "at": b1[0], "until": b1[1], "from": 0, "pip": face_track(*b1)},
+             {"src": "pinky/v5/racks.mp4", "at": at("todo"), "until": end("nuevas") + 0.05, "from": 0},
+             {"src": "pinky/v5/laptop.mp4", "at": b3[0], "until": b3[1], "from": 0.5, "pip": face_track(*b3)}]
     punches = [[at("ropa"), 0.06], [at("mayoreo"), 0.08], [at("500"), 0.1], [at("negocio", 2), 0.06]]
     hl = ["calidad", "almacén", "negocio", "emprender", "pedido"]
-    em = ["mayoreo"]
+    em = ["mayoreo", "500"]
 
-props = {"clip": CLIP, "duration": round(DUR, 3), "words": W, "cuts": sorted(set([round(c, 2) for c in SCENES + JUMPS])),
+FULL = [o["at"] for o in ov if o["type"] in ("globe", "catalog")]
+cuts = sorted(set(round(c, 2) for c in JUMPS))
+flashes = sorted(set([round(c, 2) for c in SCENES] + FULL + [b["at"] for b in BROLL]))
+props = {"clip": CLIP, "duration": round(DUR, 3), "words": W, "cuts": cuts, "flashes": flashes,
          "punches": punches, "highlight": hl, "emph": em, "overlays": ov, "broll": BROLL,
-         "captionY": {"v1": 1310, "v2": 1310, "v5": 1310}.get(NAME, 980)}  # primer plano en v1/v2: subtítulos al pecho
+         "captionY": {"v1": 1200, "v2": 1200, "v5": 1200}.get(NAME, 1000)}  # primer plano en v1/v2/v5: subtítulos al pecho
 json.dump(props, open(f"{JOB}/props.json", "w"), ensure_ascii=False)
 
-# SFX: whoosh on cuts and on full-screen/big overlays, pop on stacked items, cash on prices, hit on badges/stamps
-whoosh = sorted(set(props["cuts"] + [o["at"] for o in ov if o["type"] in ("globe", "catalog", "big", "money")] + [b["at"] for b in BROLL]))
-pops = [i[0] for o in ov if o["type"] in ("stack", "steps") for i in o["items"]] + [o["at"] for o in ov if o["type"] == "emoji"]
-events = {"duration": round(DUR, 3), "whoosh": whoosh, "pop": pops,
-          "cash": [o["at"] + 0.1 for o in ov if o["type"] in ("price", "money")],
-          "hit": [o["at"] for o in ov if o["type"] in ("badge", "stamp")],
-          "type": [[o["at"] + 0.15, o["at"] + 1.2] for o in ov if o["type"] == "url"], "music_db": -43, "sfx_db": -20}  # música ~12 dB bajo la voz con --sfx-db 0
+# SFX (pinky_lib): whoosh on every cut and b-roll change, riser into the globe/catalog, sparkle on the first
+# frame and on big yellow words, pop on each list bar, ka-ching on prices/money, typing on the URL. No music.
+emw = {bare(x) for x in em}
+em_t = [w[0] for w in W if bare(w[2]) in emw]
+whoosh = sorted(set(cuts + flashes + [o["at"] for o in ov if o["type"] == "money"]) - set(FULL))
+events = {"duration": round(DUR, 3), "whoosh": whoosh, "riser": FULL,
+          "sparkle": [0.05] + em_t[:: 2],
+          "pop": [i[0] for o in ov if o["type"] == "stack" for i in o["items"]],
+          "cash": [o["at"] + 0.05 for o in ov if o["type"] in ("price", "money")],
+          "type": [[o["at"] + 0.15, o["at"] + 1.2] for o in ov if o["type"] == "url"],
+          "music": False, "sfx_db": -20}
 json.dump(events, open(f"{JOB}/events.json", "w"))
-print(f"{NAME}: {DUR:.1f}s, {len(ov)} gráficos, {len(props['cuts'])} cortes, {len(punches)} acercamientos")
+print(f"{NAME}: {DUR:.1f}s, {len(ov)} gráficos, {len(cuts)} cortes, {len(flashes)} transiciones")

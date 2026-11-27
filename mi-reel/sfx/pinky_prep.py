@@ -71,8 +71,11 @@ for s, e in regions[:-1]:
 
 trc = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=color_transfer",
                       "-of", "csv=p=0", args.src], capture_output=True, text=True).stdout.strip()
-tone = ("zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,"
-        "zscale=t=bt709:m=bt709:r=tv,format=yuv420p,") if trc in ("arib-std-b67", "smpte2084") else ""
+# iPhone HLG -> SDR with a 3D LUT fitted on identical frames of the client's own SDR exports (mean error 2/255),
+# so the picture keeps the lighting the client sees on the phone (a generic tonemap looked flat and grey).
+LUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "luts", "iphone_hlg2sdr.cube")
+tone = (f"scale=in_color_matrix=bt2020:in_range=tv:out_range=pc,format=gbrp16le,lut3d={LUT},"
+        "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p,") if trc in ("arib-std-b67", "smpte2084") else ""
 parts, labels = [], []
 for k, (s, e) in enumerate(regions):
     d = e - s

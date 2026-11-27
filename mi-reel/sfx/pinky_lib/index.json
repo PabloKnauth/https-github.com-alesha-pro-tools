@@ -1,0 +1,80 @@
+{
+ "ref_riser": {
+  "dur": 1.347,
+  "peak_at": 0.622,
+  "rms_db": -14.4,
+  "uso": "subida antes de un corte grande (de la referencia ad_2)"
+ },
+ "ref_riser2": {
+  "dur": 0.998,
+  "peak_at": 0.473,
+  "rms_db": -12.9,
+  "uso": "subida (ad_4)"
+ },
+ "ref_whoosh1": {
+  "dur": 0.697,
+  "peak_at": 0.172,
+  "rms_db": -13.0,
+  "uso": "whoosh de corte (ad_1)"
+ },
+ "ref_whoosh2": {
+  "dur": 0.604,
+  "peak_at": 0.184,
+  "rms_db": -14.2,
+  "uso": "whoosh de corte (ad_2)"
+ },
+ "ref_whoosh3": {
+  "dur": 0.534,
+  "peak_at": 0.152,
+  "rms_db": -12.8,
+  "uso": "whoosh de corte (ad_4)"
+ },
+ "ref_whoosh4": {
+  "dur": 0.662,
+  "peak_at": 0.17,
+  "rms_db": -15.6,
+  "uso": "whoosh de corte (ad_1)"
+ },
+ "ref_sparkle": {
+  "dur": 0.557,
+  "peak_at": 0.369,
+  "rms_db": -14.4,
+  "uso": "destello de inicio (ad_4)"
+ },
+ "ref_typing": {
+  "dur": 0.383,
+  "peak_at": 0.243,
+  "rms_db": -21.5,
+  "uso": "tecleo de la URL (ad_2)"
+ },
+ "mi_whoosh": {
+  "dur": 0.439,
+  "peak_at": 0.062,
+  "rms_db": -17.2,
+  "uso": "whoosh limpio (myinstants)"
+ },
+ "mi_pop": {
+  "dur": 0.243,
+  "peak_at": 0.043,
+  "rms_db": -16.2,
+  "uso": "pop de barras/listas (myinstants)"
+ },
+ "mi_cash": {
+  "dur": 2.262,
+  "peak_at": 0.068,
+  "rms_db": -22.2,
+  "uso": "caja registradora para precios/dinero (myinstants)"
+ },
+ "mi_ding": {
+  "dur": 1.136,
+  "peak_at": 0.061,
+  "rms_db": -16.4,
+  "uso": "ding de aparición (myinstants)"
+ },
+ "mi_typing": {
+  "dur": 2.995,
+  "peak_at": 0.551,
+  "rms_db": -30.5,
+  "uso": "tecleo continuo (myinstants)"
+ }
+}
