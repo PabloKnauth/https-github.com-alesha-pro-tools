@@ -102,6 +102,26 @@ elif NAME == "v5":         # anuncio propio armado con el stock (presentador de 
     hl = ["calidad", "almacén", "negocio", "emprender", "pedido"]
     em = ["mayoreo", "500"]
 
+elif NAME == "v6":         # "¿Qué compras con $1,000?": dos tomas POV unidas, conteo de 12 prendas con su equivalente en la tienda
+    PROD = json.load(open("public/pinky/v6/prod/index.json"))
+    # momento en que cada prenda aparece en cuadro (revisado a mano sobre el video), en orden de PROD
+    T12 = [5.0, 6.8, 8.2, 9.8, 11.1, 14.6, 20.5, 23.4, 28.6, 31.0, 35.7, 39.1]
+    for k, (t0, pr) in enumerate(zip(T12, PROD)):
+        t1 = T12[k + 1] - 0.02 if k + 1 < len(T12) else t0 + 2.2
+        ov += [{"type": "count", "at": t0, "until": round(min(t1, t0 + 3.2), 2), "n": k + 1, "total": 12,
+                "image": f"pinky/v6/prod/{pr['handle']}.jpg", "label": f"MOD. {pr['mod'].upper()}"}]
+    ov += [{"type": "price", "at": at("mil") - 0.05, "until": end("pinky") + 0.3, "value": "$1,000"}]
+    ov += [{"type": "stack", "items": [[at("hombre"), "HOMBRE"], [at("mujer"), "MUJER"], [at("niña"), "NIÑA"]], "until": at("además") - 0.05}]
+    ov += [{"type": "price", "at": at("1000") - 0.05, "until": at("12") - 0.05, "value": "$1,000"}]
+    ov += [{"type": "countgrid", "at": at("12"), "until": at("para", 1, at("precio", 2)) - 0.05, "images": [f"pinky/v6/prod/{pr['handle']}.jpg" for pr in PROD]}]
+    ov += [{"type": "money", "at": at("obtener"), "until": end("negocio", 1, at("ganancia")) + 0.2}]
+    ov += [{"type": "catalog", "at": at("tienda", 1, at("entra")) - 0.15, "until": at("para", 1, at("variedad")) - 0.05, "image": CAT}]
+    ov += [{"type": "url", "at": at("para", 1, at("variedad")), "until": DUR, "text": URL}]
+    ov += [{"type": "globe", "at": at("enviamos") - 0.25, "until": DUR}]
+    punches = [[at("mil"), 0.08], [at("500"), 0.1], [at("12"), 0.1]]
+    hl = ["pinky", "precio", "corta", "rosa", "café", "abierto", "terminado", "elegir", "negocio", "variedad", "pedido", "casa"]
+    em = ["500", "12"]
+
 # ---------- cara del presentador en todo el clip (para colocar subtítulos e íconos sin taparla) ----------
 def faces_all(step=0.2):
     cas = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
@@ -123,7 +143,7 @@ def faces_all(step=0.2):
                 and abs(b[2] - a[2]) < 0.35 * a[3] and 0.7 < b[3] / a[3] < 1.4)
         return n >= 2
     return [a for a in out if ok(a)]
-FACES = [] if NAME == "v3" else faces_all()   # v3: voz en off sin presentador (la ropa daba falsos positivos)
+FACES = [] if NAME in ("v3", "v6") else faces_all()   # v3: voz en off sin presentador (la ropa daba falsos positivos)
 
 # ---------- íconos que apoyan lo que se dice (Fluent Emoji 3D + imágenes de dinero del cliente) ----------
 ICONS = {  # el cliente pidió quitar todos los stickers salvo los de dinero
@@ -131,7 +151,7 @@ ICONS = {  # el cliente pidió quitar todos los stickers salvo los de dinero
 }
 import unicodedata
 def plain(w): return "".join(c for c in unicodedata.normalize("NFD", bare(w)) if unicodedata.category(c) != "Mn")
-busy = [(o["at"], o["until"]) for o in ov if o["type"] in ("globe", "catalog", "money")] + [(b["at"], b["until"]) for b in BROLL if not b.get("pip")]
+busy = [(o["at"], o["until"]) for o in ov if o["type"] in ("globe", "catalog", "money", "countgrid")] + [(b["at"], b["until"]) for b in BROLL if not b.get("pip")]
 last, used = -9.0, {}
 for s0, e0, w, *_ in W:
     ic = ICONS.get(plain(w))
@@ -175,6 +195,7 @@ for o in [o for o in ov if o["type"] == "icon"]:
 FULL = [o["at"] for o in ov if o["type"] in ("globe", "catalog")]
 cuts = sorted(set(round(c, 2) for c in JUMPS))
 flashes = sorted(set([round(c, 2) for c in SCENES] + FULL + [b["at"] for b in BROLL]))
+if NAME == "v6": flashes = sorted(set(JUMPS + FULL))   # tomas POV con paneos rápidos: destello solo en la unión y en globo/catálogo
 props = {"clip": CLIP, "duration": round(DUR, 3), "words": W, "cuts": cuts, "flashes": flashes,
          "punches": punches, "highlight": hl, "emph": em, "overlays": ov, "broll": BROLL, "faces": FACES,
          "captionY": {"v1": 1200, "v2": 1200, "v5": 1200}.get(NAME, 1000)}  # primer plano en v1/v2/v5: subtítulos al pecho
@@ -187,7 +208,8 @@ em_t = [w[0] for w in W if bare(w[2]) in emw]
 whoosh = sorted(set(cuts + flashes + [o["at"] for o in ov if o["type"] == "money"]) - set(FULL))
 events = {"duration": round(DUR, 3), "whoosh": whoosh, "riser": FULL,
           "sparkle": [0.05] + em_t[:: 2],
-          "pop": [i[0] for o in ov if o["type"] == "stack" for i in o["items"]],
+          "pop": [i[0] for o in ov if o["type"] == "stack" for i in o["items"]] + [o["at"] for o in ov if o["type"] == "count"]
+                 + [o["at"] + 0.06 * k for o in ov if o["type"] == "countgrid" for k in range(0, len(o["images"]), 3)],
           "cash": [o["at"] + 0.05 for o in ov if o["type"] in ("price", "money", "icon")],
           "type": [[o["at"] + 0.15, o["at"] + 1.2] for o in ov if o["type"] == "url"],
           "music": False, "sfx_db": -20}

@@ -22,11 +22,13 @@ os.makedirs(args.out, exist_ok=True)
 
 # Whisper mis-hearings seen in this client's clips (word-level, punctuation kept)
 FIX = {"piyamas": "pijamas", "pillamas": "pijamas", "resortir": "resurtir", "comprendas": "prendas",
-       "podamos": "podemos", "conocer": "conocer", "entranos": "Entra", "asortir": "surtir"}
+       "podamos": "podemos", "conocer": "conocer", "entranos": "Entra", "asortir": "surtir",
+       "héteres": "suéteres", "heteres": "suéteres"}
 PHRASES = [  # (sequence to find, replacement) on lower-cased bare words
     (["resurtir", "de", "tu"], ["resurtir", "tu"]),
     (["pesos", "se", "compra"], ["pesos", "de", "compra"]),
     (["entra", "a", "tienda"], ["Entra", "a", "nuestra", "tienda"]),
+    (["tienda", "línea"], ["tienda", "en", "línea"]),
 ]
 
 def bare(w): return re.sub(r"[^\wáéíóúñü]", "", w.lower())

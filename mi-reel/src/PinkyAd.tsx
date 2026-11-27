@@ -38,7 +38,9 @@ export type Overlay =
   | { type: "url"; at: number; until: number; text: string }
   | { type: "globe"; at: number; until: number }
   | { type: "catalog"; at: number; until: number; image: string }
-  | { type: "icon"; at: number; until: number; src: string; x?: number; y?: number };
+  | { type: "icon"; at: number; until: number; src: string; x?: number; y?: number }
+  | { type: "count"; at: number; until: number; n: number; total: number; image: string; label: string }
+  | { type: "countgrid"; at: number; until: number; images: string[] };
 export type PipTrack = [number, number, number, number][]; // [t, cx, cy, faceW] in clip pixels (720x1280)
 export type Broll = { src: string; at: number; until: number; from?: number; pip?: PipTrack };
 export type PinkyProps = {
@@ -69,7 +71,7 @@ const sp = (frame: number, fps: number, at: number, damping = 12) =>
   spring({ frame: frame - at * fps, fps, config: { damping, stiffness: 170, mass: 0.6 } });
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 const bare = (w: string) => w.toLowerCase().replace(/[^\wáéíóúñü%$]/g, "");
-const fmt = (w: string) => w.replace(/^2000([.,]?)$/, "$$2,000$1").replace(/^(\d+)\s?%$/, "$1%");
+const fmt = (w: string) => w.replace(/^2000([.,]?)$/, "$$2,000$1").replace(/^1000([.,]?)$/, "$$1,000$1").replace(/^(\d+)\s?%$/, "$1%");
 const life = (t: number, at: number, until: number) => interpolate(t, [until - 0.12, until], [1, 0], clamp) * (t >= at ? 1 : 0);
 const wipe = (t: number, at: number, d = 0.2) => interpolate(t, [at, at + d], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
 const SHADOW = "0 3px 6px rgba(0,0,0,0.55), 0 0 2px rgba(0,0,0,0.5)";
@@ -155,8 +157,12 @@ const Captions: React.FC<{ p: PinkyProps; y: number }> = ({ p, y }) => {
   const bar = wipe(t, W[a][0], 0.22);
   if (isEm) {
     // línea pequeña blanca + palabra fuerte grande amarilla con brillo (debajo), como "PARA / REVENDER"
-    const small = ws.filter(([, , w]) => !em.has(bare(w)));
-    const big = ws.filter(([, , w]) => em.has(bare(w)));
+    // orden de las referencias: palabras antes (arriba, chicas) / palabra fuerte (grande) / palabras después (abajo, chicas)
+    const iBig = ws.findIndex(([, , w]) => em.has(bare(w)));
+    const iLast = ws.length - 1 - [...ws].reverse().findIndex(([, , w]) => em.has(bare(w)));
+    const small = ws.slice(0, iBig);
+    const big = ws.slice(iBig, iLast + 1);
+    const after = ws.slice(iLast + 1);
     return (
       <div style={{ position: "absolute", top: y - 60, left: 0, right: 0, display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ display: "flex", gap: 14, minHeight: 50 }}>
@@ -169,6 +175,11 @@ const Captions: React.FC<{ p: PinkyProps; y: number }> = ({ p, y }) => {
               textShadow: "0 0 14px rgba(255,232,26,0.95), 0 0 34px rgba(255,214,0,0.6), 0 4px 8px rgba(0,0,0,0.5)" }}>{fmt(w)}</Reveal>;
           })}
         </div>
+        {after.length > 0 && (
+          <div style={{ display: "flex", gap: 14, marginTop: -6 }}>
+            {after.map(([s, , w], k) => <Reveal key={k} t={t} at={s} style={{ ...txt(50), textShadow: SHADOW }}>{fmt(w)}</Reveal>)}
+          </div>
+        )}
       </div>
     );
   }
@@ -429,6 +440,55 @@ const Pip: React.FC<{ clip: string; b: Broll }> = ({ clip, b }) => {
   );
 };
 
+// ---------- conteo de prendas: número grande "N/12" + la prenda equivalente de la tienda ----------
+const Count: React.FC<{ o: Extract<Overlay, { type: "count" }> }> = ({ o }) => {
+  const { t, frame, fps } = useT();
+  if (t < o.at || t >= o.until) return null;
+  const q = spring({ frame: frame - o.at * fps, fps, config: { damping: 10, stiffness: 200, mass: 0.6 } });
+  const out = interpolate(t, [o.until - 0.15, o.until], [1, 0], clamp);
+  const bar = wipe(t, o.at + 0.12, 0.2);
+  return (
+    <>
+      <div style={{ position: "absolute", left: 60, top: 190, display: "flex", alignItems: "baseline", opacity: out, transform: `scale(${0.6 + 0.4 * q})`, transformOrigin: "left top" }}>
+        <span style={{ ...txt(220, YG), letterSpacing: -10, textShadow: "0 0 18px rgba(255,232,26,0.95), 0 0 44px rgba(255,214,0,0.6), 0 6px 10px rgba(0,0,0,0.5)" }}>{o.n}</span>
+        <span style={{ ...txt(76), marginLeft: 6, textShadow: SHADOW }}>/{o.total}</span>
+      </div>
+      <div style={{ position: "absolute", left: 66, top: 420, opacity: out * Math.min(1, q * 1.5) }}>
+        <span style={{ ...txt(44), textShadow: SHADOW }}>PRENDAS</span>
+      </div>
+      <div style={{ position: "absolute", right: 56, top: 170, width: 410, opacity: out, transform: `translateX(${(1 - q) * 160}px) scale(${0.8 + 0.2 * q})`, transformOrigin: "right top" }}>
+        <div style={{ width: 410, height: 540, borderRadius: 26, overflow: "hidden", background: "#eee", border: "5px solid white", boxShadow: "0 16px 36px rgba(0,0,0,0.45)" }}>
+          <Img src={staticFile(o.image)} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 20%" }} />
+        </div>
+        <div style={{ position: "relative", marginTop: 12, height: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ position: "absolute", inset: 0, background: Y, clipPath: `inset(0 ${(1 - bar) * 100}% 0 0)` }} />
+          <span style={{ ...txt(44), position: "relative", textShadow: SHADOW, opacity: bar }}>{o.label}</span>
+        </div>
+      </div>
+    </>
+  );
+};
+const CountGrid: React.FC<{ o: Extract<Overlay, { type: "countgrid" }> }> = ({ o }) => {
+  const { t, frame, fps } = useT();
+  if (t < o.at || t >= o.until) return null;
+  const out = interpolate(t, [o.until - 0.15, o.until], [1, 0], clamp);
+  const cw = 196, ch = 250, gap = 12, cols = 4, x0 = (1080 - (cols * cw + (cols - 1) * gap)) / 2, y0 = 100;   // termina antes del subtítulo
+  return (
+    <div style={{ position: "absolute", inset: 0, opacity: out }}>
+      {o.images.map((im, i) => {
+        const q = spring({ frame: frame - (o.at + i * 0.06) * fps, fps, config: { damping: 11, stiffness: 220, mass: 0.5 } });
+        if (q <= 0.001) return null;
+        return (
+          <div key={i} style={{ position: "absolute", left: x0 + (i % cols) * (cw + gap), top: y0 + Math.floor(i / cols) * (ch + gap), width: cw, height: ch, borderRadius: 18, overflow: "hidden",
+            border: "4px solid white", boxShadow: "0 10px 24px rgba(0,0,0,0.45)", background: "#eee", transform: `scale(${q}) rotate(${(i % 2 ? 2 : -2) * (1 - q)}deg)` }}>
+            <Img src={staticFile(im)} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 20%" }} />
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 // ---------- colocación según la cara: el subtítulo (y su widget) nunca tapa la cara ----------
 type Box = { top: number; bottom: number; left: number; right: number; cx: number; cy: number; w: number };
 const presenterVisible = (p: PinkyProps, t: number) =>
@@ -532,6 +592,8 @@ export const PinkyAd: React.FC<PinkyProps> = (p) => {
           case "money": return <Money key={i} o={o} y={wy[widgets.indexOf(o)]} />;
           case "url": return <Url key={i} o={o} y={wy[widgets.indexOf(o)]} />;
           case "icon": return <Icon key={i} o={o} p={p} k={i} avoid={avoid} />;
+          case "count": return <Count key={i} o={o} />;
+          case "countgrid": return <CountGrid key={i} o={o} />;
           default: return null;
         }
       })}
