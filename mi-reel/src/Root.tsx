@@ -7,6 +7,7 @@ import { PabloKnauth } from "./PabloKnauth";
 import { BodegaRenta } from "./BodegaRenta";
 import { BodegaChica } from "./BodegaChica";
 import { MotoRokaCalidad } from "./MotoRokaCalidad";
+import { calcPinky, PinkyAd, PinkyProps } from "./PinkyAd";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -67,6 +68,16 @@ export const RemotionRoot: React.FC = () => {
         fps={30}
         width={1080}
         height={1920}
+      />
+      <Composition
+        id="PinkyAd"
+        component={PinkyAd}
+        calculateMetadata={calcPinky}
+        durationInFrames={300}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{ clip: "pinky/v2/clip.mp4", duration: 10, words: [] } as PinkyProps}
       />
     </>
   );
