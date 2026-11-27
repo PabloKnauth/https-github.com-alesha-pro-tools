@@ -29,6 +29,31 @@ Estilo definido por el usuario con dos imágenes de referencia; respetalo en tod
 - Whisper oye "Knauth" como "Klauth" y "Claude" como "Klauth"/"cloud"; "prompts, skills y guías" sale mal.
   Pasá esos términos en `initial_prompt` y confirmá con el usuario las frases dudosas.
 
+### Vestidos Pinky (cliente: anuncios de ropa de mujer a mayoreo)
+
+Estilo tomado de 3 anuncios de referencia del usuario (ad_1, ad_2, ad_4; 18–25 s, 1080×1920):
+- **Guion**: gancho con categorías/"¿buscas ropa de mujer a precio saldo?" → +500 modelos → "desde menos de
+  $100" → para surtir/revender/iniciar tu negocio → envío a todo México → CTA "conoce el catálogo / compra
+  ahora" con la URL `https://tienda.vestidospinky.com`. Ritmo rápido: un corte cada 1–2,5 s.
+- **Subtítulos**: palabra por palabra, MAYÚSCULAS, sans geométrica muy negrita (tipo Montserrat/Poppins
+  Black), blanco con sombra; frases clave sobre **barra amarilla `#f6dc3c`** que se barre de izquierda a
+  derecha; las listas (VESTIDOS / BLUSAS / SUÉTERES / PLAYERAS) se apilan en barras amarillas; a la altura
+  del pecho. Palabras fuertes (MAYOREO, TU NEGOCIO, 500) en amarillo grande con brillo.
+- **Gráficos**: degradado negro en el 30 % inferior; precio en píldora verde neón con flecha verde
+  dibujada ("$100"); billetes con flecha de subida; zoom del globo a México con bandera ("enviamos a todo
+  México"); catálogo/web en pantalla curva 3D desplazándose; presentador en círculo (PiP) sobre B-roll
+  de fábrica; URL tecleándose dentro de barra amarilla; destellos blancos y zoom en cortes.
+- **Audio**: música de fondo enérgica constante (~154/77 BPM) unos 12 dB bajo la voz, *whoosh* en casi
+  cada corte, máster ≈ −14 LUFS.
+- **Datos reales de la tienda** (tienda.vestidospinky.com): ropa al mayoreo a precio de saldo, envíos a
+  todo México, vestidos/blusas/partes bajas/conjuntos/niña/pijamas, remates y lotes surtidos, mezcla tallas y
+  colores, pago con tarjeta/transferencia/OXXO, precios de mayoreo solo para clientes registrados (precios
+  vistos $53–$145 c/u). Tipografía web: Jost. WhatsApp wa.me/525539384621, IG @vestidospinkymx,
+  FB VestidosPinkyMX. No inventes precios ni cifras: usa solo lo que dice el video o la tienda.
+- **Clips de stock** (Drive del cliente): iPhone **HDR HLG** → convertir a SDR (`person_cutout.py` ya lo
+  hace; para clips sin recorte usar el mismo `zscale…tonemap=hable` a 100 nits). El presentador viste
+  polo roja en el stock y negra en las referencias.
+
 Al transcribir, pasá estos nombres en `initial_prompt` de faster-whisper. Si una palabra clave sale
 con probabilidad baja, preguntale al usuario en vez de adivinar.
 
