@@ -1,0 +1,2 @@
+- `*.webp`: Microsoft Fluent Emoji 3D (MIT), via npm `@lobehub/fluent-emoji-3d@1.1.0`.
+- `money_bills.png`, `money_bag.png`: imágenes que entregó el usuario (recortadas del fondo).

@@ -102,11 +102,92 @@ elif NAME == "v5":         # anuncio propio armado con el stock (presentador de 
     hl = ["calidad", "almacén", "negocio", "emprender", "pedido"]
     em = ["mayoreo", "500"]
 
+# ---------- cara del presentador en todo el clip (para colocar subtítulos e íconos sin taparla) ----------
+def faces_all(step=0.2):
+    cas = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    prof = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_profileface.xml")
+    cap = cv2.VideoCapture(f"public/{CLIP}"); out = []
+    for t in np.arange(0, DUR, step):
+        cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000); ok, f = cap.read()
+        if not ok: continue
+        g = cv2.cvtColor(f, cv2.COLOR_BGR2GRAY)
+        fs = [r for r in cas.detectMultiScale(g, 1.1, 7, minSize=(55, 55))]
+        if not fs:   # de perfil (mirando la laptop): detector de perfil en ambas direcciones
+            fs = [r for r in prof.detectMultiScale(g, 1.1, 6, minSize=(55, 55))]
+            fs += [(g.shape[1] - x - w, y, w, h) for x, y, w, h in prof.detectMultiScale(cv2.flip(g, 1), 1.1, 6, minSize=(55, 55))]
+        if fs:
+            x, y, w, h = max(fs, key=lambda r: r[2] * r[3]); out.append([round(float(t), 2), int(x + w / 2), int(y + h / 2), int(w)])
+    # una cara real persiste: exige 2 vecinos en ±0,45 s con centro y tamaño parecidos (quita falsos positivos en la ropa)
+    def ok(a):
+        n = sum(1 for b in out if b is not a and abs(b[0] - a[0]) <= 0.45 and abs(b[1] - a[1]) < 0.35 * a[3]
+                and abs(b[2] - a[2]) < 0.35 * a[3] and 0.7 < b[3] / a[3] < 1.4)
+        return n >= 2
+    return [a for a in out if ok(a)]
+FACES = [] if NAME == "v3" else faces_all()   # v3: voz en off sin presentador (la ropa daba falsos positivos)
+
+# ---------- íconos que apoyan lo que se dice (Fluent Emoji 3D + imágenes de dinero del cliente) ----------
+ICONS = {  # palabra (sin acentos ni signos) -> ícono
+    "vestido": "vestido", "vestidos": "vestido", "prenda": "vestido", "prendas": "vestido", "ropa": "blusa",
+    "blusa": "blusa", "blusas": "blusa", "sueter": "sueter", "sueteres": "sueter", "pijama": "pijama", "pijamas": "pijama",
+    "envio": "camion", "envios": "camion", "enviamos": "camion", "enviar": "camion", "envia": "camion", "llegan": "caja",
+    "casa": "casa", "puerta": "casa", "tarjeta": "tarjeta", "credito": "tarjeta", "debito": "tarjeta", "efectivo": "billete_alas",
+    "carrito": "carrito", "linea": "laptop", "pagina": "laptop", "calidad": "estrella", "nuevas": "nuevo", "nuevos": "nuevo",
+    "descuento": "etiqueta", "descuentos": "etiqueta", "promociones": "fuego", "friday": "fuego", "domingo": "calendario",
+    "almacen": "almacen", "negocio": "tienda", "boutique": "tienda", "emprender": "maletin", "empresa": "maletin",
+    "jefa": "corona", "jefe": "enojado", "gritado": "enojado", "harta": "resoplido", "ganancia": "money_bag",
+    "ganancias": "money_bag", "ingreso": "money_bag", "revender": "grafica", "revenderla": "grafica", "revenderlo": "grafica",
+    "modelos": "bolsas", "mayoreo": "caja", "pedido": "caja", "compra": "bolsas", "comprar": "bolsas", "saldo": "etiqueta",
+    "renuncia": "fiesta", "sencillo": "check", "facil": "check", "talla": "blusa", "cantidad": "caja", "mexico": "mexico",
+    "catalogo": "celular", "pinky": "bolso", "pesos": "money_bag",
+}
+import unicodedata
+def plain(w): return "".join(c for c in unicodedata.normalize("NFD", bare(w)) if unicodedata.category(c) != "Mn")
+busy = [(o["at"], o["until"]) for o in ov if o["type"] in ("globe", "catalog", "money")] + [(b["at"], b["until"]) for b in BROLL if not b.get("pip")]
+last, used = -9.0, {}
+for s0, e0, w, *_ in W:
+    ic = ICONS.get(plain(w))
+    if not ic or s0 - last < 1.3 or any(a - 0.2 <= s0 < b + 0.1 for a, b in busy) or used.get(ic, -9) > s0 - 6: continue
+    src = f"pinky/icons/{ic}.png" if ic.startswith("money_") else f"pinky/icons/{ic}.webp"
+    ov.append({"type": "icon", "at": round(s0 - 0.05, 2), "until": round(min(DUR, s0 + 1.5), 2), "src": src})
+    last, used[ic] = s0, s0
+
+# ---------- lugar de cada ícono: donde menos tape a la persona (máscara u2net_human_seg) ----------
+import os, onnxruntime as ort
+U2NET = os.environ.get("U2NET", "/tmp/claude-0/-home-user-https-github-com-alesha-pro-tools/0949fc31-48f8-5558-be33-abcffc0b4ee5/scratchpad/seg/dl/u2net_human_seg.onnx")
+SESS = ort.InferenceSession(U2NET, providers=["CPUExecutionProvider"]); INP = SESS.get_inputs()[0].name
+def person_mask(t, src=None, t_src=None):
+    cap = cv2.VideoCapture(f"public/{src or CLIP}"); cap.set(cv2.CAP_PROP_POS_MSEC, (t if t_src is None else t_src) * 1000)
+    ok, f = cap.read()
+    if not ok: return np.zeros((1920, 1080), np.float32)
+    rgb = cv2.cvtColor(f, cv2.COLOR_BGR2RGB).astype(np.float32)
+    x = cv2.resize(rgb, (320, 320), interpolation=cv2.INTER_AREA) / max(rgb.max(), 1)
+    x = (x - [0.485, 0.456, 0.406]) / [0.229, 0.224, 0.225]
+    m = SESS.run(None, {INP: x.transpose(2, 0, 1)[None].astype(np.float32)})[0][0, 0]
+    m = (m - m.min()) / (m.max() - m.min() + 1e-8)
+    return cv2.resize(m, (1080, 1920)) if m.max() > 0.5 else np.zeros((1920, 1080), np.float32)
+S_IC, CY = 270, {"v1": 1200, "v2": 1200, "v5": 1200}.get(NAME, 1000)
+for o in [o for o in ov if o["type"] == "icon"]:
+    br = next((b for b in BROLL if b["at"] <= o["at"] < b["until"]), None)
+    ms = [person_mask(t) if not br else person_mask(t, br["src"], t - br["at"] + br.get("from", 0)) for t in (o["at"] + 0.1, (o["at"] + o["until"]) / 2, o["until"] - 0.1)]
+    M = np.maximum.reduce(ms)
+    rows = np.where(M.max(1) > 0.5)[0]; head = rows[0] if len(rows) else 2000
+    best = None
+    for x in (40, 405, 770):
+        for y in (140, 380, 620, 860, 1100, 1340):
+            sc = float(M[y:y + S_IC, x:x + S_IC].mean())
+            if head - 240 < y + S_IC and y < head and len(rows): sc += 0.35   # franja sobre la cabeza: ahí puede ir el subtítulo
+            if CY - 130 < y + S_IC and y < CY + 170: sc += 0.5                # subtítulo en el pecho
+            if br and br.get("pip") and x + S_IC > 545 and y < 695 and y + S_IC > 265: sc += 1.0
+            if y + S_IC > 1550: sc += 0.3
+            sc += 0.00008 * abs(y - 500)
+            if best is None or sc < best[0]: best = (sc, x, y)
+    o["x"], o["y"] = best[1], best[2]
+
 FULL = [o["at"] for o in ov if o["type"] in ("globe", "catalog")]
 cuts = sorted(set(round(c, 2) for c in JUMPS))
 flashes = sorted(set([round(c, 2) for c in SCENES] + FULL + [b["at"] for b in BROLL]))
 props = {"clip": CLIP, "duration": round(DUR, 3), "words": W, "cuts": cuts, "flashes": flashes,
-         "punches": punches, "highlight": hl, "emph": em, "overlays": ov, "broll": BROLL,
+         "punches": punches, "highlight": hl, "emph": em, "overlays": ov, "broll": BROLL, "faces": FACES,
          "captionY": {"v1": 1200, "v2": 1200, "v5": 1200}.get(NAME, 1000)}  # primer plano en v1/v2/v5: subtítulos al pecho
 json.dump(props, open(f"{JOB}/props.json", "w"), ensure_ascii=False)
 
@@ -117,9 +198,9 @@ em_t = [w[0] for w in W if bare(w[2]) in emw]
 whoosh = sorted(set(cuts + flashes + [o["at"] for o in ov if o["type"] == "money"]) - set(FULL))
 events = {"duration": round(DUR, 3), "whoosh": whoosh, "riser": FULL,
           "sparkle": [0.05] + em_t[:: 2],
-          "pop": [i[0] for o in ov if o["type"] == "stack" for i in o["items"]],
+          "pop": [i[0] for o in ov if o["type"] == "stack" for i in o["items"]] + [o["at"] + 0.05 for o in ov if o["type"] == "icon"],
           "cash": [o["at"] + 0.05 for o in ov if o["type"] in ("price", "money")],
           "type": [[o["at"] + 0.15, o["at"] + 1.2] for o in ov if o["type"] == "url"],
           "music": False, "sfx_db": -20}
 json.dump(events, open(f"{JOB}/events.json", "w"))
-print(f"{NAME}: {DUR:.1f}s, {len(ov)} gráficos, {len(cuts)} cortes, {len(flashes)} transiciones")
+print(f"{NAME}: {DUR:.1f}s, {len(ov)} gráficos ({sum(o['type'] == 'icon' for o in ov)} íconos), {len(FACES)} caras, {len(cuts)} cortes, {len(flashes)} transiciones")

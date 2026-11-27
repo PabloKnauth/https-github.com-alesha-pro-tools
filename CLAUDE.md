@@ -49,6 +49,10 @@ Estilo tomado de 3 anuncios de referencia del usuario (ad_1, ad_2, ad_4; 18–25
 - **Plantilla**: `mi-reel/src/PinkyAd.tsx` + `sfx/pinky_specs.py` (widgets medidos sobre las referencias:
   píldora gris translúcida con precio verde neón, recuadro de vidrio con billetes, globo satelital Natural
   Earth II con bandera recortada a México, catálogo de la tienda en página curva, PiP que sigue la cara).
+  **Los subtítulos nunca tapan la cara**: se detecta la cara (Haar frontal + perfil) y, si el bloque del
+  subtítulo/widget la tocaría, sube arriba de la cabeza. **Íconos 3D tipo sticker** (Fluent Emoji, MIT) apoyan
+  palabras clave; se colocan donde menos tapan a la persona (máscara u2net). Dinero: imágenes del cliente
+  (`public/pinky/icons/money_bills.png`, `money_bag.png`).
 - **Datos reales de la tienda** (tienda.vestidospinky.com): ropa al mayoreo a precio de saldo, envíos a
   todo México, vestidos/blusas/partes bajas/conjuntos/niña/pijamas, remates y lotes surtidos, mezcla tallas y
   colores, pago con tarjeta/transferencia/OXXO, precios de mayoreo solo para clientes registrados (precios

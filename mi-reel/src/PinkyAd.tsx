@@ -7,6 +7,7 @@ import {
   continueRender,
   delayRender,
   Easing,
+  Img,
   interpolate,
   OffthreadVideo,
   spring,
@@ -36,7 +37,8 @@ export type Overlay =
   | { type: "money"; at: number; until: number }
   | { type: "url"; at: number; until: number; text: string }
   | { type: "globe"; at: number; until: number }
-  | { type: "catalog"; at: number; until: number; image: string };
+  | { type: "catalog"; at: number; until: number; image: string }
+  | { type: "icon"; at: number; until: number; src: string; x?: number; y?: number };
 export type PipTrack = [number, number, number, number][]; // [t, cx, cy, faceW] in clip pixels (720x1280)
 export type Broll = { src: string; at: number; until: number; from?: number; pip?: PipTrack };
 export type PinkyProps = {
@@ -50,7 +52,8 @@ export type PinkyProps = {
   emph?: string[];            // these words go big, yellow, glowing
   overlays?: Overlay[];
   broll?: Broll[];
-  captionY?: number;          // vertical centre of the caption line
+  captionY?: number;          // preferred vertical centre of the caption line (chest)
+  faces?: [number, number, number, number][]; // [t, cx, cy, w] face box of the presenter in clip pixels (720x1280)
 };
 
 export const calcPinky: CalculateMetadataFunction<PinkyProps> = ({ props }) => ({
@@ -76,14 +79,18 @@ const txt = (size: number, color = "white"): React.CSSProperties => ({
 });
 
 // ---------- cámara ----------
-const Camera: React.FC<{ p: PinkyProps; children: React.ReactNode }> = ({ p, children }) => {
-  const { t } = useT();
+const zoomAt = (p: PinkyProps, t: number) => {
   const keys = [...(p.punches ?? []), ...(p.cuts ?? []).map((c, i) => [c, i % 2 ? 0.0 : 0.07] as [number, number])].sort((a, b) => a[0] - b[0]);
   let z = 1 + 0.02 * Math.sin(t * 0.35);
   let cur = 0, last = -10;
   for (const [tp, a] of keys) if (t >= tp) { cur = a; last = tp; }
   const prev = keys.filter(([tp]) => tp < last).slice(-1)[0]?.[1] ?? 0;
   z += prev + (cur - prev) * Easing.out(Easing.cubic)(Math.min(1, (t - last) / 0.16));
+  return z;
+};
+const Camera: React.FC<{ p: PinkyProps; children: React.ReactNode }> = ({ p, children }) => {
+  const { t } = useT();
+  const z = zoomAt(p, t);
   return <AbsoluteFill style={{ transform: `scale(${z})`, transformOrigin: "50% 40%" }}>{children}</AbsoluteFill>;
 };
 
@@ -102,22 +109,44 @@ const Flash: React.FC<{ at: number[] }> = ({ at }) => {
 const Reveal: React.FC<{ t: number; at: number; style: React.CSSProperties; children: React.ReactNode }> = ({ t, at, style, children }) => {
   const r = wipe(t, at, 0.12);
   if (r <= 0) return <span style={{ ...style, opacity: 0 }}>{children}</span>;
-  return <span style={{ ...style, clipPath: `inset(-30% ${(1 - r) * 100}% -30% -5%)`, opacity: Math.min(1, r * 2) }}>{children}</span>;
+  // recorte solo mientras se revela, con margen para la última letra y la sombra
+  return <span style={{ ...style, paddingRight: 8, marginRight: -8, clipPath: r < 1 ? `inset(-40% ${(1 - r) * 108 - 8}% -40% -10%)` : undefined, opacity: Math.min(1, r * 2) }}>{children}</span>;
 };
 
 // ---------- subtítulos ----------
-const Captions: React.FC<{ p: PinkyProps; y: number }> = ({ p, y }) => {
-  const { t, frame } = useT();
-  const W = p.words;
+const pageCache = new WeakMap<Word[], [number, number][]>();
+const pagesOf = (W: Word[]) => {
+  if (pageCache.has(W)) return pageCache.get(W)!;
   const pages: [number, number][] = [];
   let s0 = 0;
   W.forEach(([, e, w], i) => {
     const nx = W[i + 1];
     if (/[.,:?¿!]$/.test(w) || !nx || nx[0] - e > 0.3 || i - s0 === 2) { pages.push([s0, i + 1]); s0 = i + 1; }
   });
-  const idx = pages.findIndex(([a, b], i) => t >= W[a][0] - 0.02 && t < Math.min(W[b - 1][1] + 0.25, i + 1 < pages.length ? W[pages[i + 1][0]][0] - 0.02 : 999));
-  if (idx < 0) return null;
-  const [a, b] = pages[idx];
+  pageCache.set(W, pages);
+  return pages;
+};
+// página de subtítulos activa en t -> [primera palabra, última+1, inicio, fin]
+const pageAt = (W: Word[], t: number): [number, number, number, number] | null => {
+  const pages = pagesOf(W);
+  for (let i = 0; i < pages.length; i++) {
+    const [a, b] = pages[i];
+    const t0 = W[a][0] - 0.02, t1 = Math.min(W[b - 1][1] + 0.25, i + 1 < pages.length ? W[pages[i + 1][0]][0] - 0.02 : 999);
+    if (t >= t0 && t < t1) return [a, b, t0, t1];
+  }
+  return null;
+};
+const isEmPage = (p: PinkyProps, a: number, b: number) => {
+  const em = new Set((p.emph ?? []).map(bare));
+  return p.words.slice(a, b).some(([, , w]) => em.has(bare(w)));
+};
+
+const Captions: React.FC<{ p: PinkyProps; y: number }> = ({ p, y }) => {
+  const { t, frame } = useT();
+  const W = p.words;
+  const pg = pageAt(W, t);
+  if (!pg) return null;
+  const [a, b] = pg;
   const ws = W.slice(a, b);
   const hl = new Set((p.highlight ?? []).map(bare));
   const em = new Set((p.emph ?? []).map(bare));
@@ -195,37 +224,16 @@ const Price: React.FC<{ o: Extract<Overlay, { type: "price" }>; y: number }> = (
         <span style={{ ...txt(112, "#d8ffd2"), letterSpacing: -3, textShadow: `0 0 6px ${NEON}, 0 0 18px ${NEON}, 0 0 36px rgba(61,255,61,${0.7 * flick})` }}>{o.value}</span>
       </div>
       <svg width="1080" height="420" viewBox="0 0 1080 420" style={{ position: "absolute", left: 0, top: 40, overflow: "visible" }}>
-        <path d="M300 400 L360 240 L392 268 L470 105" stroke="#caffc4" strokeWidth="9" fill="none" strokeLinecap="round" strokeLinejoin="round"
+        <path d="M372 270 L404 170 L428 190 L478 70" stroke="#caffc4" strokeWidth="9" fill="none" strokeLinecap="round" strokeLinejoin="round"
           pathLength={1} strokeDasharray={1} strokeDashoffset={1 - draw} style={{ filter: `drop-shadow(0 0 6px ${NEON}) drop-shadow(0 0 14px ${NEON})` }} />
-        <path d="M440 110 L472 100 L478 134" stroke="#caffc4" strokeWidth="9" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={draw > 0.97 ? 1 : 0}
+        <path d="M452 78 L480 66 L488 96" stroke="#caffc4" strokeWidth="9" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={draw > 0.97 ? 1 : 0}
           style={{ filter: `drop-shadow(0 0 6px ${NEON})` }} />
       </svg>
     </div>
   );
 };
 
-// fajo de billetes (dibujo original: billetes verdes con faja de papel)
-const Bills: React.FC = () => (
-  <svg width="360" height="230" viewBox="0 0 360 230">
-    <defs>
-      <linearGradient id="bill" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stopColor="#d9e6c8" /><stop offset="50%" stopColor="#b7cc9c" /><stop offset="100%" stopColor="#93ad78" /></linearGradient>
-      <linearGradient id="edge" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#eef3e4" /><stop offset="100%" stopColor="#9db58a" /></linearGradient>
-    </defs>
-    <g transform="rotate(-14 180 115)">
-      {[...Array(9)].map((_, k) => <rect key={k} x={40} y={82 + k * 4} width={280} height={110} rx={4} fill="url(#edge)" stroke="#7d966a" strokeWidth={1} />)}
-      <rect x={40} y={74} width={280} height={110} rx={4} fill="url(#bill)" stroke="#5f7a4c" strokeWidth={2} />
-      <rect x={52} y={84} width={256} height={90} rx={3} fill="none" stroke="#5f7a4c" strokeWidth={2} opacity={0.7} />
-      <ellipse cx={180} cy={129} rx={32} ry={38} fill="#a6bd8b" stroke="#5f7a4c" strokeWidth={2} />
-      <text x={180} y={143} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={40} fill="#3f5a2f">$</text>
-      <text x={70} y={110} fontFamily={FONT} fontWeight={900} fontSize={22} fill="#3f5a2f">100</text>
-      <text x={262} y={168} fontFamily={FONT} fontWeight={900} fontSize={22} fill="#3f5a2f">100</text>
-      <rect x={236} y={70} width={44} height={150} fill="#f2e3a6" stroke="#b89a45" strokeWidth={2} />
-      <rect x={236} y={128} width={44} height={20} fill="#d9b95a" />
-    </g>
-  </svg>
-);
-
-// ---------- dinero: recuadro de vidrio + billetes + flecha en zigzag ----------
+// ---------- dinero: recuadro de vidrio + fajo de billetes (imagen del cliente) + flecha en zigzag ----------
 const Money: React.FC<{ o: Extract<Overlay, { type: "money" }>; y: number }> = ({ o, y }) => {
   const { t, frame, fps } = useT();
   const a = life(t, o.at, o.until);
@@ -237,7 +245,7 @@ const Money: React.FC<{ o: Extract<Overlay, { type: "money" }>; y: number }> = (
     <div style={{ position: "absolute", inset: 0, opacity: a }}>
       <div style={{ position: "absolute", left, top, width: W, height: H, borderRadius: 34, background: "rgba(255,255,255,0.20)", border: "3px solid rgba(255,255,255,0.6)",
         backdropFilter: "blur(5px)", boxShadow: "0 12px 30px rgba(0,0,0,0.3)", transform: `scale(${0.7 + 0.3 * q})`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Bills />
+        <Img src={staticFile("pinky/icons/money_bills.png")} style={{ width: 420, height: 420, objectFit: "contain", transform: `rotate(${-4 + 3 * Math.sin(t * 2)}deg)` }} />
       </div>
       <svg width="1080" height="1920" viewBox="0 0 1080 1920" style={{ position: "absolute", inset: 0, overflow: "visible" }}>
         <path d={`M${left + 20} ${top + H + 110} L${left + 70} ${top + H - 40} L${left + 140} ${top + H - 110} L${left + 175} ${top + H - 60} L${left + 290} ${top + 120}`}
@@ -410,11 +418,88 @@ const Pip: React.FC<{ clip: string; b: Broll }> = ({ clip, b }) => {
   );
 };
 
+// ---------- colocación según la cara: el subtítulo (y su widget) nunca tapa la cara ----------
+type Box = { top: number; bottom: number; left: number; right: number; cx: number; cy: number; w: number };
+const presenterVisible = (p: PinkyProps, t: number) =>
+  !(p.broll ?? []).some((b) => t >= b.at && t < b.until) &&
+  !(p.overlays ?? []).some((o) => (o.type === "globe" || o.type === "catalog") && t >= o.at && t < o.until);
+// zona protegida de la cara (del pelo a la barbilla) en coordenadas de salida, unida sobre [t0, t1]
+const faceZone = (p: PinkyProps, t0: number, t1: number): Box | null => {
+  let box: Box | null = null;
+  for (const [ft, cx, cy, w] of p.faces ?? []) {
+    if (ft < t0 - 0.2 || ft > t1 + 0.2 || !presenterVisible(p, ft)) continue;
+    const z = zoomAt(p, ft), X = (x: number) => 540 + (x * 1.5 - 540) * z, Yo = (y: number) => 768 + (y * 1.5 - 768) * z;
+    const b = { top: Yo(cy - 0.85 * w), bottom: Yo(cy + 0.75 * w), left: X(cx - 0.75 * w), right: X(cx + 0.75 * w), cx: X(cx), cy: Yo(cy), w: w * 1.5 * z };
+    box = box ? { top: Math.min(box.top, b.top), bottom: Math.max(box.bottom, b.bottom), left: Math.min(box.left, b.left), right: Math.max(box.right, b.right), cx: (box.cx + b.cx) / 2, cy: (box.cy + b.cy) / 2, w: Math.max(box.w, b.w) } : b;
+  }
+  return box;
+};
+// y del bloque [y+up, y+down]: en el pecho si no toca la cara; si la toca, arriba de la cabeza (o debajo de la barbilla)
+const placeY = (p: PinkyProps, t0: number, t1: number, up: number, down: number) => {
+  const pref = p.captionY ?? 1000;
+  const zones: { top: number; bottom: number }[] = [];
+  const f = faceZone(p, t0, t1);
+  if (f) zones.push(f);
+  // el círculo del presentador sobre B-roll también es obstáculo
+  if ((p.broll ?? []).some((b) => b.pip && b.at < t1 && b.until > t0)) zones.push({ top: PIP_Y - PIP_D / 2 - 20, bottom: PIP_Y + PIP_D / 2 + 20 });
+  if (!zones.length) return pref;
+  const overlap = (y: number) => zones.reduce((acc, z) => acc + Math.max(0, Math.min(y + down, z.bottom) - Math.max(y + up, z.top)), 0);
+  const top = Math.min(...zones.map((z) => z.top)), bottom = Math.max(...zones.map((z) => z.bottom));
+  const clampY = (y: number) => Math.min(1720 - down, Math.max(150 - up, y));
+  const cands = [pref, ...zones.map((z) => z.top - 30 - down), ...zones.map((z) => z.bottom + 30 - up), top - 30 - down, bottom + 30 - up].map(clampY);
+  let best = cands[0];
+  for (const c of cands) if (overlap(c) < overlap(best) - 1) best = c;
+  return best;
+};
+const blockOf = (o: Overlay): [number, number] => {
+  switch (o.type) {
+    case "price": return [-80, 330];
+    case "money": return [-80, 430];
+    case "url": return [-80, 140];
+    case "stack": return [-50, o.items.length * 88 - 30];
+    default: return [-80, 60];
+  }
+};
+const widgetSpan = (o: Overlay): [number, number] => o.type === "stack" ? [o.items[0][0], o.until] : [(o as { at: number }).at, (o as { until: number }).until];
+
+// ---------- íconos tipo sticker junto a la cabeza ----------
+const STICKER = "drop-shadow(5px 0 0 white) drop-shadow(-5px 0 0 white) drop-shadow(0 5px 0 white) drop-shadow(0 -5px 0 white) drop-shadow(0 14px 18px rgba(0,0,0,0.45))";
+const Icon: React.FC<{ o: Extract<Overlay, { type: "icon" }>; p: PinkyProps; k: number; avoid: [number, number] }> = ({ o, p, k, avoid }) => {
+  const { t, frame, fps } = useT();
+  if (t < o.at || t >= o.until) return null;
+  const q = spring({ frame: frame - o.at * fps, fps, config: { damping: 9, stiffness: 190, mass: 0.7 } });
+  const out = interpolate(t, [o.until - 0.14, o.until], [1, 0], clamp);
+  const f = faceZone(p, o.at, o.until);
+  const S = 270;
+  let x: number, y: number;
+  if (o.x !== undefined && o.y !== undefined) { x = o.x; y = o.y; }
+  else if (f) {
+    const leftRoom = f.left, rightRoom = 1080 - f.right;
+    const right = rightRoom >= leftRoom ? true : false;
+    x = right ? Math.min(1080 - S - 30, f.right + 10) : Math.max(30, f.left - S - 10);
+    y = Math.max(140, f.cy - S * 0.55);
+  } else { x = k % 2 ? 90 : 1080 - S - 90; y = 300; }
+  // que no choque con el bloque del subtítulo
+  if (y + S > avoid[0] && y < avoid[1]) y = avoid[0] - S - 20 > 120 ? avoid[0] - S - 20 : avoid[1] + 20;
+  const rot = (k % 2 ? 8 : -8) + 3 * Math.sin(t * 3 + k);
+  const isPhoto = o.src.endsWith(".png");
+  return (
+    <Img src={staticFile(o.src)} style={{ position: "absolute", left: x, top: y + 6 * Math.sin(t * 4 + k), width: S, height: S, objectFit: "contain",
+      transform: `scale(${q * out}) rotate(${rot}deg)`, filter: isPhoto ? "drop-shadow(0 14px 18px rgba(0,0,0,0.45))" : STICKER }} />
+  );
+};
+
 export const PinkyAd: React.FC<PinkyProps> = (p) => {
   const { t } = useT();
   const br = (p.broll ?? []).find((b) => t >= b.at && t < b.until);
-  const y = p.captionY ?? 980;
   const stackOn = (p.overlays ?? []).some((o) => o.type === "stack" && t >= o.items[0][0] && t < o.until);
+  const widgets = (p.overlays ?? []).filter((o) => ["price", "money", "url", "stack"].includes(o.type));
+  const wy = widgets.map((o) => { const [u, d] = blockOf(o); const [a, b] = widgetSpan(o); return placeY(p, a, b, u, d); });
+  const activeW = widgets.findIndex((o) => { const [a, b] = widgetSpan(o); return t >= a && t < b; });
+  const pg = pageAt(p.words, t);
+  const em = pg ? isEmPage(p, pg[0], pg[1]) : false;
+  const y = activeW >= 0 ? wy[activeW] : pg ? placeY(p, pg[2], pg[3], em ? -80 : -50, em ? 140 : 60) : p.captionY ?? 1000;
+  const avoid: [number, number] = activeW >= 0 ? [wy[activeW] + blockOf(widgets[activeW])[0], wy[activeW] + blockOf(widgets[activeW])[1]] : [y - 80, y + (em ? 140 : 60)];
   return (
     <AbsoluteFill style={{ background: "black" }}>
       <Camera p={p}>
@@ -431,10 +516,11 @@ export const PinkyAd: React.FC<PinkyProps> = (p) => {
       <AbsoluteFill style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0) 52%, rgba(0,0,0,0.55) 72%, rgba(0,0,0,0.96) 90%)" }} />
       {(p.overlays ?? []).map((o, i) => {
         switch (o.type) {
-          case "stack": return <Stack key={i} o={o} y={y} />;
-          case "price": return <Price key={i} o={o} y={y} />;
-          case "money": return <Money key={i} o={o} y={y} />;
-          case "url": return <Url key={i} o={o} y={y} />;
+          case "stack": return <Stack key={i} o={o} y={wy[widgets.indexOf(o)]} />;
+          case "price": return <Price key={i} o={o} y={wy[widgets.indexOf(o)]} />;
+          case "money": return <Money key={i} o={o} y={wy[widgets.indexOf(o)]} />;
+          case "url": return <Url key={i} o={o} y={wy[widgets.indexOf(o)]} />;
+          case "icon": return <Icon key={i} o={o} p={p} k={i} avoid={avoid} />;
           default: return null;
         }
       })}
