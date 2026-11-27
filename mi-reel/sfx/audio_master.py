@@ -34,6 +34,8 @@ ap.add_argument("--scenes", type=lambda s: [float(v) for v in s.split(",")], def
 ap.add_argument("--voice-ref", type=float, default=None)
 ap.add_argument("--sfx-db", type=float, default=-7.0)
 ap.add_argument("--clarity", action="store_true")
+ap.add_argument("--noise-file", default=None, help="wav with room noise only (better profile when the edit has few pauses)")
+ap.add_argument("--nr-amount", type=float, default=0.92, help="noise reduction strength (lower = fewer artifacts on noisy sources)")
 ap.add_argument("--lufs", type=float, default=-14.0)
 ap.add_argument("--keep-natural", type=lambda s: [tuple(map(float, r.split("-"))) for r in s.split(",")], default=None)
 args = ap.parse_args()
@@ -53,8 +55,12 @@ w = json.load(open(WORDS))
 gaps = [(w[i][1] + 0.04, w[i + 1][0] - 0.04) for i in range(len(w) - 1) if w[i + 1][0] - w[i][1] > 0.25]
 if args.max_gap_db is not None:
     gaps = [(a, b) for a, b in gaps if db(x[int(a * sr):int(b * sr)]) <= args.max_gap_db]
-noise = np.concatenate([x[int(a * sr):int(b * sr)] for a, b in gaps if b > a])
-print(f"noise profile: {len(noise) / sr:.2f} s from {len(gaps)} pauses")
+noise = np.concatenate([x[int(a * sr):int(b * sr)] for a, b in gaps if b > a]) if gaps else np.zeros(0, np.float32)
+if args.noise_file:
+    nsr, nz = wavfile.read(args.noise_file)
+    nz = nz.astype(np.float32); nz = nz / 2**31 if nz.dtype != np.float32 or np.abs(nz).max() > 1.5 else nz
+    noise = np.concatenate([noise, nz.reshape(-1)])
+print(f"noise profile: {len(noise) / sr:.2f} s from {len(gaps)} pauses{' + noise file' if args.noise_file else ''}")
 
 if args.scenes:
     bounds = args.scenes + [len(x) / sr]
@@ -68,7 +74,7 @@ if args.scenes:
             g = float(np.clip(target - l, -6, 6))
             x[int(a * sr):int(b * sr)] *= 10 ** (g / 20)
             print(f"take {a:6.2f}-{b:6.2f}s: {l:6.1f} dBFS -> gain {g:+.1f} dB")
-clean = nr.reduce_noise(y=x, sr=sr, y_noise=noise, stationary=True, prop_decrease=0.92,
+clean = nr.reduce_noise(y=x, sr=sr, y_noise=noise, stationary=True, prop_decrease=args.nr_amount,
                         n_std_thresh_stationary=2.0, freq_mask_smooth_hz=300, time_mask_smooth_ms=60)
 if args.voice_ref is not None:
     speech = np.concatenate([clean[int(q[0] * sr):int(q[1] * sr)] for q in w])

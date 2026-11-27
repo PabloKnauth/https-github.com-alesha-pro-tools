@@ -126,19 +126,8 @@ def faces_all(step=0.2):
 FACES = [] if NAME == "v3" else faces_all()   # v3: voz en off sin presentador (la ropa daba falsos positivos)
 
 # ---------- íconos que apoyan lo que se dice (Fluent Emoji 3D + imágenes de dinero del cliente) ----------
-ICONS = {  # palabra (sin acentos ni signos) -> ícono
-    "vestido": "vestido", "vestidos": "vestido", "prenda": "vestido", "prendas": "vestido", "ropa": "blusa",
-    "blusa": "blusa", "blusas": "blusa", "sueter": "sueter", "sueteres": "sueter", "pijama": "pijama", "pijamas": "pijama",
-    "envio": "camion", "envios": "camion", "enviamos": "camion", "enviar": "camion", "envia": "camion", "llegan": "caja",
-    "casa": "casa", "puerta": "casa", "tarjeta": "tarjeta", "credito": "tarjeta", "debito": "tarjeta", "efectivo": "billete_alas",
-    "carrito": "carrito", "linea": "laptop", "pagina": "laptop", "calidad": "estrella", "nuevas": "nuevo", "nuevos": "nuevo",
-    "descuento": "etiqueta", "descuentos": "etiqueta", "promociones": "fuego", "friday": "fuego", "domingo": "calendario",
-    "almacen": "almacen", "negocio": "tienda", "boutique": "tienda", "emprender": "maletin", "empresa": "maletin",
-    "jefa": "corona", "jefe": "enojado", "gritado": "enojado", "harta": "resoplido", "ganancia": "money_bag",
-    "ganancias": "money_bag", "ingreso": "money_bag", "revender": "grafica", "revenderla": "grafica", "revenderlo": "grafica",
-    "modelos": "bolsas", "mayoreo": "caja", "pedido": "caja", "compra": "bolsas", "comprar": "bolsas", "saldo": "etiqueta",
-    "renuncia": "fiesta", "sencillo": "check", "facil": "check", "talla": "blusa", "cantidad": "caja", "mexico": "mexico",
-    "catalogo": "celular", "pinky": "bolso", "pesos": "money_bag",
+ICONS = {  # el cliente pidió quitar todos los stickers salvo los de dinero
+    "pesos": "money_bag", "ganancia": "money_bag", "ganancias": "money_bag", "ingreso": "money_bag", "ganar": "money_bag",
 }
 import unicodedata
 def plain(w): return "".join(c for c in unicodedata.normalize("NFD", bare(w)) if unicodedata.category(c) != "Mn")
@@ -198,8 +187,8 @@ em_t = [w[0] for w in W if bare(w[2]) in emw]
 whoosh = sorted(set(cuts + flashes + [o["at"] for o in ov if o["type"] == "money"]) - set(FULL))
 events = {"duration": round(DUR, 3), "whoosh": whoosh, "riser": FULL,
           "sparkle": [0.05] + em_t[:: 2],
-          "pop": [i[0] for o in ov if o["type"] == "stack" for i in o["items"]] + [o["at"] + 0.05 for o in ov if o["type"] == "icon"],
-          "cash": [o["at"] + 0.05 for o in ov if o["type"] in ("price", "money")],
+          "pop": [i[0] for o in ov if o["type"] == "stack" for i in o["items"]],
+          "cash": [o["at"] + 0.05 for o in ov if o["type"] in ("price", "money", "icon")],
           "type": [[o["at"] + 0.15, o["at"] + 1.2] for o in ov if o["type"] == "url"],
           "music": False, "sfx_db": -20}
 json.dump(events, open(f"{JOB}/events.json", "w"))

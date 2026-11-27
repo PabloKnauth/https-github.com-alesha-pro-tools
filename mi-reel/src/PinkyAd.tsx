@@ -239,18 +239,29 @@ const Money: React.FC<{ o: Extract<Overlay, { type: "money" }>; y: number }> = (
   const a = life(t, o.at, o.until);
   if (a <= 0) return null;
   const q = sp(frame, fps, o.at, 11);
-  const draw = interpolate(t, [o.at + 0.1, o.at + 0.55], [0, 1], { ...clamp, easing: Easing.out(Easing.quad) });
-  const W = 520, H = 330, left = (1080 - W) / 2, top = y + 70;
+  const draw = interpolate(t, [o.at + 0.15, o.at + 0.65], [0, 1], { ...clamp, easing: Easing.out(Easing.quad) });
+  const head = spring({ frame: frame - (o.at + 0.6) * fps, fps, config: { damping: 9, stiffness: 220, mass: 0.5 } });
+  // recuadro de vidrio con los billetes a la izquierda; flecha de crecimiento a la derecha, sin encimarse
+  const W = 470, H = 330, left = 110, top = y + 150;   // debajo de la palabra grande del subtítulo
+  const x0 = left + W + 40, yb = top + H - 10, yt = top + 30;
+  const pts: [number, number][] = [[x0, yb], [x0 + 80, yb - 105], [x0 + 140, yb - 60], [x0 + 300, yt + 18]];
+  const [ex, ey] = pts[3], [px, py] = pts[2];
+  const ang = Math.atan2(ey - py, ex - px), L = 58, Wd = 30;
+  const tip = [ex + Math.cos(ang) * 26, ey + Math.sin(ang) * 26];
+  const b1 = [tip[0] - Math.cos(ang) * L + Math.sin(ang) * Wd, tip[1] - Math.sin(ang) * L - Math.cos(ang) * Wd];
+  const b2 = [tip[0] - Math.cos(ang) * L - Math.sin(ang) * Wd, tip[1] - Math.sin(ang) * L + Math.cos(ang) * Wd];
+  const glow = `drop-shadow(0 0 6px ${NEON}) drop-shadow(0 0 16px ${NEON})`;
   return (
     <div style={{ position: "absolute", inset: 0, opacity: a }}>
       <div style={{ position: "absolute", left, top, width: W, height: H, borderRadius: 34, background: "rgba(255,255,255,0.20)", border: "3px solid rgba(255,255,255,0.6)",
         backdropFilter: "blur(5px)", boxShadow: "0 12px 30px rgba(0,0,0,0.3)", transform: `scale(${0.7 + 0.3 * q})`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Img src={staticFile("pinky/icons/money_bills.png")} style={{ width: 420, height: 420, objectFit: "contain", transform: `rotate(${-4 + 3 * Math.sin(t * 2)}deg)` }} />
+        <Img src={staticFile("pinky/icons/money_bills.png")} style={{ width: 400, height: 400, objectFit: "contain", transform: `rotate(${-4 + 3 * Math.sin(t * 2)}deg)` }} />
       </div>
       <svg width="1080" height="1920" viewBox="0 0 1080 1920" style={{ position: "absolute", inset: 0, overflow: "visible" }}>
-        <path d={`M${left + 20} ${top + H + 110} L${left + 70} ${top + H - 40} L${left + 140} ${top + H - 110} L${left + 175} ${top + H - 60} L${left + 290} ${top + 120}`}
-          stroke="#caffc4" strokeWidth="10" fill="none" strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - draw}
-          style={{ filter: `drop-shadow(0 0 6px ${NEON}) drop-shadow(0 0 16px ${NEON})` }} />
+        <path d={`M${pts.map((p) => p.join(" ")).join(" L")}`} stroke="#caffc4" strokeWidth="16" fill="none" strokeLinecap="round" strokeLinejoin="round"
+          pathLength={1} strokeDasharray={1} strokeDashoffset={1 - draw} style={{ filter: glow }} />
+        {draw > 0.95 && <polygon points={`${tip[0]},${tip[1]} ${b1[0]},${b1[1]} ${b2[0]},${b2[1]}`} fill="#caffc4" strokeLinejoin="round"
+          style={{ filter: glow, transformOrigin: `${ex}px ${ey}px`, transform: `scale(${head})` }} />}
       </svg>
     </div>
   );
@@ -454,7 +465,7 @@ const placeY = (p: PinkyProps, t0: number, t1: number, up: number, down: number)
 const blockOf = (o: Overlay): [number, number] => {
   switch (o.type) {
     case "price": return [-80, 330];
-    case "money": return [-80, 430];
+    case "money": return [-80, 500];
     case "url": return [-80, 140];
     case "stack": return [-50, o.items.length * 88 - 30];
     default: return [-80, 60];

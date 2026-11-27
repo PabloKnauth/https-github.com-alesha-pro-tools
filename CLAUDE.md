@@ -50,9 +50,15 @@ Estilo tomado de 3 anuncios de referencia del usuario (ad_1, ad_2, ad_4; 18–25
   píldora gris translúcida con precio verde neón, recuadro de vidrio con billetes, globo satelital Natural
   Earth II con bandera recortada a México, catálogo de la tienda en página curva, PiP que sigue la cara).
   **Los subtítulos nunca tapan la cara**: se detecta la cara (Haar frontal + perfil) y, si el bloque del
-  subtítulo/widget la tocaría, sube arriba de la cabeza. **Íconos 3D tipo sticker** (Fluent Emoji, MIT) apoyan
-  palabras clave; se colocan donde menos tapan a la persona (máscara u2net). Dinero: imágenes del cliente
-  (`public/pinky/icons/money_bills.png`, `money_bag.png`).
+  subtítulo/widget la tocaría, sube arriba de la cabeza. **Sin stickers**: el cliente pidió quitarlos todos salvo
+  los de dinero (`public/pinky/icons/money_bills.png` en el recuadro con flecha de crecimiento, `money_bag.png`
+  al decir "pesos"/"ganancia").
+- **Render siempre con `--color-space=bt709`**: sin eso Remotion entrega yuvj420p BT.601 sin etiquetas y en el
+  iPhone la luz/contraste se ve cambiada respecto al original.
+- **Cortes de frases**: al armar con `pinky_prep.py --from/--to`, el `--to` debe quedar *después* del final de la
+  última palabra (+0,25 s) o la recorta; usá `--pad 0.14 --gap 0.4` y frases completas.
+- **Audio del stock** (mono, ruidoso, SNR ≈ 7 dB): `audio_master.py --noise-file <ruido de sala> --nr-amount 0.85`
+  sin `--clarity`; el stock 7290/7291 además lleva `--grade "eq=gamma=1.12:saturation=0.97"` tras la LUT.
 - **Datos reales de la tienda** (tienda.vestidospinky.com): ropa al mayoreo a precio de saldo, envíos a
   todo México, vestidos/blusas/partes bajas/conjuntos/niña/pijamas, remates y lotes surtidos, mezcla tallas y
   colores, pago con tarjeta/transferencia/OXXO, precios de mayoreo solo para clientes registrados (precios

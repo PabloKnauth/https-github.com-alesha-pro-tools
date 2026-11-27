@@ -47,7 +47,7 @@ def bw(bgr):
 
 # iPhone HDR (HLG / PQ) must be tone-mapped to SDR, or skin looks flat and grey
 trc = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=color_transfer",
-                      "-of", "csv=p=0", args.src], capture_output=True, text=True).stdout.strip()
+                      "-of", "csv=p=0", args.src], capture_output=True, text=True).stdout.strip().strip(",")  # ffprobe deja una coma final
 TONEMAP = ("zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,"
            "zscale=t=bt709:m=bt709:r=tv,format=yuv420p,") if trc in ("arib-std-b67", "smpte2084") else ""
 if TONEMAP: print(f"HDR source ({trc}): tone-mapping to SDR")

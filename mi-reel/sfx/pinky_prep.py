@@ -14,6 +14,9 @@ ap.add_argument("--gap", type=float, default=0.28, help="pauses longer than this
 ap.add_argument("--pad", type=float, default=0.09, help="audio kept around each phrase")
 ap.add_argument("--from", dest="t0", type=float, default=0.0)
 ap.add_argument("--to", dest="t1", type=float, default=1e9)
+ap.add_argument("--lut", default=None, help="3D LUT for HLG/PQ sources (default luts/iphone_hlg2sdr.cube)")
+ap.add_argument("--grade", default="", help='extra ffmpeg filter after the LUT, e.g. "eq=gamma=1.12:saturation=0.97" '
+                "(v5 del stock: iguala brillo/saturación a los clips SDR del cliente)")
 args = ap.parse_args()
 os.makedirs(args.out, exist_ok=True)
 
@@ -70,12 +73,13 @@ for s, e in regions[:-1]:
     acc += e - s; cuts.append(round(acc, 3))
 
 trc = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=color_transfer",
-                      "-of", "csv=p=0", args.src], capture_output=True, text=True).stdout.strip()
+                      "-of", "csv=p=0", args.src], capture_output=True, text=True).stdout.strip().strip(",")  # ffprobe deja una coma final
 # iPhone HLG -> SDR with a 3D LUT fitted on identical frames of the client's own SDR exports (mean error 2/255),
 # so the picture keeps the lighting the client sees on the phone (a generic tonemap looked flat and grey).
-LUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "luts", "iphone_hlg2sdr.cube")
+LUT = args.lut or os.path.join(os.path.dirname(os.path.abspath(__file__)), "luts", "iphone_hlg2sdr.cube")
 tone = (f"scale=in_color_matrix=bt2020:in_range=tv:out_range=pc,format=gbrp16le,lut3d={LUT},"
         "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p,") if trc in ("arib-std-b67", "smpte2084") else ""
+if args.grade: tone += args.grade + ","
 parts, labels = [], []
 for k, (s, e) in enumerate(regions):
     d = e - s
