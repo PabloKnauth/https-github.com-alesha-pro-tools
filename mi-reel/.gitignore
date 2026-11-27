@@ -11,3 +11,6 @@ public/*.mp4
 public/*.mov
 public/*.MOV
 public/*.webm
+public/**/*.mp4
+public/**/*.mov
+public/**/*.MOV
